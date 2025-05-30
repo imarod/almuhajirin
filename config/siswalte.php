@@ -334,6 +334,18 @@ return [
             'icon' => 'fas fa-fw fa-user',
         ],
         [
+            'text' => 'Jadwal Pelajaran',
+            'url'  => '/home',
+            'icon' => 'fas fa-fw fa-calendar',
+        ],
+        [
+            'text' => 'Nilai',
+            'url'  => '/home',
+            'icon' => 'fas fa-fw fa-chart-bar',
+        ],
+
+
+        [
             'text' => 'change_password',
             'url' => 'admin/settings',
             'icon' => 'fas fa-fw fa-lock',
