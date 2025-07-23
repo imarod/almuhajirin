@@ -190,6 +190,8 @@ return [
     |
     */
 
+
+    //body
     'classes_body' => '',
     'classes_brand' => '',
     'classes_brand_text' => '',
@@ -329,7 +331,7 @@ return [
         ],
         ['header' => 'account_settings'],
         [
-            'text' => 'profile',
+            'text' => 'profilerhhrj',
             'url' => 'admin/settings',
             'icon' => 'fas fa-fw fa-user',
         ],

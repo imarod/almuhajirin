@@ -1,0 +1,27 @@
+.status-badge {
+  padding: 4px 8px;
+  border-radius: 5px;
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+.status-diterima {
+  background-color: #d1ecf1;
+  color: #0c5460;
+}
+
+.status-belum {
+  background-color: #fff3cd;
+  color: #856404;
+}
+
+.action-icons i {
+  margin: 0 6px;
+  cursor: pointer;
+}
+
+.filter-area .form-control {
+  height: calc(1.5em + .5rem + 2px);
+  font-size: .875rem;
+}
+

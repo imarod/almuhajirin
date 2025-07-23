@@ -1,45 +1,22 @@
 @extends('adminlte::page')
 
 @section('content')
+<link rel="stylesheet" href="{{ asset('css/custom.css') }}">
     <div class="content-header">
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1 class="m-0">Dashboard</h1>
+                    <h1 class="m-0">Data Pendaftar</h1>
                 </div><!-- /.col -->
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
                         <li class="breadcrumb-item"><a href="#">Home</a></li>
-                        <li class="breadcrumb-item active">Dashboard v1</li>
+                        <li class="breadcrumb-item active">Data Pendaftar</li>
                     </ol>
                 </div><!-- /.col -->
             </div><!-- /.row -->
 
-        </div>
-
-
-
-        {{-- Gunakan container-fluid agar penuh, px-3 untuk padding kiri-kanan --}}
-        <div class="row justify-content-start border-3  "> {{-- mt-4 untuk memberi jarak dari atas --}}
-            <div class="col-md-12"> {{-- Lebar card bisa diatur, misalnya 8 kolom dari 12 --}}
-                <div class="card shadow-sm mt-4">
-                    <div class="card-header">{{ __('Dashboard') }}</div>
-
-                    <div class="card-body">
-                        @if (session('status'))
-                            <div class="alert alert-success" role="alert">
-                                {{ session('status') }}
-                            </div>
-                        @endif
-
-                        {{ __('You are logged in!') }}
-                    </div>
-                </div>
-
-            </div>
-        </div>
-
-        <div class="card">
+            <div class="card">
             <div class="card-body">
 
                 <!-- Filter dan Search -->
@@ -65,7 +42,6 @@
                         <thead class="bg-light">
                             <tr class="text-center">
                                 <th style="width: 5%;">No.</th>
-                                <th>No. Pendaftaran</th>
                                 <th>Nama Lengkap</th>
                                 <th>NISN</th>
                                 <th>Status</th>
@@ -75,22 +51,20 @@
                         <tbody>
                             <tr>
                                 <td class="text-center">1.</td>
-                                <td class="text-center">1</td>
                                 <td>Balaji Nant</td>
                                 <td>23432151</td>
                                 <td><span class="status-badge status-diterima">Diterima</span></td>
                                 <td class="text-center action-icons">
-                                    <i class="fas fa-eye text-secondary" title="Lihat"></i>
+                                    <a href="{{ route('admin.detail-pendaftar') }}"><i class="fas fa-eye text-secondary" title="Lihat"></i></a>
                                     <i class="fas fa-trash text-danger" title="Hapus"></i>
                                     <i class="fas fa-edit text-dark" title="Edit"></i>
                                 </td>
                             </tr>
                             <tr>
                                 <td class="text-center">2.</td>
-                                <td class="text-center">2</td>
                                 <td>Nithya Menon</td>
                                 <td>23432152</td>
-                                <td><span class="status-badge status-belum">Belum Diproses</span></td>
+                                <td><span class="status-badge status-belum">Belum Diprosesdsdssds</span></td>
                                 <td class="text-center action-icons">
                                     <i class="fas fa-eye text-secondary" title="Lihat"></i>
                                     <i class="fas fa-trash text-danger" title="Hapus"></i>
@@ -99,7 +73,6 @@
                             </tr>
                             <tr>
                                 <td class="text-center">3.</td>
-                                <td class="text-center">3</td>
                                 <td>Meera Gonzalez</td>
                                 <td>23432153</td>
                                 <td><span class="status-badge status-belum">Belum Diproses</span></td>
@@ -111,7 +84,6 @@
                             </tr>
                             <tr>
                                 <td class="text-center">4.</td>
-                                <td class="text-center">4</td>
                                 <td>Karthik Subramanian</td>
                                 <td>23432154</td>
                                 <td><span class="status-badge status-diterima">Diterima</span></td>
@@ -123,11 +95,10 @@
                             </tr>
                             <tr>
                                 <td class="text-center">5.</td>
-                                <td class="text-center">5</td>
                                 <td>Mithra B</td>
                                 <td>23432155</td>
                                 <td><span class="status-badge status-diterima">Diterima</span></td>
-                                <td class="text-center action-icons">
+                                <td class="text-center action-icons ">
                                     <i class="fas fa-eye text-secondary" title="Lihat"></i>
                                     <i class="fas fa-trash text-danger" title="Hapus"></i>
                                     <i class="fas fa-edit text-dark" title="Edit"></i>
@@ -152,4 +123,6 @@
 
 
         </div>
-    @endsection
+        </div>
+    </div>
+@endsection
