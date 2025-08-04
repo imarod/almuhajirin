@@ -7,14 +7,21 @@ use App\Models\Pendaftaran;
 use App\Models\Siswa;
 use App\Models\OrangTua;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 
 class PendaftaranController extends Controller
 {
+    // Siswa
+    public function index()
+    {
+        return view('formulir-siswa');
+    }
     public function store(Request $request)
     {
+
         $request->validate([
             'nama' => 'required',
-            'nisn'=> 'required|unique:siswa,nisn',
+            'nisn' => 'required|unique:siswa,nisn',
             'jenis_kelamin' => 'required',
             'tempat_lahir' => 'required',
             "tanggal_lahir" => 'required|date',
@@ -25,21 +32,25 @@ class PendaftaranController extends Controller
             'alamat_ortu' => 'required',
             'no_hp_ortu' => 'required',
             'kk' => 'required|file|mimes:jpg,jpeg,png,pdf',
-            'ijazah' => 'required|file|mimes:jpg,jpeg,pdf',
-            'piagam' => 'nullable|file|mimes:jpg,jpeg,pdf',
+            'ijazah' => 'required|file|mimes:pdf',
+            'piagam' => 'nullable|file|mimes:pdf',
             'kategori_prestasi' => 'nullable|array',
+        ], [
+            'nisn.unique' => 'NISN sudah terdaftar',
         ]);
         DB::beginTransaction();
         try {
-             $ortu = OrangTua::create([
+            $ortu = OrangTua::create([
                 'nama_ayah' => $request->nama_ayah,
                 'nama_ibu' => $request->nama_ibu,
                 'alamat_ortu' => $request->alamat_ortu,
                 'no_hp_ortu' => $request->no_hp_ortu,
             ]);
 
-            // 2. Buat siswa dan hubungkan ke orang tua
             $siswa = Siswa::create([
+               
+
+                'user_id' => Auth::id(),
                 'nama' => $request->nama,
                 'nisn' => $request->nisn,
                 'jenis_kelamin' => $request->jenis_kelamin,
@@ -48,27 +59,64 @@ class PendaftaranController extends Controller
                 'alamat_siswa' => $request->alamat_siswa,
                 'no_hp_siswa' => $request->no_hp_siswa,
                 'orang_tua_id' => $ortu->id,
-                'kategori_prestasi' => json_encode($request->kategori_prestasi),
-            ]);
+                'kategori_prestasi' => $request->kategori_prestasi ? implode(', ', $request->kategori_prestasi) : null,
 
-            // upload
+            ]);
             $kk = $request->file('kk')?->store('dokumen', 'public');
             $ijazah = $request->file('ijazah')?->store('dokumen', 'public');
             $piagam = $request->file('piagam')?->store('dokumen', 'public');
 
-            Pendaftaran::create([
+            $pendaftaran = Pendaftaran::create([
                 'siswa_id' => $siswa->id,
                 'kk' => $kk,
                 'ijazah' => $ijazah,
                 'piagam' => $piagam,
                 'status_verifikasi' => 'Dikirim',
-                'kategori_prestasi' => json_encode($request->kategori_prestasi),
+                'kategori_prestasi' => $request->kategori_prestasi ? implode(', ', $request->kategori_prestasi) : null,
             ]);
             DB::commit();
-            return redirect()->back()->with('success', 'Pendaftaran berhasil dikirim');
-        }catch(\Exception $e) {
+            return redirect()->route('ajuan.pendaftaran')->with('success', 'Pendaftaran berhasil dikirim');
+        } catch (\Exception $e) {
             DB::rollback();
             return back()->with('error', 'Pendaftaran gagal: ' . $e->getMessage());
         }
+    }
+
+    public function ajuanPendaftaran()
+    {
+        $userId = Auth::id();
+
+        $pendaftarans = Pendaftaran::with('siswa')
+            ->whereHas('siswa', function ($query) use ($userId) {
+                $query->where('user_id', $userId);
+            })
+            ->get();
+        return view('siswa.ajuan-pendaftaran', compact('pendaftarans'));
+    }
+
+    public function detailPendaftaran()
+    {
+
+
+        return view('detail-pendaftaran');
+    }
+
+    public function edit($id)
+    {
+        $pendaftaran = Pendaftaran::with(['siswa.orangTua'])->findOrFail($id);
+        return view('formulir-siswa', compact('pendaftaran'));
+    }
+
+    public function update(Request $request, $id)
+    {
+        $pendaftaran = Pendaftaran::with(['siswa.orangTua'])->findOrFail($id);
+        $pendaftaran->siswa->update($request->only(['nama', 'nisn', 'jenis_kelamin', 'tempat_lahir', 'tanggal_lahir', 'alamat_siswa', 'no_hp_siswa', 'kategori_prestasi']));
+        $pendaftaran->siswa->orangTua->update($request->only(['nama_ayah', 'nama_ibu', 'alamat_ortu', 'no_hp_ortu']));
+        $pendaftaran->update([
+            'kk' => $request->file('kk') ? $request->file('kk')->store('dokumen', 'public') : $pendaftaran->kk,
+            'ijazah' => $request->file('ijazah') ? $request->file('ijazah')->store('dokumen', 'public') : $pendaftaran->ijazah,
+            'piagam' => $request->file('piagam') ? $request->file('piagam')->store('dokumen', 'public') : $pendaftaran->piagam,
+        ]);
+        return redirect()->route('formulir-siswa')->with('success', 'Pendaftaran berhasil diperbarui');
     }
 }

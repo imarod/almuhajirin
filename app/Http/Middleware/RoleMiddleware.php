@@ -21,7 +21,7 @@ class RoleMiddleware
         }
 
         if (Auth::user()->is_admin !== 1) {
-            return redirect('/home')->with('error', 'Unauthorized: Anda tidak memiliki akses.');
+            return redirect('/Home')->with('error', 'Unauthorized: Anda tidak memiliki akses.');
         }
         return $next($request);
     }

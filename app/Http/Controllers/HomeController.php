@@ -26,12 +26,11 @@ class HomeController extends Controller
     {
         return view('home');
     }
-
-    // Siswa
     public function index()
     {
-        return view('formulir-siswa');
+        return view('siswa.ajuan-pendaftaran');
     }
+    
 
 
     // Admin

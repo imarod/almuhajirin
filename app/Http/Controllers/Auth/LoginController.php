@@ -27,7 +27,7 @@ class LoginController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = '/formulir-siswa';
+    protected $redirectTo = '/siswa/pendaftaran';
 
     /**
      * Create a new controller instance.
@@ -50,7 +50,7 @@ class LoginController extends Controller
             if (auth()->user()->is_admin == 1) {
                 return redirect() -> route('admin.dashboard-statistik')->with('success', 'Login berhasil');
             }else {
-                return redirect() -> route('formulir-siswa')->with('success', 'Login berhasil');
+                return redirect() -> route('ajuan.pendaftaran')->with('success', 'Login berhasil');
             }
 
         }else {

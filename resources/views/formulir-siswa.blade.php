@@ -40,12 +40,22 @@
                     </div>
                 </div>
 
-                @if(session('success'))
+                @if (session('success'))
                     <div class="alert alert-success alert-dismissible fade show" role="alert">
                         {{ session('success') }}
                         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
+                    </div>
+                @endif
+
+                @if ($errors->any())
+                    <div class="alert alert-danger">
+                        <ul>
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
                     </div>
                 @endif
 
@@ -60,7 +70,8 @@
 
                             <div class="form-group">
                                 <label>Nama Lengkap</label>
-                                <input type="text" class="form-control" placeholder="Masukkan Nama Lengkap" name="nama">
+                                <input type="text" class="form-control" placeholder="Masukkan Nama Lengkap"
+                                    name="nama">
                             </div>
 
                             <div class="form-group">
@@ -82,7 +93,8 @@
 
                             <div class="form-group">
                                 <label>Tempat Lahir</label>
-                                <input type="text" class="form-control" placeholder="Masukkan Tempat Lahir"name="tempat_lahir">
+                                <input type="text" class="form-control"
+                                    placeholder="Masukkan Tempat Lahir"name="tempat_lahir">
                             </div>
 
                             <div class="form-group">
@@ -92,7 +104,8 @@
 
                             <div class="form-group">
                                 <label>Alamat</label>
-                                <input type="text" class="form-control" placeholder="Masukkan Alamat" name="alamat_siswa">
+                                <input type="text" class="form-control" placeholder="Masukkan Alamat"
+                                    name="alamat_siswa">
                             </div>
 
                             <div class="form-group">
@@ -119,19 +132,23 @@
                             <div class="form-group">
                                 <label>Kategori Prestasi (Jika Ada)</label><br>
                                 <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="checkbox" value="" name="kategori_prestasi[]">
+                                    <input class="form-check-input" type="checkbox" value=""
+                                        name="kategori_prestasi[]">
                                     <label class="form-check-label">Hafidz Qur'an 1-3 Juz</label>
                                 </div>
                                 <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="checkbox" value="" name="kategori_prestasi[]">
+                                    <input class="form-check-input" type="checkbox" value=""
+                                        name="kategori_prestasi[]">
                                     <label class="form-check-label">Hafidz Qur'an 4-5 Juz</label>
                                 </div>
                                 <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="checkbox" value="" name="kategori_prestasi[]">
+                                    <input class="form-check-input" type="checkbox" value=""
+                                        name="kategori_prestasi[]">
                                     <label class="form-check-label">Peringkat 1-5</label>
                                 </div>
                                 <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="checkbox" value="" name="kategori_prestasi[]">
+                                    <input class="form-check-input" type="checkbox" value=""
+                                        name="kategori_prestasi[]">
                                     <label class="form-check-label">Prestasi Non Akademik Tingkat Kabupaten</label>
                                 </div>
                             </div>
@@ -155,22 +172,26 @@
 
                             <div class="form-group">
                                 <label>Nama Ayah</label>
-                                <input type="text" class="form-control" placeholder="Masukkan Nama Ayah" name="nama_ayah">
+                                <input type="text" class="form-control" placeholder="Masukkan Nama Ayah"
+                                    name="nama_ayah">
                             </div>
 
                             <div class="form-group">
                                 <label>Nama Ibu</label>
-                                <input type="text" class="form-control" placeholder="Masukkan Nama Ibu" name="nama_ibu">
+                                <input type="text" class="form-control" placeholder="Masukkan Nama Ibu"
+                                    name="nama_ibu">
                             </div>
 
                             <div class="form-group">
                                 <label>Alamat</label>
-                                <input type="text" class="form-control" placeholder="Masukkan Alamat" name="alamat_ortu">
+                                <input type="text" class="form-control" placeholder="Masukkan Alamat"
+                                    name="alamat_ortu">
                             </div>
 
                             <div class="form-group">
                                 <label>No HP</label>
-                                <input type="text" class="form-control" placeholder="Masukkan No HP" name="no_hp_ortu">
+                                <input type="text" class="form-control" placeholder="Masukkan No HP"
+                                    name="no_hp_ortu">
                             </div>
 
                             <div class="text-center">
@@ -183,18 +204,17 @@
                 </form>
             </div>
         </div>
-        </div><!-- /.container-fluid -->
+    </div><!-- /.container-fluid -->
 
-        <script>
-            document.querySelectorAll('.custom-file-input').forEach(function(input){
-                input.addEventListener('change', function(e){
-                    let fileName = e.target.files[0]?.name || '';
-                    let label = e.target.nextElementSibling;
-                    if(label&&fileName){
-                        label.textContent = fileName
-                    }
-                });
-            })
-
-        </script>
-    @endsection
+    <script>
+        document.querySelectorAll('.custom-file-input').forEach(function(input) {
+            input.addEventListener('change', function(e) {
+                let fileName = e.target.files[0]?.name || '';
+                let label = e.target.nextElementSibling;
+                if (label && fileName) {
+                    label.textContent = fileName
+                }
+            });
+        })
+    </script>
+@endsection
