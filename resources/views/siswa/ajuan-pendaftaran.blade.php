@@ -29,183 +29,96 @@
 
                 <div class="card">
                     <div class="card-body">
-                       @if (isset($pendaftaran) && $pendaftaran->isEmpty())
-                            <div class="alert alert-info">
-                                belum ada pengajuan pendaftaran.
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label>
+                                    Show
+                                    <select class="custom-select custom-select-sm form-control form-control-sm"
+                                        style="width: auto; display: inline-block;">
+                                        <option value="10">10</option>
+                                        <option value="25">25</option>
+                                        <option value="50">50</option>
+                                    </select>
+                                    entries
+                                </label>
                             </div>
-
-                             <!-- Top controls -->
-                            <div class="row mb-3">
-                                <div class="col-md-6">
-                                    <label>
-                                        Show
-                                        <select class="custom-select custom-select-sm form-control form-control-sm"
-                                            style="width: auto; display: inline-block;">
-                                            <option value="10">10</option>
-                                            <option value="25">25</option>
-                                            <option value="50">50</option>
-                                        </select>
-                                        entries
+                            <div class="col-md-6 ms-auto">
+                                <div
+                                    class="d-flex flex-md-row flex-column align-items-md-center align-items-start justify-content-md-end gap-2">
+                                    <label class="d-flex align-items-center mb-0">
+                                        Search:
+                                        <input type="search" class="form-control form-control-sm ms-2" placeholder="">
                                     </label>
+                                    <a href="{{ route('formulir-siswa') }}"
+                                        class="btn btn-sm btn-primary mt-2 mt-md-0">Tambah</a>
                                 </div>
-                                <div class="col-md-6 ms-auto">
-                                    <div
-                                        class="d-flex flex-md-row flex-column align-items-md-center align-items-start justify-content-md-end gap-2">
-                                        <label class="d-flex align-items-center mb-0">
-                                            Search:
-                                            <input type="search" class="form-control form-control-sm ms-2" placeholder="">
-                                        </label>
-                                        <a href="{{ route('formulir-siswa') }}"
-                                            class="btn btn-sm btn-primary mt-2 mt-md-0">Tambah</a>
-                                    </div>
-                                </div>
-
-
                             </div>
+                        </div>
 
-                            <!-- Table -->
-                            <div class="table-responsive">
-                                <table class="table table-bordered table-striped">
-                                    <thead class="thead-dark">
+                        <!-- Table -->
+                        <div class="table-responsive">
+                            <table class="table table-bordered table-striped">
+                                <thead class="thead-dark">
+                                    <tr>
+                                        <th>No. Pendaftaran</th>
+                                        <th>Nama Lengkap</th>
+                                        <th>NISN</th>
+                                        <th>Jenis Kelamin</th>
+                                        <th>Tgl Daftar</th>
+                                        <th>Status</th>
+                                        <th>Aksi</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @if (isset($pendaftarans) && $pendaftarans->isEmpty())
                                         <tr>
-                                            <th>No. Pendaftaran</th>
-                                            <th>Tgl Daftar</th>
-                                            <th>Nama Lengkap</th>
-                                            <th>NISN</th>
-                                            <th>Jenis Kelamin</th>
-                                            <th>Status</th>
-                                            <th>Aksi</th>
+                                            <td colspan="7" class="text-center">Tidak ada data pendaftaran</td>
                                         </tr>
-                                    </thead>
-                                    <tbody>
-                                            <tr>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                                <td><strong></strong></td>
-                                                <td></td>
-
-                                                <td><span class="badge badge-warning"></span></td>
-                                                <td class="text-center action-icons">
-                                                    <a href="{{ route('pendaftaran.detail') }}">
-                                                        <i class="fas fa-edit text-primary me-2" title="Edit"></i>
-                                                    </a>
-                                                    <i class="fas fa-trash text-danger" title="Hapus"></i>
-                                                </td>
-                                        </tr>
-                                        <!-- Tambahkan baris lainnya sesuai kebutuhan -->
-                                    </tbody>
-                                </table>
-                            </div>
-
-                            <!-- Bottom controls -->
-                            <div class="row mt-3">
-                                <div class="col-sm-12 col-md-5">
-                                    <div class="dataTables_info">Showing 1 to 10 of 52 entries</div>
-                                </div>
-                                <div class="col-sm-12 col-md-7">
-                                    <nav aria-label="Page navigation" class="float-right">
-                                        <ul class="pagination pagination-sm mb-0">
-                                            <li class="page-item disabled"><a class="page-link" href="#">Previous</a>
-                                            </li>
-                                            <li class="page-item active"><a class="page-link" href="#">1</a></li>
-                                            <li class="page-item"><a class="page-link" href="#">2</a></li>
-                                            <li class="page-item"><a class="page-link" href="#">3</a></li>
-                                            <li class="page-item"><a class="page-link" href="#">Next</a></li>
-                                        </ul>
-                                    </nav>
-                                </div>
-                            </div>
-                        @else
-                            <!-- Top controls -->
-                            <div class="row mb-3">
-                                <div class="col-md-6">
-                                    <label>
-                                        Show
-                                        <select class="custom-select custom-select-sm form-control form-control-sm"
-                                            style="width: auto; display: inline-block;">
-                                            <option value="10">10</option>
-                                            <option value="25">25</option>
-                                            <option value="50">50</option>
-                                        </select>
-                                        entries
-                                    </label>
-                                </div>
-                                <div class="col-md-6 ms-auto">
-                                    <div
-                                        class="d-flex flex-md-row flex-column align-items-md-center align-items-start justify-content-md-end gap-2">
-                                        <label class="d-flex align-items-center mb-0">
-                                            Search:
-                                            <input type="search" class="form-control form-control-sm ms-2" placeholder="">
-                                        </label>
-                                        <a href="{{ route('formulir-siswa') }}"
-                                            class="btn btn-sm btn-primary mt-2 mt-md-0">Tambah</a>
-                                    </div>
-                                </div>
-
-
-                            </div>
-
-                            <!-- Table -->
-                            <div class="table-responsive">
-                                <table class="table table-bordered table-striped">
-                                    <thead class="thead-dark">
-                                        <tr>
-                                            <th>No. Pendaftaran</th>
-                                             <th>Nama Lengkap</th>
-                                            <th>NISN</th>
-                                            <th>Jenis Kelamin</th>
-                                            <th>Tgl Daftar</th>
-                                           
-                                            <th>Status</th>
-                                            <th>Aksi</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
+                                    @else
                                         @foreach ($pendaftarans as $pendaftaran)
                                             <tr>
-                                                <td>{{ $pendaftaran->siswa->id}}</td>
-                                                 <td>{{ $pendaftaran->siswa->nama }}</td>
-                                                <td><strong>{{ $pendaftaran->siswa->nisn }} </strong></td>
+                                                <td>{{ $pendaftaran->siswa->id }}</td>
+                                                <td>{{ $pendaftaran->siswa->nama }}</td>
+                                                <td><strong>{{ $pendaftaran->siswa->nisn }}</strong></td>
                                                 <td>{{ $pendaftaran->siswa->jenis_kelamin }}</td>
                                                 <td>{{ $pendaftaran->created_at->format('d-m-Y') }}</td>
-                                               
-
-                                                <td><span class="badge badge-warning">{{ $pendaftaran->status_verifikasi }}</span></td>
+                                                <td><span
+                                                        class="badge badge-warning">{{ $pendaftaran->status_verifikasi }}</span>
+                                                </td>
                                                 <td class="text-center action-icons">
                                                     <a href="{{ route('pendaftaran.detail') }}">
                                                         <i class="fas fa-edit text-primary me-2" title="Edit"></i>
                                                     </a>
                                                     <i class="fas fa-trash text-danger" title="Hapus"></i>
                                                 </td>
+                                            </tr>
                                         @endforeach
-                                        </tr>
-                                        <!-- Tambahkan baris lainnya sesuai kebutuhan -->
-                                    </tbody>
-                                </table>
-                            </div>
+                                    @endif
+                                </tbody>
+                            </table>
+                        </div>
 
-                            <!-- Bottom controls -->
-                            <div class="row mt-3">
-                                <div class="col-sm-12 col-md-5">
-                                    <div class="dataTables_info">Showing 1 to 10 of 52 entries</div>
-                                </div>
-                                <div class="col-sm-12 col-md-7">
-                                    <nav aria-label="Page navigation" class="float-right">
-                                        <ul class="pagination pagination-sm mb-0">
-                                            <li class="page-item disabled"><a class="page-link" href="#">Previous</a>
-                                            </li>
-                                            <li class="page-item active"><a class="page-link" href="#">1</a></li>
-                                            <li class="page-item"><a class="page-link" href="#">2</a></li>
-                                            <li class="page-item"><a class="page-link" href="#">3</a></li>
-                                            <li class="page-item"><a class="page-link" href="#">Next</a></li>
-                                        </ul>
-                                    </nav>
-                                </div>
+                        <!-- Bottom controls -->
+                        <div class="row mt-3">
+                            <div class="col-sm-12 col-md-5">
+                                <div class="dataTables_info">Showing 1 to 10 of 52 entries</div>
                             </div>
-                        @endif
+                            <div class="col-sm-12 col-md-7">
+                                <nav aria-label="Page navigation" class="float-right">
+                                    <ul class="pagination pagination-sm mb-0">
+                                        <li class="page-item disabled"><a class="page-link" href="#">Previous</a></li>
+                                        <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                                        <li class="page-item"><a class="page-link" href="#">2</a></li>
+                                        <li class="page-item"><a class="page-link" href="#">3</a></li>
+                                        <li class="page-item"><a class="page-link" href="#">Next</a></li>
+                                    </ul>
+                                </nav>
+                            </div>
+                        </div>
+
                     </div>
                 </div>
+
 
             </div>
         </div>

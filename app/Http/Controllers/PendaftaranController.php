@@ -36,7 +36,28 @@ class PendaftaranController extends Controller
             'piagam' => 'nullable|file|mimes:pdf',
             'kategori_prestasi' => 'nullable|array',
         ], [
+            'nama.required' => 'Nama lengkap harus diisi',
+            'nisn.required' => 'NISN harus diisi',
             'nisn.unique' => 'NISN sudah terdaftar',
+            'jenis_kelamin.required' => 'Jenis kelamin harus dipilih',
+            'tempat_lahir.required' => 'Tempat lahir harus diisi',
+            'tanggal_lahir.required' => 'Tanggal lahir harus diisi',
+            'alamat_siswa.required' => 'Alamat harus diisi',
+            'no_hp_siswa.required' => 'Nomor HP siswa harus diisi',
+            'nama_ayah.required' => 'Nama ayah harus diisi',
+            'nama_ibu.required' => 'Nama ibu harus diisi',
+            'alamat_ortu.required' => 'Alamat orang tua harus diisi',
+            'no_hp_ortu.required' => 'Nomor HP orang tua harus diisi',
+            'kk.required' => 'File KK harus diunggah',
+            'kk.file' => 'File KK harus berupa file',
+            'kk.mimes' => 'File KK harus berupa file dengan format PDF',
+            'ijazah.required' => 'File ijazah harus diunggah',
+            'ijazah.file' => 'File ijazah harus berupa file',
+            'ijazah.mimes' => 'File ijazah harus berupa file dengan format PDF',
+            'piagam.file' => 'File piagam harus berupa file',
+            'piagam.mimes' => 'File piagam harus berupa file dengan format PDF',
+            'kategori_prestasi.required' => 'Kategori prestasi harus diisi jika ada',
+            
         ]);
         DB::beginTransaction();
         try {

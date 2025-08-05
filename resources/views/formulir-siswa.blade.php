@@ -26,7 +26,7 @@
         {{-- Gunakan container-fluid agar penuh, px-3 untuk padding kiri-kanan --}}
         <div class="row justify-content-start "> {{-- mt-4 untuk memberi jarak dari atas --}}
             <div class="col-md-12"> {{-- Lebar card bisa diatur, misalnya 8 kolom dari 12 --}}
-                <div class="card shadow-sm mt-4">
+                {{-- <div class="card shadow-sm mt-4">
                     <div class="card-header">{{ __('Dashboard') }}</div>
 
                     <div class="card-body">
@@ -38,7 +38,7 @@
 
                         {{ __('You are logged in!') }}
                     </div>
-                </div>
+                </div> --}}
 
                 @if (session('success'))
                     <div class="alert alert-success alert-dismissible fade show" role="alert">
@@ -48,7 +48,7 @@
                         </button>
                     </div>
                 @endif
-
+                {{-- 
                 @if ($errors->any())
                     <div class="alert alert-danger">
                         <ul>
@@ -57,7 +57,7 @@
                             @endforeach
                         </ul>
                     </div>
-                @endif
+                @endif --}}
 
                 <form action="{{ route('pendaftaran.store') }}" method="POST" enctype="multipart/form-data">
                     @csrf
@@ -70,62 +70,96 @@
 
                             <div class="form-group">
                                 <label>Nama Lengkap</label>
-                                <input type="text" class="form-control" placeholder="Masukkan Nama Lengkap"
-                                    name="nama">
+                                <input type="text" class="form-control @error('nama') is-invalid @enderror"
+                                    placeholder="Masukkan Nama Lengkap" name="nama">
+                                @error('nama')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
                             </div>
 
                             <div class="form-group">
                                 <label>NISN</label>
-                                <input type="text" class="form-control" placeholder="Masukkan NISN" name="nisn">
+                                <input type="text" class="form-control @error('nisn') is-invalid @enderror"
+                                    placeholder="Masukkan NISN" name="nisn">
+                                @error('nisn')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
                             </div>
 
-                            <div class="form-group">
+                            <div class="form-group ">
+
                                 <label>Jenis Kelamin</label><br>
                                 <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" name="jenis_kelamin" value="Laki-laki">
+                                    <input class="form-check-input @error('jenis_kelamin') is-invalid @enderror"
+                                        type="radio" name="jenis_kelamin" value="Laki-laki">
                                     <label class="form-check-label">Laki-laki</label>
                                 </div>
                                 <div class="form-check form-check-inline">
                                     <input class="form-check-input" type="radio" name="jenis_kelamin" value="Perempuan">
                                     <label class="form-check-label">Perempuan</label>
                                 </div>
+                                @error('jenis_kelamin')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
                             </div>
 
                             <div class="form-group">
                                 <label>Tempat Lahir</label>
-                                <input type="text" class="form-control"
+                                <input type="text" class="form-control @error('tempat_lahir') is-invalid @enderror"
                                     placeholder="Masukkan Tempat Lahir"name="tempat_lahir">
+                                @error('tempat_lahir')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
                             </div>
 
                             <div class="form-group">
                                 <label>Tanggal Lahir</label>
-                                <input type="date" class="form-control" name="tanggal_lahir">
+                                <input type="date" class="form-control @error('tanggal_lahir') is-invalid @enderror"
+                                    name="tanggal_lahir">
+                                @error('tanggal_lahir')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
                             </div>
 
                             <div class="form-group">
                                 <label>Alamat</label>
-                                <input type="text" class="form-control" placeholder="Masukkan Alamat"
-                                    name="alamat_siswa">
+                                <input type="text" class="form-control @error('alamat_siswa') is-invalid @enderror"
+                                    placeholder="Masukkan Alamat" name="alamat_siswa">
+                                @error('alamat_siswa')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
                             </div>
 
                             <div class="form-group">
                                 <label>No HP</label>
-                                <input type="text" class="form-control" placeholder="Masukkan No HP" name="no_hp_siswa">
+                                <input type="text" class="form-control @error('no_hp_siswa') is-invalid @enderror"
+                                    placeholder="Masukkan No HP" name="no_hp_siswa">
+                                @error('no_hp_siswa')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
                             </div>
 
                             <div class="form-group">
                                 <label>Scan Kartu Keluarga</label>
                                 <div class="custom-file">
-                                    <input type="file" class="custom-file-input" name="kk">
+                                    <input type="file" class="custom-file-input @error('kk') is-invalid @enderror"
+                                        name="kk">
                                     <label class="custom-file-label">Unggah Dokumen</label>
+                                    @error('kk')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
                                 </div>
                             </div>
 
                             <div class="form-group">
                                 <label>Scan Ijazah</label>
                                 <div class="custom-file">
-                                    <input type="file" class="custom-file-input" name="ijazah">
+                                    <input type="file" class="custom-file-input @error('ijazah') is-invalid @enderror"
+                                        name="ijazah">
                                     <label class="custom-file-label">Unggah Dokumen</label>
+                                    @error('ijazah')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
                                 </div>
                             </div>
 
@@ -156,8 +190,12 @@
                             <div class="form-group">
                                 <label>Scan Piagam Prestasi (Jika Ada)</label>
                                 <div class="custom-file">
-                                    <input type="file" class="custom-file-input" name="piagam">
+                                    <input type="file" class="custom-file-input @error('piagam') is-invalid @enderror"
+                                        name="piagam">
                                     <label class="custom-file-label">Unggah Dokumen</label>
+                                    @error('piagam')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
                                 </div>
                             </div>
                         </div>
@@ -172,26 +210,38 @@
 
                             <div class="form-group">
                                 <label>Nama Ayah</label>
-                                <input type="text" class="form-control" placeholder="Masukkan Nama Ayah"
-                                    name="nama_ayah">
+                                <input type="text" class="form-control @error('nama_ayah') is-invalid @enderror"
+                                    placeholder="Masukkan Nama Ayah" name="nama_ayah">
+                                @error('nama_ayah')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
                             </div>
 
                             <div class="form-group">
                                 <label>Nama Ibu</label>
-                                <input type="text" class="form-control" placeholder="Masukkan Nama Ibu"
-                                    name="nama_ibu">
+                                <input type="text" class="form-control @error('nama_ibu') is-invalid @enderror"
+                                    placeholder="Masukkan Nama Ibu" name="nama_ibu">
+                                @error('nama_ibu')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
                             </div>
 
                             <div class="form-group">
                                 <label>Alamat</label>
-                                <input type="text" class="form-control" placeholder="Masukkan Alamat"
-                                    name="alamat_ortu">
+                                <input type="text" class="form-control @error('alamat_ortu') is-invalid @enderror"
+                                    placeholder="Masukkan Alamat" name="alamat_ortu">
+                                @error('alamat_ortu')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
                             </div>
 
                             <div class="form-group">
                                 <label>No HP</label>
-                                <input type="text" class="form-control" placeholder="Masukkan No HP"
-                                    name="no_hp_ortu">
+                                <input type="text" class="form-control @error('no_hp_ortu') is-invalid @enderror"
+                                    placeholder="Masukkan No HP" name="no_hp_ortu">
+                                @error('no_hp_ortu')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
                             </div>
 
                             <div class="text-center">
