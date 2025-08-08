@@ -13,7 +13,7 @@ Route::get('/', function () {
 Auth::routes();
 
 //layout app
-// Route::get('/home', [App\Http\Controllers\HomeController::class, 'home'])->name('home');
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'home'])->name('home');
 
 // adminlte
 // siswa
@@ -23,10 +23,13 @@ Route::get('/siswa/pendaftaran', [PendaftaranController::class, 'ajuanPendaftara
 Route::get('/formulir-siswa', [App\Http\Controllers\PendaftaranController::class, 'index'])
     ->middleware('auth')
     ->name('formulir-siswa');
+//////////////////
 Route::post('/pendaftaran', [App\Http\Controllers\PendaftaranController::class, 'store'])->name('pendaftaran.store');
+///////////////
 Route::get('pendaftaran/detail', [App\Http\Controllers\PendaftaranController::class, 'detailPendaftaran'])
     ->middleware('auth')
     ->name('pendaftaran.detail');
+
 Route::get('formulir/edit{id}', [App\Http\Controllers\PendaftaranController::class, 'edit'])->name('formulir.edit');
 Route::put('formulir/update/{id}', [App\Http\Controllers\PendaftaranController::class, 'update'])->name('formulir.update');
 
@@ -34,10 +37,16 @@ Route::put('formulir/update/{id}', [App\Http\Controllers\PendaftaranController::
 
 // admin
 Route::prefix('admin')->middleware(['auth', 'is_admin'])->group(function () {
+    Route::get('/dashboard-statistik', [HomeController::class, 'dashboardStatistik'])->name('admin.dashboard-statistik');
+     Route::get('/data-pendaftar', [AdminController::class, 'showDataPendaftar'])->name('admin.pendaftar');
+    Route::get('/detail-pendaftar', [AdminController::class, 'showDetailPendaftar'])->name('admin.detail-pendaftar');
+    Route::get('/detail-pendaftar/{id}', [AdminController::class, 'showDetailPendaftar'])->name('admin.detail-pendaftar');
+
+
+
     Route::get('/dashboard', [HomeController::class, 'adminDashboard'])->name('admin.dashboard');
     // Route::get('/data-pendaftar', [HomeController::class, 'dataPendaftar'])->name('admin.data-pendaftar');
-    Route::get('/data-pendaftar', [AdminController::class, 'index'])->name('admin.pendaftar');
+   
 
-    Route::get('/dashboard-statistik', [HomeController::class, 'dashboardStatistik'])->name('admin.dashboard-statistik');
-    Route::get('/detail-pendaftar', [HomeController::class, 'detailPendaftar'])->name('admin.detail-pendaftar');
+
 });

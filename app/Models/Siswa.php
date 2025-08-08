@@ -10,6 +10,9 @@ class Siswa extends Model
     protected $fillable = [
         'user_id','orang_tua_id', 'nama','tempat_lahir', 'tanggal_lahir', 'jenis_kelamin', 'nisn', 'alamat_siswa', 'no_hp_siswa', 'kategori_prestasi'
     ];
+      protected $casts = [
+        'tanggal_lahir' => 'date',
+    ];
 
     public function orangTua() 
     {
