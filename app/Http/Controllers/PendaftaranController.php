@@ -14,7 +14,7 @@ class PendaftaranController extends Controller
     // Siswa
     public function index()
     {
-        return view('formulir-siswa');
+        return view('siswa.formulir-siswa');
     }
     public function store(\App\Http\Requests\FormulirPendaftaranStore $request)
     {
@@ -29,9 +29,7 @@ class PendaftaranController extends Controller
                 'no_hp_ortu' => $request->no_hp_ortu,
             ]);
 
-            $siswa = Siswa::create([
-               
-
+            $siswa = Siswa::create([           
                 'user_id' => Auth::id(),
                 'nama' => $request->nama,
                 'nisn' => $request->nisn,
@@ -42,7 +40,6 @@ class PendaftaranController extends Controller
                 'no_hp_siswa' => $request->no_hp_siswa,
                 'orang_tua_id' => $ortu->id,
                 'kategori_prestasi' => $request->kategori_prestasi ? implode(', ', $request->kategori_prestasi) : null,
-
             ]);
             $kk = $request->file('kk')?->store('dokumen', 'public');
             $ijazah = $request->file('ijazah')?->store('dokumen', 'public');

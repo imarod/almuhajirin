@@ -43,6 +43,7 @@
                                     <th style="width: 5%;">No.</th>
                                     <th>Nama Lengkap</th>
                                     <th>NISN</th>
+                                    <th>No HP</th>
                                     <th>Status</th>
                                     <th>Aksi</th>
                                 </tr>
@@ -53,6 +54,7 @@
                                         <td class="text-center">{{ $loop->iteration }}.</td>
                                         <td>{{ $pendaftar->siswa->nama ?? '-' }}</td>
                                         <td>{{ $pendaftar->siswa->nisn ?? '-' }}</td>
+                                        <td>{{$pendaftar->siswa->no_hp_siswa}}</td>
                                         <td><span
                                                 class="status-badge status-diterima">{{ $pendaftar->status_verifikasi ?? '-' }}</span>
                                         </td>

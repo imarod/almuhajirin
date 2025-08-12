@@ -6,14 +6,14 @@
             <div class="row mb-2">
                 <div class="col-sm-6">
                     <h1 class="m-0">Dashboard</h1>
-                </div><!-- /.col -->
+                </div>
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
                         <li class="breadcrumb-item"><a href="#">Home</a></li>
                         <li class="breadcrumb-item active">Dashboard v1</li>
                     </ol>
-                </div><!-- /.col -->
-            </div><!-- /.row -->
+                </div>
+            </div>
 
         </div>
 
@@ -22,10 +22,8 @@
             <span>Pastikan dokumen yang Anda unggah memiliki kualitas scan yang jelas dan mudah dibaca.</span>
         </div>
 
-
-        {{-- Gunakan container-fluid agar penuh, px-3 untuk padding kiri-kanan --}}
-        <div class="row justify-content-start "> {{-- mt-4 untuk memberi jarak dari atas --}}
-            <div class="col-md-12"> {{-- Lebar card bisa diatur, misalnya 8 kolom dari 12 --}}
+        <div class="row justify-content-start ">
+            <div class="col-md-12"> 
                 {{-- <div class="card shadow-sm mt-4">
                     <div class="card-header">{{ __('Dashboard') }}</div>
 
@@ -132,11 +130,33 @@
 
                             <div class="form-group">
                                 <label>No HP</label>
-                                <input type="text" class="form-control @error('no_hp_siswa') is-invalid @enderror"
-                                    placeholder="Masukkan No HP" name="no_hp_siswa">
-                                @error('no_hp_siswa')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
+                                <style>
+                                    .input-group-text {
+                                        padding: 0.375rem 0.75rem;
+                                        font-size: 1rem;
+                                        line-height: 1.5;
+                                        color: #495057;
+                                    }
+
+                                    .input-group>.form-control {
+                                        border-left: none;
+                                        border-radius: 0 0.25rem 0.025rem 0;
+                                    }
+                                </style>
+                                <div class="input-group">
+                                    <span class="input-group-text"
+                                        style="background-color: #e9ecef; border-right: none; border-radius: 0.25rem 0 0 0.25rem;">+62</span>
+                                    <input type="text" id="phoneInput"
+                                        class="form-control @error('no_hp_siswa') is-invalid @enderror"
+                                        placeholder="Masukkan No Handphone" name="no_hp_siswa"
+                                        value="{{ old('no_hp_siswa_display') }}">
+                                    <input type="hidden" name="no_hp_siswa" id="hiddenPhoneInput"
+                                        value="{{ old('no_hp_siswa') }}">
+                                    @error('no_hp_siswa')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
+
                             </div>
 
                             <div class="form-group">
@@ -237,11 +257,20 @@
 
                             <div class="form-group">
                                 <label>No HP</label>
-                                <input type="text" class="form-control @error('no_hp_ortu') is-invalid @enderror"
-                                    placeholder="Masukkan No HP" name="no_hp_ortu">
-                                @error('no_hp_ortu')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
+                                <div class="input-group">
+                                    <span class="input-group-text"
+                                        style="background-color: #e9ecef; border-right: none; border-radius: 0.25rem 0 0 0.25rem">+62</span>
+                                    <input type="text" id="phoneOrtuInput"
+                                        class="form-control @error('no_hp_ortu') is-invalid @enderror"
+                                        placeholder="Masukkan No HP" name="no_hp_ortu"
+                                        value="{{ old('no_hp_ortu_display') }}">
+                                    <input type="hidden" name="no_hp_ortu" id="hiddenOrtuInput"
+                                        value="{{ old('no_hp_ortu') }}">
+                                    @error('no_hp_ortu')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
+
                             </div>
 
                             <div class="text-center">
@@ -254,9 +283,10 @@
                 </form>
             </div>
         </div>
-    </div><!-- /.container-fluid -->
+    </div>
 
     <script>
+        //menampilkan nama dokumen yang di upload di formulir
         document.querySelectorAll('.custom-file-input').forEach(function(input) {
             input.addEventListener('change', function(e) {
                 let fileName = e.target.files[0]?.name || '';
@@ -265,6 +295,76 @@
                     label.textContent = fileName
                 }
             });
+        })
+
+        document.addEventListener('DOMContentLoaded', function(){
+            const phoneInput = document.querySelector('#phoneInput')
+            const hiddenPhoneInput = document.querySelector('#hiddenPhoneInput')
+            phoneInput.addEventListener('input', function(){
+                let value = phoneInput.value.replace(/[^0-9]/g,'')
+                if(value.startsWith('0')){
+                    value = value.substring(1);
+                    phoneInput.value = value
+                }
+
+                if(value.lenght> 12){
+                    value=value.substring(0,12)
+                    phoneInput.value= value
+                }
+                hiddenPhoneInput.value = value ? '+62' + value : ''
+            })
+            phoneInput.addEventListener('keypress', function(e){
+                if(phoneInput.value === '' && e.key === '0') {
+                    e.preventDefault()
+                }
+            })
+
+            const phoneOrtuInput = document.querySelector('#phoneOrtuInput')
+            const hiddenOrtuInput = document.querySelector('#hiddenOrtuInput')
+            phoneOrtuInput.addEventListener('input', function(){
+                let value= phoneOrtuInput.value.replace(/[^0-9]/g,'')
+                if(value.startsWith('0')){
+                    value= value.substring(1)
+                    phoneOrtuInput.value=value
+                }
+                if(value.lenght>12 ){
+                    value=value.substring(0,12)
+                    phoneOrtuInput.value= value
+                }
+                hiddenOrtuInput.value = value ? '+62' + value : ''
+            })
+            phoneOrtuInput.addEventListener('keypress', function(e){
+                if(phoneOrtuInput.value === '' && e.key === '0'){
+                    e.preventDefault()
+                }
+            })
+
+            // validasi no telepon siswa dan ortu
+            document.querySelector('form').addEventListener('submit', function(e){
+                const phoneRegex = /^[8][0-9]{8,11}$/
+                if (phoneInput.value && !phoneRegex.test(phoneInput.value)){
+                    e.preventDefault()
+                    phoneInput.classList.add('is-invalid')
+                    let feedback = phoneInput.parentElement.querySelector('.invalid-feedback');
+                    if(!feedback){
+                        feedback = document.createElement('div')
+                        feedback.className = 'invalid-feedback'
+                        phoneInput.parentElement.appendChild(feedback)
+                    }
+                    feedback.textContent = 'Nomor HP siswa harus dimulai dengan 8 dan berisi 9-12 digit.'
+                }
+                if (phoneOrtuInput.value && !phoneRegex.test(phoneOrtuInput.value)){
+                    e.preventDefault()
+                    phoneOrtuInput.classList.add('is-invalid')
+                    let feedback = phoneOrtuInput.parentElement.querySelector('.invalid-feedback');
+                    if(!feedback){
+                        feedback = document.createElement('div')
+                        feedback.className = 'invalid-feedback'
+                        phoneOrtuInput.parentElement.appendChild(feedback)
+                    }
+                    feedback.textContent = 'Nomor HP Orang Tua harus dimulai dengan 8 dan berisi 9-12 digit.'
+                }
+            })
         })
     </script>
 @endsection

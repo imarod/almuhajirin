@@ -17,18 +17,34 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'home'])->name(
 
 // adminlte
 // siswa
-Route::get('/siswa/pendaftaran', [PendaftaranController::class, 'ajuanPendaftaran'])
-    ->middleware('auth')
-    ->name('ajuan.pendaftaran');
-Route::get('/formulir-siswa', [App\Http\Controllers\PendaftaranController::class, 'index'])
-    ->middleware('auth')
-    ->name('formulir-siswa');
+
+
+
+Route::middleware('auth')->group(function () {
+    Route::get('pendaftaran/detail', [PendaftaranController::class, 'detailPendaftaran'])
+        ->name('pendaftaran.detail');
+
+    Route::get('/siswa/pendaftaran', [PendaftaranController::class, 'ajuanPendaftaran'])
+        ->name('ajuan.pendaftaran');
+
+    Route::get('/formulir-siswa', [PendaftaranController::class, 'index'])
+        ->name('formulir-siswa');
+});
+
+// Route::get('/siswa/pendaftaran', [PendaftaranController::class, 'ajuanPendaftaran'])
+//     ->middleware('auth')
+//     ->name('ajuan.pendaftaran');
+// Route::get('/formulir-siswa', [App\Http\Controllers\PendaftaranController::class, 'index'])
+//     ->middleware('auth')
+//     ->name('formulir-siswa');
 //////////////////
 Route::post('/pendaftaran', [App\Http\Controllers\PendaftaranController::class, 'store'])->name('pendaftaran.store');
 ///////////////
-Route::get('pendaftaran/detail', [App\Http\Controllers\PendaftaranController::class, 'detailPendaftaran'])
-    ->middleware('auth')
-    ->name('pendaftaran.detail');
+
+// route pendaftaran/detail emang belum dibuat detailnya
+// Route::get('pendaftaran/detail', [App\Http\Controllers\PendaftaranController::class, 'detailPendaftaran'])
+//     ->middleware('auth')
+//     ->name('pendaftaran.detail'); 
 
 Route::get('formulir/edit{id}', [App\Http\Controllers\PendaftaranController::class, 'edit'])->name('formulir.edit');
 Route::put('formulir/update/{id}', [App\Http\Controllers\PendaftaranController::class, 'update'])->name('formulir.update');
