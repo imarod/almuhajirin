@@ -11,6 +11,11 @@ return [
         'url'  => 'admin/data-pendaftar',
         'icon' => 'fas fa-users',
     ],
+    [
+        'text' => 'Manajemen Jadwal PPDB',
+        'url'  => 'admin/manajemen-jadwal-ppdb',
+        'icon' => 'fas fa-cog',
+    ],
     // Tambah menu admin lainnya di sini...
 
     // Navbar items:

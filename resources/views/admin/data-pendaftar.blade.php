@@ -1,9 +1,18 @@
 @extends('layouts.adminlte-custom')
+@section('content_header')
+  <div class="container-fluid">
+        <div class="d-flex justify-content-between align-items-center">
+            <div>
+                <h1 class="h3 mb-0 font-weight-bold text-dark">Data Seluruh Pendaftar</h1>
+            </div>
+
+        </div>
+    </div>
+@stop
 
 @section('content')
-    <div class="content-header">
         <div class="container-fluid">
-            <div class="row mb-2">
+            {{-- <div class="row mb-2">
                 <div class="col-sm-6">
                     <h1 class="m-0">Data Pendaftar</h1>
                 </div><!-- /.col -->
@@ -13,7 +22,7 @@
                         <li class="breadcrumb-item active">Data Pendaftar</li>
                     </ol>
                 </div><!-- /.col -->
-            </div><!-- /.row -->
+            </div><!-- /.row --> --}}
 
             <div class="card">
                 <div class="card-body">
@@ -56,7 +65,7 @@
                                         <td>{{ $pendaftar->siswa->nisn ?? '-' }}</td>
                                         <td>{{$pendaftar->siswa->no_hp_siswa}}</td>
                                         <td><span
-                                                class="status-badge status-diterima">{{ $pendaftar->status_verifikasi ?? '-' }}</span>
+                                                class="status-badge status-diterima">{{ $pendaftar->status_aktual ?? '-' }}</span>
                                         </td>
                                         <td class="text-center action-icons">
                                             <a href="{{ route('admin.detail-pendaftar', ['id' => $pendaftar->id]) }}"><i
@@ -86,5 +95,4 @@
 
             </div>
         </div>
-    </div>
 @endsection

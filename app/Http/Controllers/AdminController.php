@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Http\Request;
 use App\Models\Pendaftaran;
 
 class AdminController extends Controller
@@ -19,4 +20,14 @@ class AdminController extends Controller
 
         return view('admin.detail-pendaftaran', compact('pendaftars'));
     }
+    public function updateStatus(Request $request, $id)
+    {
+        $pendaftaran = Pendaftaran::findOrFail($id);
+        $pendaftaran->update([
+            'status_aktual' => $request->status_aktual,
+        ]);
+
+        return redirect()->route('admin.detail-pendaftar', $pendaftaran->id)->with('success', 'Status pendaftaran berhasil diperbarui.');
+    }
+   
 }

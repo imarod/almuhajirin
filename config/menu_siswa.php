@@ -17,5 +17,4 @@ return [
         'url'  => 'siswa/profile',
         'icon' => 'fas fa-user',
     ],
-    // Tambah menu siswa lainnya di sini...
 ];

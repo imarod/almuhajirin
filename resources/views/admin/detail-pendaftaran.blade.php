@@ -19,13 +19,37 @@
                     <a href="#" class="btn btn-success">
                         <i class="fas fa-edit"></i> Edit Data
                     </a>
-                    <button class="btn btn-danger">
-                        <i class="fas fa-times"></i> Tolak
-                    </button>
-                    <button class="btn btn-primary">
-                        <i class="fas fa-check"></i> Terima
-                    </button>
+                    <form action="{{ route('admin.update-status', $pendaftars->id) }}" method="POST">
+                        @csrf
+                        @method('PUT')
+                        <input type="hidden" name="status_aktual" value="Ditolak">
+                        <button type="submit" class="btn btn-danger">
+                            <i class="fas fa-times"></i> Tolak
+                        </button>
+                    </form>
+                    <form action="{{ route('admin.update-status', $pendaftars->id) }}" method="POST">
+                        @csrf
+                        @method('PUT')
+                        <input type="hidden" name="status_aktual" value="Diterima">
+                        <button class="btn btn-primary">
+                            <i class="fas fa-check"></i> Terima
+                        </button>
+                    </form>
                 </div>
+
+                {{-- DIGANTI --}}
+                {{-- <div class="card-footer">
+                    <form action="{{route('admin.set-announcement-date', $pendaftars->id)}}" method="POST">
+                        @csrf
+                        @method('PUT')
+                        <div class="form-group d-flex align-items-center">
+                            <label for="tgl_pengumuman" class="mr-2 mb-0">Tanggal Pengumuman: </label>
+                            <input type="date" name="tgl_pengumuman" class="form-control col-sm-3 mr-2" value="{{$pendaftars->tgl_pengumuman ? $pendaftars->tgl_pengumuman->format('Y-m-d') : ''}}">
+                            <button type="submit" class="btn btn-info">Simpan Tanggal</button>
+                        </div>
+                    </form>
+                </div> --}}
+
                 <div class="row g-3">
                     {{-- Kolom Kiri --}}
                     <div class="col-md-6">
@@ -74,6 +98,16 @@
                                         <p class="text-muted mb-1">Tanggal Lahir</p>
                                         <strong
                                             class="text-dark">{{ $pendaftars->siswa->tanggal_lahir->format('d-m-Y') }}</strong>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="list-group-item d-flex justify-content-between align-items-center ">
+                                <div class="d-flex align-items-center ">
+                                    <i class="fa fa-phone text-primary fs-3 mr-3"></i>
+                                    <div class="flex-grow-1">
+                                        <p class="text-muted mb-1">No WhatsApp </p>
+                                        <strong
+                                            class="text-dark">{{ $pendaftars->siswa->no_hp_siswa }}</strong>
                                     </div>
                                 </div>
                             </div>
@@ -490,14 +524,15 @@
             }
         });
 
+        //KODE INI NANTI DIAKTIFKAN KALAU PERLU
         // function toggleFullScreen(){
         //     if(isFullscreen){
-                
+
         //             overlay.classList.remove('fullscreen')
         //             if(document.exitFullscreen){
         //                 document.exitFullscreen()
         //             }
-               
+
         //     }else{
         //         overlay.classList.add('fullscreen')
         //         if(overlay.requestFullscreen){
@@ -505,7 +540,5 @@
         //         }
         //     }
         // }
-
-        
     </script>
 @stop

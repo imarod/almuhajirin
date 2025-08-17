@@ -3,6 +3,8 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\ManajemenJadwalPpdb;
+use App\Http\Controllers\ManajemenJadwalPpdbController;
 use App\Http\Controllers\PendaftaranController;
 use App\Models\Pendaftaran;
 
@@ -54,9 +56,15 @@ Route::put('formulir/update/{id}', [App\Http\Controllers\PendaftaranController::
 // admin
 Route::prefix('admin')->middleware(['auth', 'is_admin'])->group(function () {
     Route::get('/dashboard-statistik', [HomeController::class, 'dashboardStatistik'])->name('admin.dashboard-statistik');
-     Route::get('/data-pendaftar', [AdminController::class, 'showDataPendaftar'])->name('admin.pendaftar');
+    Route::get('/data-pendaftar', [AdminController::class, 'showDataPendaftar'])->name('admin.pendaftar');
     Route::get('/detail-pendaftar', [AdminController::class, 'showDetailPendaftar'])->name('admin.detail-pendaftar');
     Route::get('/detail-pendaftar/{id}', [AdminController::class, 'showDetailPendaftar'])->name('admin.detail-pendaftar');
+    Route::put('/pendaftaran/{id}/update-status', [AdminController::class, 'updateStatus'])->name('admin.update-status');
+    Route::get('/manajemen-jadwal-ppdb', [ManajemenJadwalPpdbController::class, 'index'])->name('admin.manajemen-jadwal-ppdb');
+    Route::post('/manajemen-jadwal-ppdb', [ManajemenJadwalPpdbController::class, 'store'])->name('admin.store-jadwal-ppdb');
+    Route::get('/manajemen-jadwal-ppdb/{id}/edit', [ManajemenJadwalPpdbController::class, 'edit'])->name('admin.edit-jadwal-ppdb');
+    Route::put('/manajemen-jadwal-ppdb/{id}', [ManajemenJadwalPpdbController::class, 'update'])->name('admin.update-jadwal-ppdb');
+    Route::delete('/manajemen-jadwal-ppdb/{id}', [ManajemenJadwalPpdbController::class, 'destroy'])->name('admin.destroy-jadwal-ppdb');
 
 
 

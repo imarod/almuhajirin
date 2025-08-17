@@ -83,7 +83,7 @@
                                                 <td>{{ $pendaftaran->siswa->jenis_kelamin }}</td>
                                                 <td>{{ $pendaftaran->created_at->format('d-m-Y') }}</td>
                                                 <td><span
-                                                        class="badge badge-warning">{{ $pendaftaran->status_verifikasi }}</span>
+                                                        class="badge badge-warning">{{ $pendaftaran->showStatusPendaftar()}}</span>
                                                 </td>
                                                 <td class="text-center action-icons">
                                                     <a href="{{ route('pendaftaran.detail') }}">

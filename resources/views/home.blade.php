@@ -8,7 +8,7 @@
 @stop
 
 @section('content')
-<div class="row">
+{{-- <div class="row">
     <!-- Data Calon Siswa -->
     <div class="col-md-6">
         <div class="card card-primary">
@@ -79,6 +79,139 @@
             </div>
             <div class="icon">
                 <i class="fas fa-users"></i>
+            </div>
+        </div>
+    </div>
+</div> --}}
+
+
+
+<div class="container-fluid px-4">
+    <div class="card ">
+       
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover mb-0">
+                    <thead class="table-secondary">
+                        <tr>
+                            <th scope="col" class="px-4 py-3 text-dark fw-semibold  ">No.</th>
+                            <th scope="col" class="px-4 py-3 text-dark fw-semibold  ">Tahun Ajaran</th>
+                            <th scope="col" class="px-4 py-3 text-dark fw-semibold  ">Gelombang</th>
+                            <th scope="col" class="px-4 py-3 text-dark fw-semibold  ">Total Pendaftar</th>
+                            <th scope="col" class="px-4 py-3 text-dark fw-semibold  ">Tanggal Mulai</th>
+                            <th scope="col" class="px-4 py-3 text-dark fw-semibold  ">Tanggal Berakhir</th>
+                            <th scope="col" class="px-4 py-3 text-dark fw-semibold  ">Status</th>
+                            <th scope="col" class="px-4 py-3 text-dark fw-semibold  ">Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="border-bottom">
+                            <td class="px-4 py-2 text-muted">1.</td>
+                            <td class="px-4 py-2 fw-medium">2024/2025</td>
+                            <td class="px-4 py-2">1</td>
+                            <td class="px-4 py-2 fw-semibold">222</td>
+                            <td class="px-4 py-2 text-muted">23-04-2024</td>
+                            <td class="px-4 py-2 text-muted">23-05-2024</td>
+                            <td class="px-4 py-2">
+                                <span class="badge bg-success-subtle text-success px-3 py-2 rounded-pill fw-medium">Aktif</span>
+                            </td>
+                            <td class="px-4 py-2 text-center">
+                                <div class="btn-group" role="group">
+                                    <button type="button" class="btn btn-outline-secondary btn-sm" title="View">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                    <button type="button" class="btn btn-outline-primary btn-sm" title="Edit">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr class="border-bottom">
+                            <td class="px-4 py-2 text-muted">2.</td>
+                            <td class="px-4 py-2 fw-medium">2023/2024</td>
+                            <td class="px-4 py-2">2</td>
+                            <td class="px-4 py-2 fw-semibold">343</td>
+                            <td class="px-4 py-2 text-muted">23-05-2022</td>
+                            <td class="px-4 py-2 text-muted">23-06-2022</td>
+                            <td class="px-4 py-2">
+                                <span class="badge bg-warning-subtle text-warning px-3 py-2 rounded-pill fw-medium">Selesai</span>
+                            </td>
+                            <td class="px-4 py-2 text-center">
+                                <div class="btn-group" role="group">
+                                    <button type="button" class="btn btn-outline-secondary btn-sm" title="View">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                    <button type="button" class="btn btn-outline-primary btn-sm" title="Edit">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr class="border-bottom">
+                            <td class="px-4 py-2 text-muted">3.</td>
+                            <td class="px-4 py-2 fw-medium">2022/2023</td>
+                            <td class="px-4 py-2">1</td>
+                            <td class="px-4 py-2 fw-semibold">343</td>
+                            <td class="px-4 py-2 text-muted">23-04-2022</td>
+                            <td class="px-4 py-2 text-muted">23-05-2022</td>
+                            <td class="px-4 py-2">
+                                <span class="badge bg-warning-subtle text-warning px-3 py-2 rounded-pill fw-medium">Selesai</span>
+                            </td>
+                            <td class="px-4 py-2 text-center">
+                                <div class="btn-group" role="group">
+                                    <button type="button" class="btn btn-outline-secondary btn-sm" title="View">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                    <button type="button" class="btn btn-outline-primary btn-sm" title="Edit">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr class="border-bottom">
+                            <td class="px-4 py-2 text-muted">4.</td>
+                            <td class="px-4 py-2 fw-medium">2021/2022</td>
+                            <td class="px-4 py-2">2</td>
+                            <td class="px-4 py-2 fw-semibold">343</td>
+                            <td class="px-4 py-2 text-muted">23-05-2021</td>
+                            <td class="px-4 py-2 text-muted">23-06-2021</td>
+                            <td class="px-4 py-2">
+                                <span class="badge bg-warning-subtle text-warning px-3 py-2 rounded-pill fw-medium">Selesai</span>
+                            </td>
+                            <td class="px-4 py-2 text-center">
+                                <div class="btn-group" role="group">
+                                    <button type="button" class="btn btn-outline-secondary btn-sm" title="View">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                    <button type="button" class="btn btn-outline-primary btn-sm" title="Edit">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="px-4 py-2 text-muted">5.</td>
+                            <td class="px-4 py-2 fw-medium">2021/2022</td>
+                            <td class="px-4 py-2">1</td>
+                            <td class="px-4 py-2 fw-semibold">222</td>
+                            <td class="px-4 py-2 text-muted">23-04-2021</td>
+                            <td class="px-4 py-2 text-muted">23-05-2021</td>
+                            <td class="px-4 py-2">
+                                <span class="badge bg-warning-subtle text-warning px-3 py-2 rounded-pill fw-medium">Selesai</span>
+                            </td>
+                            <td class="px-4 py-2 text-center">
+                                <div class="btn-group" role="group">
+                                    <button type="button" class="btn btn-outline-secondary btn-sm" title="View">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                    <button type="button" class="btn btn-outline-primary btn-sm" title="Edit">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>
