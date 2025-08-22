@@ -116,7 +116,7 @@
                                     <i class="fa fa-calendar-alt text-primary fs-3 mr-3"></i>
                                     <div class="flex-grow-1">
                                         <p class="text-muted mb-1">Kategori Prestasi</p>
-                                        <strong class="text-dark">{{ $pendaftars->kategori_prestasi ?? '-' }}</strong>
+                                        <strong class="text-dark">{{ $pendaftars->siswa->kategori_prestasi ?? '-' }}</strong>
                                     </div>
                                 </div>
                             </div>

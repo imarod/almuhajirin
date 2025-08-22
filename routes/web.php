@@ -23,14 +23,29 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'home'])->name(
 
 
 Route::middleware('auth')->group(function () {
-    Route::get('pendaftaran/detail', [PendaftaranController::class, 'detailPendaftaran'])
-        ->name('pendaftaran.detail');
-
-    Route::get('/siswa/pendaftaran', [PendaftaranController::class, 'ajuanPendaftaran'])
+    Route::get('/siswa/pendaftaran', [PendaftaranController::class, 'listPendaftar'])
         ->name('ajuan.pendaftaran');
 
     Route::get('/formulir-siswa', [PendaftaranController::class, 'index'])
         ->name('formulir-siswa');
+
+    Route::post('/pendaftaran', [PendaftaranController::class, 'store'])
+        ->name('pendaftaran.store');
+
+    Route::get('formulir/edit/{id}', [PendaftaranController::class, 'edit'])
+        ->name('formulir.edit');
+    Route::put('formulir/update/{id}', [PendaftaranController::class, 'update'])
+        ->name('formulir.update');
+
+    Route::delete('pendaftaran/{id}', [PendaftaranController::class, 'destroy'])
+        ->name('pendaftaran.destroy');
+
+    //cetak pendaftaran
+    Route::get('siswa/daftar-cetak-formulir', [PendaftaranController::class, 'listCetakFormulir'])
+        ->name('siswa.daftar-formulir');
+
+    Route::get('siswa/cetak-formulir/{id}', [PendaftaranController::class, 'printPendaftaran'])
+        ->name('cetak.formulir');
 });
 
 // Route::get('/siswa/pendaftaran', [PendaftaranController::class, 'ajuanPendaftaran'])
@@ -40,7 +55,7 @@ Route::middleware('auth')->group(function () {
 //     ->middleware('auth')
 //     ->name('formulir-siswa');
 //////////////////
-Route::post('/pendaftaran', [App\Http\Controllers\PendaftaranController::class, 'store'])->name('pendaftaran.store');
+
 ///////////////
 
 // route pendaftaran/detail emang belum dibuat detailnya
@@ -48,8 +63,8 @@ Route::post('/pendaftaran', [App\Http\Controllers\PendaftaranController::class, 
 //     ->middleware('auth')
 //     ->name('pendaftaran.detail'); 
 
-Route::get('formulir/edit{id}', [App\Http\Controllers\PendaftaranController::class, 'edit'])->name('formulir.edit');
-Route::put('formulir/update/{id}', [App\Http\Controllers\PendaftaranController::class, 'update'])->name('formulir.update');
+
+
 
 
 
@@ -70,7 +85,7 @@ Route::prefix('admin')->middleware(['auth', 'is_admin'])->group(function () {
 
     Route::get('/dashboard', [HomeController::class, 'adminDashboard'])->name('admin.dashboard');
     // Route::get('/data-pendaftar', [HomeController::class, 'dataPendaftar'])->name('admin.data-pendaftar');
-   
+
 
 
 });

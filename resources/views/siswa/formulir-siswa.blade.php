@@ -23,21 +23,7 @@
         </div>
 
         <div class="row justify-content-start ">
-            <div class="col-md-12"> 
-                {{-- <div class="card shadow-sm mt-4">
-                    <div class="card-header">{{ __('Dashboard') }}</div>
-
-                    <div class="card-body">
-                        @if (session('status'))
-                            <div class="alert alert-success" role="alert">
-                                {{ session('status') }}
-                            </div>
-                        @endif
-
-                        {{ __('You are logged in!') }}
-                    </div>
-                </div> --}}
-
+            <div class="col-md-12">
                 @if (session('success'))
                     <div class="alert alert-success alert-dismissible fade show" role="alert">
                         {{ session('success') }}
@@ -46,19 +32,14 @@
                         </button>
                     </div>
                 @endif
-                {{-- 
-                @if ($errors->any())
-                    <div class="alert alert-danger">
-                        <ul>
-                            @foreach ($errors->all() as $error)
-                                <li>{{ $error }}</li>
-                            @endforeach
-                        </ul>
-                    </div>
-                @endif --}}
-
-                <form action="{{ route('pendaftaran.store') }}" method="POST" enctype="multipart/form-data">
+                <form
+                    action="{{ isset($pendaftaran) ? route('formulir.update', $pendaftaran->id) : route('pendaftaran.store') }}"
+                    method="POST" enctype="multipart/form-data">
                     @csrf
+                    @if (isset($pendaftaran))
+                        @method('PUT')
+                    @endif
+
                     <!-- Data Calon Siswa -->
                     <div class="card">
                         <div class="card-header bg-secondary">
@@ -69,7 +50,8 @@
                             <div class="form-group">
                                 <label>Nama Lengkap</label>
                                 <input type="text" class="form-control @error('nama') is-invalid @enderror"
-                                    placeholder="Masukkan Nama Lengkap" name="nama">
+                                    placeholder="Masukkan Nama Lengkap" name="nama"
+                                    value="{{ isset($pendaftaran) ? $pendaftaran->siswa->nama : old('nama') }}">
                                 @error('nama')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
@@ -78,7 +60,8 @@
                             <div class="form-group">
                                 <label>NISN</label>
                                 <input type="text" class="form-control @error('nisn') is-invalid @enderror"
-                                    placeholder="Masukkan NISN" name="nisn">
+                                    placeholder="Masukkan NISN" name="nisn"
+                                    value="{{ isset($pendaftaran) ? $pendaftaran->siswa->nisn : old('nisn') }}">
                                 @error('nisn')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
@@ -89,11 +72,13 @@
                                 <label>Jenis Kelamin</label><br>
                                 <div class="form-check form-check-inline">
                                     <input class="form-check-input @error('jenis_kelamin') is-invalid @enderror"
-                                        type="radio" name="jenis_kelamin" value="Laki-laki">
+                                        type="radio" name="jenis_kelamin" value="Laki-laki"
+                                        {{ isset($pendaftaran) && $pendaftaran->siswa->jenis_kelamin == 'Laki-laki' ? 'checked' : (old('jenis_kelamin') == 'Laki-laki' ? 'checked' : '') }}>
                                     <label class="form-check-label">Laki-laki</label>
                                 </div>
                                 <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" name="jenis_kelamin" value="Perempuan">
+                                    <input class="form-check-input" type="radio" name="jenis_kelamin" value="Perempuan"
+                                        {{ isset($pendaftaran) && $pendaftaran->siswa->jenis_kelamin == 'Perempuan' ? 'checked' : (old('jenis_kelamin') == 'Perempuan' ? 'checked' : '') }}>
                                     <label class="form-check-label">Perempuan</label>
                                 </div>
                                 @error('jenis_kelamin')
@@ -104,7 +89,8 @@
                             <div class="form-group">
                                 <label>Tempat Lahir</label>
                                 <input type="text" class="form-control @error('tempat_lahir') is-invalid @enderror"
-                                    placeholder="Masukkan Tempat Lahir"name="tempat_lahir">
+                                    placeholder="Masukkan Tempat Lahir"name="tempat_lahir"
+                                    value="{{ isset($pendaftaran) ? $pendaftaran->siswa->tempat_lahir : old('tempat_lahir') }}">
                                 @error('tempat_lahir')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
@@ -113,7 +99,8 @@
                             <div class="form-group">
                                 <label>Tanggal Lahir</label>
                                 <input type="date" class="form-control @error('tanggal_lahir') is-invalid @enderror"
-                                    name="tanggal_lahir">
+                                    name="tanggal_lahir"
+                                    value="{{ isset($pendaftaran) ? $pendaftaran->siswa->tanggal_lahir->format('Y-m-d') : old('tanggal_lahir') }}">
                                 @error('tanggal_lahir')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
@@ -122,7 +109,8 @@
                             <div class="form-group">
                                 <label>Alamat</label>
                                 <input type="text" class="form-control @error('alamat_siswa') is-invalid @enderror"
-                                    placeholder="Masukkan Alamat" name="alamat_siswa">
+                                    placeholder="Masukkan Alamat" name="alamat_siswa"
+                                    value="{{ isset($pendaftaran) ? $pendaftaran->siswa->alamat_siswa : old('alamat_siswa') }}">
                                 @error('alamat_siswa')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
@@ -149,9 +137,9 @@
                                     <input type="text" id="phoneInput"
                                         class="form-control @error('no_hp_siswa') is-invalid @enderror"
                                         placeholder="Masukkan No Handphone" name="no_hp_siswa"
-                                        value="{{ old('no_hp_siswa_display') }}">
+                                        value="{{ isset($pendaftaran) ? $pendaftaran->siswa->no_hp_siswa : old('no_hp_siswa_display') }}">
                                     <input type="hidden" name="no_hp_siswa" id="hiddenPhoneInput"
-                                        value="{{ old('no_hp_siswa') }}">
+                                        value="{{ isset($pendaftaran) ? $pendaftaran->siswa->no_hp_siswa : old('no_hp_siswa') }}">
                                     @error('no_hp_siswa')
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
@@ -185,24 +173,33 @@
 
                             <div class="form-group">
                                 <label>Kategori Prestasi (Jika Ada)</label><br>
+                                @php
+                                    $prestasi = isset($pendaftaran)
+                                        ? explode(',', $pendaftaran->siswa->kategori_prestasi)
+                                        : [];
+                                @endphp
                                 <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="checkbox" value=""
-                                        name="kategori_prestasi[]">
+                                    <input class="form-check-input" type="checkbox" value="Hafidz Qur'an 1-3 Juz"
+                                        name="kategori_prestasi[]"
+                                        {{ in_array('Hafidz Qur\'an 1-3 Juz', $prestasi) ? 'checked' : '' }}>
                                     <label class="form-check-label">Hafidz Qur'an 1-3 Juz</label>
                                 </div>
                                 <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="checkbox" value=""
-                                        name="kategori_prestasi[]">
+                                    <input class="form-check-input" type="checkbox" value="Hafidz Qur'an 4-5 Juz"
+                                        name="kategori_prestasi[]"
+                                        {{ in_array('Hafidz Qur\'an 4-5 Juz', $prestasi) ? 'checked' : '' }}>
                                     <label class="form-check-label">Hafidz Qur'an 4-5 Juz</label>
                                 </div>
                                 <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="checkbox" value=""
-                                        name="kategori_prestasi[]">
+                                    <input class="form-check-input" type="checkbox" value="Peringkat 1-5"
+                                        name="kategori_prestasi[]"
+                                        {{ in_array('Peringkat 1-5', $prestasi) ? 'checked' : '' }}>
                                     <label class="form-check-label">Peringkat 1-5</label>
                                 </div>
                                 <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="checkbox" value=""
-                                        name="kategori_prestasi[]">
+                                    <input class="form-check-input" type="checkbox"
+                                        value="Prestasi Non Akademik Tingkat Kabupaten" name="kategori_prestasi[]"
+                                        {{ in_array('Prestasi Non Akademik Tingkat Kabupaten', $prestasi) ? 'checked' : '' }}>
                                     <label class="form-check-label">Prestasi Non Akademik Tingkat Kabupaten</label>
                                 </div>
                             </div>
@@ -231,7 +228,8 @@
                             <div class="form-group">
                                 <label>Nama Ayah</label>
                                 <input type="text" class="form-control @error('nama_ayah') is-invalid @enderror"
-                                    placeholder="Masukkan Nama Ayah" name="nama_ayah">
+                                    placeholder="Masukkan Nama Ayah" name="nama_ayah"
+                                    value="{{ isset($pendaftaran) ? $pendaftaran->siswa->orangTua->nama_ayah : old('nama_ayah') }}">
                                 @error('nama_ayah')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
@@ -240,7 +238,8 @@
                             <div class="form-group">
                                 <label>Nama Ibu</label>
                                 <input type="text" class="form-control @error('nama_ibu') is-invalid @enderror"
-                                    placeholder="Masukkan Nama Ibu" name="nama_ibu">
+                                    placeholder="Masukkan Nama Ibu" name="nama_ibu"
+                                    value="{{ isset($pendaftaran) ? $pendaftaran->siswa->orangTua->nama_ibu : old('nama_ibu') }}">
                                 @error('nama_ibu')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
@@ -249,7 +248,8 @@
                             <div class="form-group">
                                 <label>Alamat</label>
                                 <input type="text" class="form-control @error('alamat_ortu') is-invalid @enderror"
-                                    placeholder="Masukkan Alamat" name="alamat_ortu">
+                                    placeholder="Masukkan Alamat" name="alamat_ortu"
+                                    value="{{ isset($pendaftaran) ? $pendaftaran->siswa->orangTua->alamat_ortu : old('alamat_ortu') }}">
                                 @error('alamat_ortu')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
@@ -263,9 +263,9 @@
                                     <input type="text" id="phoneOrtuInput"
                                         class="form-control @error('no_hp_ortu') is-invalid @enderror"
                                         placeholder="Masukkan No HP" name="no_hp_ortu"
-                                        value="{{ old('no_hp_ortu_display') }}">
+                                        value="{{ isset($pendaftaran) ? $pendaftaran->siswa->orangTua->no_hp_ortu : old('no_hp_ortu_display') }}">
                                     <input type="hidden" name="no_hp_ortu" id="hiddenOrtuInput"
-                                        value="{{ old('no_hp_ortu') }}">
+                                        value="{{ isset($pendaftaran) ? $pendaftaran->siswa->orangTua->no_hp_ortu : old('no_hp_ortu') }}">
                                     @error('no_hp_ortu')
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
@@ -285,8 +285,13 @@
         </div>
     </div>
 
+
+
+@endsection
+
+@section('js')
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
-        //menampilkan nama dokumen yang di upload di formulir
         document.querySelectorAll('.custom-file-input').forEach(function(input) {
             input.addEventListener('change', function(e) {
                 let fileName = e.target.files[0]?.name || '';
@@ -297,74 +302,93 @@
             });
         })
 
-        document.addEventListener('DOMContentLoaded', function(){
+        document.addEventListener('DOMContentLoaded', function() {
             const phoneInput = document.querySelector('#phoneInput')
             const hiddenPhoneInput = document.querySelector('#hiddenPhoneInput')
-            phoneInput.addEventListener('input', function(){
-                let value = phoneInput.value.replace(/[^0-9]/g,'')
-                if(value.startsWith('0')){
+            phoneInput.addEventListener('input', function() {
+                let value = phoneInput.value.replace(/[^0-9]/g, '')
+                if (value.startsWith('0')) {
                     value = value.substring(1);
                     phoneInput.value = value
                 }
 
-                if(value.lenght> 12){
-                    value=value.substring(0,12)
-                    phoneInput.value= value
+                if (value.lenght > 12) {
+                    value = value.substring(0, 12)
+                    phoneInput.value = value
                 }
                 hiddenPhoneInput.value = value ? '+62' + value : ''
             })
-            phoneInput.addEventListener('keypress', function(e){
-                if(phoneInput.value === '' && e.key === '0') {
+            phoneInput.addEventListener('keypress', function(e) {
+                if (phoneInput.value === '' && e.key === '0') {
                     e.preventDefault()
                 }
             })
 
             const phoneOrtuInput = document.querySelector('#phoneOrtuInput')
             const hiddenOrtuInput = document.querySelector('#hiddenOrtuInput')
-            phoneOrtuInput.addEventListener('input', function(){
-                let value= phoneOrtuInput.value.replace(/[^0-9]/g,'')
-                if(value.startsWith('0')){
-                    value= value.substring(1)
-                    phoneOrtuInput.value=value
+            phoneOrtuInput.addEventListener('input', function() {
+                let value = phoneOrtuInput.value.replace(/[^0-9]/g, '')
+                if (value.startsWith('0')) {
+                    value = value.substring(1)
+                    phoneOrtuInput.value = value
                 }
-                if(value.lenght>12 ){
-                    value=value.substring(0,12)
-                    phoneOrtuInput.value= value
+                if (value.lenght > 12) {
+                    value = value.substring(0, 12)
+                    phoneOrtuInput.value = value
                 }
                 hiddenOrtuInput.value = value ? '+62' + value : ''
             })
-            phoneOrtuInput.addEventListener('keypress', function(e){
-                if(phoneOrtuInput.value === '' && e.key === '0'){
+            phoneOrtuInput.addEventListener('keypress', function(e) {
+                if (phoneOrtuInput.value === '' && e.key === '0') {
                     e.preventDefault()
                 }
             })
 
             // validasi no telepon siswa dan ortu
-            document.querySelector('form').addEventListener('submit', function(e){
+            document.querySelector('form').addEventListener('submit', function(e) {
                 const phoneRegex = /^[8][0-9]{8,11}$/
-                if (phoneInput.value && !phoneRegex.test(phoneInput.value)){
+                if (phoneInput.value && !phoneRegex.test(phoneInput.value)) {
                     e.preventDefault()
                     phoneInput.classList.add('is-invalid')
                     let feedback = phoneInput.parentElement.querySelector('.invalid-feedback');
-                    if(!feedback){
+                    if (!feedback) {
                         feedback = document.createElement('div')
                         feedback.className = 'invalid-feedback'
                         phoneInput.parentElement.appendChild(feedback)
                     }
                     feedback.textContent = 'Nomor HP siswa harus dimulai dengan 8 dan berisi 9-12 digit.'
                 }
-                if (phoneOrtuInput.value && !phoneRegex.test(phoneOrtuInput.value)){
+                if (phoneOrtuInput.value && !phoneRegex.test(phoneOrtuInput.value)) {
                     e.preventDefault()
                     phoneOrtuInput.classList.add('is-invalid')
                     let feedback = phoneOrtuInput.parentElement.querySelector('.invalid-feedback');
-                    if(!feedback){
+                    if (!feedback) {
                         feedback = document.createElement('div')
                         feedback.className = 'invalid-feedback'
                         phoneOrtuInput.parentElement.appendChild(feedback)
                     }
-                    feedback.textContent = 'Nomor HP Orang Tua harus dimulai dengan 8 dan berisi 9-12 digit.'
+                    feedback.textContent =
+                        'Nomor HP Orang Tua harus dimulai dengan 8 dan berisi 9-12 digit.'
                 }
             })
         })
+
+        document.addEventListener('DOMContentLoaded', function() {
+            @if (session('success'))
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Berhasil!',
+                    text: '{{ session('success') }}'
+                });
+            @endif
+
+            @if (session('error'))
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Gagal!',
+                    text: '{{ session('error') }}'
+                });
+            @endif
+        });
     </script>
-@endsection
+@stop

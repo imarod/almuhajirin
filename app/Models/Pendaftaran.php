@@ -5,9 +5,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\ManajemenJadwalPpdb;
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Pendaftaran extends Model
 {
+    use SoftDeletes;
     protected $table = 'pendaftaran';
     protected $fillable = ['siswa_id','kk', 'ijazah', 'piagam', 'status_verifikasi','status_aktual','is_announced','pesan_whatsapp'];
     protected $casts = [

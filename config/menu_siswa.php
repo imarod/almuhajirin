@@ -9,12 +9,29 @@ return [
    
     [
         'text' => 'Cetak Bukti Pendaftaran',
-        'url'  => 'pendaftaran/detail',
+        // 'url'  => 'cetak/formulir', 
+        //ini contoh pemanggilan menggunakan route name
+        'url'  => fn() => route('siswa.daftar-formulir'),
         'icon' => 'fas fa-user',
     ],
     [
         'text' => 'Profil Saya',
-        'url'  => 'siswa/profile',
+        'url'  => '/home',
+        'icon' => 'fas fa-user',
+    ],
+    [
+        'text' => 'Profil Saya',
+        'url'  => '/home',
+        'icon' => 'fas fa-user',
+    ],
+    [
+        'text' => 'Profil Saya',
+        'url'  => '/home',
+        'icon' => 'fas fa-user',
+    ],
+    [
+        'text' => 'Profil Saya',
+        'url'  => '/home',
         'icon' => 'fas fa-user',
     ],
 ];

@@ -3,19 +3,17 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule;
 
-class FormulirPendaftaranStore extends FormRequest
+class UpdateFormulirRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
      */
     public function authorize(): bool
     {
-       return Auth::check();
+        return true;
     }
-
     /**
      * Get the validation rules that apply to the request.
      *
@@ -23,33 +21,38 @@ class FormulirPendaftaranStore extends FormRequest
      */
     public function rules(): array
     {
-        
-        $userId = Auth::id();
+       $pendaftaranId = $this->route('id'); 
+
+        // Gunakan Pendaftaran::find() untuk mengambil model,
+        // lalu ambil relasi 'siswa'
+        $pendaftaran = \App\Models\Pendaftaran::find($pendaftaranId);
+        $siswaId = $pendaftaran->siswa->id;
+
         return [
-            'nama' => 'required',
+            'nama' => 'required|string|max:255',
             'nisn' => [
                 'required',
-                Rule::unique('siswa', 'nisn')->where(function($query) use ($userId) {
-                    return $query->where('user_id','!=', $userId);
-                })
+                'numeric',
+                Rule::unique('siswa', 'nisn')->ignore($siswaId),
             ],
-            'jenis_kelamin' => 'required',
-            'tempat_lahir' => 'required',
-            "tanggal_lahir" => 'required|date',
-            'alamat_siswa' => 'required',
-            'no_hp_siswa' => 'required',
-            'nama_ayah' => 'required',
-            'nama_ibu' => 'required',
-            'alamat_ortu' => 'required',
-            'no_hp_ortu' => 'required',
-            'kk' => 'required|file|mimes:jpg,jpeg,png,pdf',
-            'ijazah' => 'required|file|mimes:pdf',
-            'piagam' => 'nullable|file|mimes:pdf',
+            'jenis_kelamin' => 'required|in:Laki-laki,Perempuan',
+            'tempat_lahir' => 'required|string|max:255',
+            'tanggal_lahir' => 'required|date',
+            'alamat_siswa' => 'required|string',
+            'no_hp_siswa' => 'required|string|max:255',
+            'nama_ayah' => 'required|string|max:255',
+            'nama_ibu' => 'required|string|max:255',
+            'alamat_ortu' => 'required|string',
+            'no_hp_ortu' => 'required|string|max:255',
+            'kk' => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048', // Nullable karena opsional saat update
+            'ijazah' => 'nullable|file|mimes:pdf|max:2048', // Nullable karena opsional saat update
+            'piagam' => 'nullable|file|mimes:pdf|max:2048', // Nullable karena opsional saat update
             'kategori_prestasi' => 'nullable|array',
+            'kategori_prestasi.*' => 'string|max:255',
         ];
     }
 
-    public function messages(): array
+     public function messages(): array
     {
         return [
             'nama.required' => 'Nama lengkap harus diisi',
