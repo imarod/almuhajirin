@@ -13,8 +13,9 @@ class ManajemenJadwalPpdbController extends Controller
     public function index()
     {
         $jadwals = ManajemenJadwalPpdb::orderBy('created_at', 'desc')->get();
+        $activeJadwal = ManajemenJadwalPpdb::active()->first();
 
-        return view('admin.manajemen-jadwal-ppdb', compact('jadwals'));
+        return view('admin.manajemen-jadwal-ppdb', compact('jadwals', 'activeJadwal'));
     }
     public function store(StoreJadwalPpdbRequest $request)
     {
@@ -31,19 +32,20 @@ class ManajemenJadwalPpdbController extends Controller
                 'tgl_pengumuman' => $validatedData['tgl_pengumuman'],
             ]);
 
-            return redirect()->route('admin.manajemen-jadwal-ppdb')->with('success', 'Jadwal PPDB berhasil disimpan.');
+            return redirect()->to(route('admin.manajemen-jadwal-ppdb') . '#history')->with('success', 'Jadwal PPDB berhasil disimpan.');
         } catch (\Exception $e) {
             return back()->with('error', 'Penyimpanan jadwal gagal. ' . $e->getMessage());
         }
     }
-
+    // menampilkan form edit
     public function edit($id)
     {
         $jadwal = ManajemenJadwalPpdb::findOrFail($id);
         $jadwals = ManajemenJadwalPpdb::orderBy('created_at', 'desc')->get();
-        return view('admin.manajemen-jadwal-ppdb', compact('jadwal', 'jadwals'));
+        $jadwalAktif = ManajemenJadwalPpdb::active()->first();
+        return view('admin.manajemen-jadwal-ppdb', compact('jadwal', 'jadwals', 'jadwalAktif'));
     }
-
+    // menyimpan perubahan di form edit
     public function update(UpdateJadwalPpdbRequest $request, $id)
     {
         try {
@@ -60,7 +62,7 @@ class ManajemenJadwalPpdbController extends Controller
                 'tgl_pengumuman' => $validatedData['tgl_pengumuman'],
             ]);
 
-            return redirect()->route('admin.manajemen-jadwal-ppdb')->with('success', 'Jadwal PPDB berhasil diperbarui.');
+            return redirect()->to(route('admin.manajemen-jadwal-ppdb') . '#history')->with('success', 'Jadwal PPDB berhasil diperbarui.');
         } catch (\Exception $e) {
             return back()->with('error', 'Pembaruan jadwal gagal. ' . $e->getMessage());
         }
@@ -71,7 +73,7 @@ class ManajemenJadwalPpdbController extends Controller
             $jadwal = ManajemenJadwalPpdb::findOrFail($id);
             $jadwal->delete();
 
-            return redirect()->route('admin.manajemen-jadwal-ppdb')->with('success', 'Jadwal PPDB berhasil Dihapus');
+            return redirect()->to(route('admin.manajemen-jadwal-ppdb') . '#history')->with('success', 'Jadwal PPDB berhasil Dihapus');
         } catch (\Exception $e) {
             return back()->with('error', 'Jadwal tidak berhasil dihapus' . $e->getMessage());
         }        

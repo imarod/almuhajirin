@@ -9,18 +9,43 @@ use App\Models\OrangTua;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\UpdateFormulirRequest;
+use App\Models\ManajemenJadwalPpdb;
 use Barryvdh\DomPDF\Facade\Pdf;
 
 class PendaftaranController extends Controller
 {
     // Siswa
-    public function index()
+    public function index($id = null)
     {
-        return view('siswa.formulir-siswa');
+        $jadwalAktif = ManajemenJadwalPpdb::active()->first();
+        $statusPendaftaran ='closed';
+        $message="Pendaftaran belum dibuka. Silahkan cek kembali Jadwal yang terlah ditentukan";
+
+        if($jadwalAktif){
+            $statusPendaftaran = 'open';
+            $message ="Pendaftaran periode X sedang dibuka";
+        }else{
+            $jadwalSelesai = ManajemenJadwalPpdb::where('tgl_berakhir', '<', now())->first();
+            if($jadwalSelesai){
+                $message = "Pendaftaran periode X telah ditutup";
+            }
+        }
+
+        $pendaftaran = null;
+        if($id) {
+            $pendaftaran  = Pendaftaran::with(['siswa.orangTua'])->findOrFail($id);
+        }
+        return view('siswa.formulir-siswa', compact('statusPendaftaran', 'message', 'jadwalAktif'));
     }
     public function store(\App\Http\Requests\FormulirPendaftaranStore $request)
     {
-
+        if(Auth::user()->siswa()->whereNull('deleted_at')->exists()) {
+            return redirect()->back()->with('error', 'Anda sudah mendaftar.');
+        }
+        $jadwalAktif = ManajemenJadwalPpdb::active()->first();
+        if(!$jadwalAktif){
+            return redirect()->back()->with('error', 'Pendaftaran belum dibuka. Silahkan cek kembali Jadwal yang telah ditentukan');
+        }
 
         DB::beginTransaction();
         try {
@@ -49,6 +74,7 @@ class PendaftaranController extends Controller
 
             $pendaftaran = Pendaftaran::create([
                 'siswa_id' => $siswa->id,
+                'jadwal_id'=>$jadwalAktif->id,
                 'kk' => $kk,
                 'ijazah' => $ijazah,
                 'piagam' => $piagam,
@@ -75,12 +101,14 @@ class PendaftaranController extends Controller
         return view('siswa.ajuan-pendaftaran', compact('pendaftarans'));
     }
 
-    public function edit($id)
-    {
-        $pendaftaran = Pendaftaran::with(['siswa.orangTua'])->findOrFail($id);
-        return view('siswa.formulir-siswa', compact('pendaftaran'));
-    }
+    // menampilkan form edit
+    // public function edit($id)
+    // {
+    //     $pendaftaran = Pendaftaran::with(['siswa.orangTua'])->findOrFail($id);
+    //     return view('siswa.formulir-siswa', compact('pendaftaran'));
+    // }
 
+    // menyimpan data form edit
     public function update(UpdateFormulirRequest $request, $id)
     {
         DB::beginTransaction();

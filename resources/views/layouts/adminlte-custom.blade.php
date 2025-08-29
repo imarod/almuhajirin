@@ -4,11 +4,19 @@
 @section('css')
     @vite('resources/css/app.css')
     <link rel="stylesheet" href="{{ asset('css/custom.css') }}">
+<link rel="stylesheet" type="text/css" href="https://npmcdn.com/flatpickr/dist/themes/material_blue.css">
 @endsection
 
 @section('js')
-    {{-- page dashboard-statistik --}}
+     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+        integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous">
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"
+        integrity="sha384-q2kxQ16AaE6UbzuKqyBE9/u/KzioAlnx2maXQHiDX9d4/zp8Ok3f+M7DPm+Ib6IU" crossorigin="anonymous">
+    </script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    
 
     <script>
         const labels = ['2021', '2022', '2023', '2024', '2025', '2026', '2027'];
@@ -52,5 +60,7 @@
             document.getElementById('chartGender'),
             configPendaftar
         );
+
+        
     </script>
 @endsection

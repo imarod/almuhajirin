@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('pendaftaran', function (Blueprint $table) {
-           $table->dropColumn('tgl_pengumuman');
+            $table->foreignId('jadwal_id')->nullable()->after('siswa_id')->constrained('jadwal_ppdb')->cascadeOnDelete();
         });
     }
 
@@ -22,8 +22,8 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('pendaftaran', function (Blueprint $table) {
-            // Anda bisa menambahkan kembali kolom jika perlu
-            $table->date('tgl_pengumuman')->nullable();
+            $table->dropForeign((['jadwal_id']));
+            $table->dropColumn('jadwal_id');
         });
     }
 };

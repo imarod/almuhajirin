@@ -13,7 +13,7 @@ class FormulirPendaftaranStore extends FormRequest
      */
     public function authorize(): bool
     {
-       return Auth::check();
+        return Auth::check();
     }
 
     /**
@@ -23,14 +23,15 @@ class FormulirPendaftaranStore extends FormRequest
      */
     public function rules(): array
     {
-        
+
         $userId = Auth::id();
         return [
             'nama' => 'required',
             'nisn' => [
                 'required',
-                Rule::unique('siswa', 'nisn')->where(function($query) use ($userId) {
-                    return $query->where('user_id','!=', $userId);
+                'numeric',
+                Rule::unique('siswa', 'nisn')->where(function ($query) use ($userId) {
+                    return $query->where('user_id', '!=', $userId);
                 })
             ],
             'jenis_kelamin' => 'required',
@@ -42,9 +43,9 @@ class FormulirPendaftaranStore extends FormRequest
             'nama_ibu' => 'required',
             'alamat_ortu' => 'required',
             'no_hp_ortu' => 'required',
-            'kk' => 'required|file|mimes:jpg,jpeg,png,pdf',
-            'ijazah' => 'required|file|mimes:pdf',
-            'piagam' => 'nullable|file|mimes:pdf',
+            'kk' => 'required|file|mimes:jpg,jpeg,png,pdf|max:1024',
+            'ijazah' => 'required|file|mimes:pdf|max:1024',
+            'piagam' => 'nullable|file|mimes:pdf|max:1024',
             'kategori_prestasi' => 'nullable|array',
         ];
     }
@@ -67,11 +68,14 @@ class FormulirPendaftaranStore extends FormRequest
             'kk.required' => 'File KK harus diunggah',
             'kk.file' => 'File KK harus berupa file',
             'kk.mimes' => 'File KK harus berupa file dengan format PDF',
+            'kk.max' => 'Ukuran file KK tidak boleh melebihi 1 MB',
             'ijazah.required' => 'File ijazah harus diunggah',
             'ijazah.file' => 'File ijazah harus berupa file',
             'ijazah.mimes' => 'File ijazah harus berupa file dengan format PDF',
+            'ijazah.max' => 'Ukuran file ijazah tidak boleh melebihi 1 MB',
             'piagam.file' => 'File piagam harus berupa file',
             'piagam.mimes' => 'File piagam harus berupa file dengan format PDF',
+            'piagam.max' => 'Ukuran file piagam tidak boleh melebihi 1 MB',
         ];
     }
 }

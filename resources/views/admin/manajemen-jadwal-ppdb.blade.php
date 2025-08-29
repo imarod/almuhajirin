@@ -12,30 +12,7 @@
 @stop
 
 @section('content')
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
-        integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous">
-    </script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"
-        integrity="sha384-q2kxQ16AaE6UbzuKqyBE9/u/KzioAlnx2maXQHiDX9d4/zp8Ok3f+M7DPm+Ib6IU" crossorigin="anonymous">
-    </script>
-
     <div class="container-fluid">
-        @if (session('success'))
-            <div class="alert alert-success">
-                {{ session('success') }}
-            </div>
-        @endif
-        @if ($errors->any())
-            <div class="alert alert-danger">
-                <ul>
-                    @foreach ($errors->all() as $error)
-                        <li>{{ $error }}</li>
-                    @endforeach
-                </ul>
-            </div>
-        @endif
-
-        <!-- Main Content Tabs -->
         <div class="card ">
             <div class="card-header bg-white border-bottom">
                 <form
@@ -73,14 +50,14 @@
                                 <li class="nav-item">
                                     <a class="nav-link {{ !isset($jadwal) ? 'active' : '' }} d-flex align-items-center"
                                         id="settings-tab" data-toggle="tab" href="#settings" role="tab">
-                                        <i class="fas fa-cog mr-2"></i>
+                                        {{-- <i class="fas fa-cog mr-2"></i> --}}
                                         Pengaturan PPDB
                                     </a>
                                 </li>
                                 <li class="nav-item">
                                     <a class="nav-link d-flex align-items-center" id="history-tab" data-toggle="tab"
                                         href="#history" role="tab">
-                                        <i class="fas fa-history mr-2"></i>
+                                        {{-- <i class="fas fa-history mr-2"></i> --}}
                                         Riwayat PPDB
                                     </a>
                                 </li>
@@ -153,8 +130,6 @@
                                                     Gelombang 1</option>
                                                 <option value="2"{{ $selectedGelombang == 2 ? 'selected' : '' }}>
                                                     Gelombang 2</option>
-                                                <option value="3"{{ $selectedGelombang == 3 ? 'selected' : '' }}>
-                                                    Gelombang 3</option>
                                             </select>
                                             @error('gelombang_pendaftaran')
                                                 <div class="text-danger mt-1">{{ $message }}</div>
@@ -170,8 +145,8 @@
                                                         <i class="fas fa-calendar text-muted"></i>
                                                     </span>
                                                 </div>
-                                                <input type="date" class="form-control border-left-0"
-                                                    id="tgl_berakhir" name="tgl_berakhir"
+                                                <input type="date" class="form-control border-left-0" id="tgl_berakhir"
+                                                    name="tgl_berakhir"
                                                     value="{{ old('tgl_berakhir', isset($jadwal) ? $jadwal->tgl_berakhir->format('Y-m-d') : '') }}">
                                             </div>
                                             @error('tgl_berakhir')
@@ -217,7 +192,7 @@
                                     {{-- button simpan/update --}}
                                     <div class="border-top pt-4 mt-4">
                                         <div class="d-flex flex-column flex-sm-row gap-2">
-                                            <button type="submit" class="btn btn-primary px-4 mr-2 mb-2 mb-sm-0">
+                                            <button type="submit" class="btn btn-primary px-4 mr-2 mb-2 mb-sm-0" href="{{ route('admin.manajemen-jadwal-ppdb') }}#settings">
                                                 @if (isset($jadwal))
                                                     Perbarui Jadwal
                                                 @else
@@ -330,8 +305,8 @@
                                                                 <i class="fas fa-edit"></i>
                                                             </a>
                                                             {{-- Tombol Hapus --}}
-                                                            <button type="button" class="btn btn-danger btn-sm"
-                                                                title="Hapus" data-toggle="modal"
+                                                            <button type="button"
+                                                                class="btn btn-danger btn-sm delete-btn" title="Hapus"
                                                                 data-target="#deleteConfirmationModal"
                                                                 data-id="{{ $jadwal->id }}">
                                                                 <i class="fas fa-trash"></i>
@@ -341,13 +316,14 @@
                                                 @empty
                                                     <tr class="border-bottom">
                                                         <td colspan="9" class="text-center py-5">
-                                                            <i class="fas fa-history fa-3x text-muted mb-3"
-                                                                style="opacity: 0.3;"></i>
+                                                            <i class="fas fa-history fa-3x text-muted mb-3"></i>
                                                             <h5 class="text-muted">Belum ada riwayat jadwal
-                                                                pendaftaran PPDB</h5>
-                                                            <p class="text-muted small">Data akan muncul setelah
-                                                                Anda menyimpan
-                                                                konfigurasi</p>
+                                                                PPDB</h5>
+                                                            <button class="btn btn-primary text-white">
+                                                                <a href="#">Buat
+                                                                    Jadwal</a>
+                                                            </button>
+
                                                         </td>
                                                     </tr>
                                                 @endforelse
@@ -363,30 +339,7 @@
         </div>
     </div>
 
-    <div class="modal fade" id="deleteConfirmationModal" tabindex="-1" role="dialog" aria-labelledby="modalLabel"
-        aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="modalLabel">Konfirmasi Hapus</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    Apakah Anda yakin ingin menghapus jadwal ini? Tindakan ini tidak dapat dibatalkan.
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
-                    <form id="deleteForm" method="POST" action="">
-                        @csrf
-                        @method('DELETE')
-                        <button type="submit" class="btn btn-danger">Hapus</button>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
+
 @stop
 @section('css')
     <style>
@@ -427,29 +380,104 @@
 @stop
 
 @section('js')
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            // tab aktif
             const isEditing = {{ isset($jadwal) ? 'true' : 'false' }}
 
             if (isEditing) {
 
                 document.getElementById('settings-tab').classList.add('active');
                 document.getElementById('settings').classList.add('show', 'active');
-
                 document.getElementById('history-tab').classList.remove('active');
                 document.getElementById('history').classList.remove('show', 'active');
             }
 
-            $('#deleteConfirmationModal').on('show.bs.modal', function(event) {
-                var button = $(event.relatedTarget);
-                var jadwalId = button.data('id');
-                var form = $(this).find('#deleteForm');
+            // mengaktifkan tab
+            function activateTabHash() {
+                const hash = window.location.hash
+                if (hash) {
+                    document.querySelectorAll('.nav-link').forEach(link => link.classList.remove('active'))
+                    document.querySelectorAll('.tab-pane').forEach(pane => pane.classList.remove('show', 'active'))
 
-                var actionUrl = '{{ route('admin.destroy-jadwal-ppdb', ':id') }}';
-                actionUrl = actionUrl.replace(':id', jadwalId);
+                    const tabLink = document.querySelector(`a[href="${hash}"]`)
+                    if (tabLink) {
+                        const tabPane = document.querySelector(hash)
+                        tabLink.classList.add('active')
+                        tabPane.classList.add('show', 'active')
+                    }
+                }
+            }
 
-                form.attr('action', actionUrl);
-            });
+            activateTabHash();
+
+            // ubah url sesuai tab aktif
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.addEventListener('click', function() {
+                    const hash = this.getAttribute('href')
+                    window.history.pushState(null, '', hash)
+                })
+            })
+
+            window.addEventListener('popstate', activateTabHash)
+
+            //    sweet alert
+            @if (session('success'))
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Berhasil!',
+                    text: '{{ session('success') }}',
+                    showConfirmButton: false,
+                    timer: 3000
+                });
+            @endif
+
+            @if (session('error'))
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Gagal!',
+                    text: '{{ session('error') }}',
+                });
+            @endif
+
+            $('.delete-btn').on('click', function(event) {
+                event.preventDefault();
+                var jadwalId = $(this).data('id')
+                var actionUrl = '{{ route('admin.destroy-jadwal-ppdb', ':id') }}'
+                actionUrl = actionUrl.replace(':id', jadwalId)
+                Swal.fire({
+                    title: 'Apakah Anda yakin?',
+                    text: "Jadwal yang dihapus tidak dapat dikembalikan!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#d33',
+                    cancelButtonColor: '#6c757d',
+                    confirmButtonText: 'Ya, hapus!',
+                    cancelButtonText: 'Batal'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        var form = document.createElement('form');
+                        form.setAttribute('method', 'POST')
+                        form.setAttribute('action', actionUrl)
+
+                        var csrfInput = document.createElement('input')
+                        csrfInput.setAttribute('type', 'hidden')
+                        csrfInput.setAttribute('name', '_token')
+                        csrfInput.setAttribute('value', '{{ csrf_token() }}')
+
+                        var methodInput = document.createElement('input')
+                        methodInput.setAttribute('type', 'hidden')
+                        methodInput.setAttribute('name', '_method')
+                        methodInput.setAttribute('value', 'DELETE')
+                        form.appendChild(csrfInput)
+                        form.appendChild(methodInput)
+
+                        document.body.appendChild(form)
+                        form.submit()
+                    }
+                })
+            })
         })
     </script>
 @endsection

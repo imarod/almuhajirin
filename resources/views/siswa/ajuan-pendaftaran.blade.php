@@ -12,21 +12,12 @@
                         <li class="breadcrumb-item"><a href="#">Home</a></li>
                         <li class="breadcrumb-item active">Pendaftaran</li>
                     </ol>
-                </div> 
+                </div>
             </div>
         </div>
 
         <div class="row justify-content-start">
             <div class="col-md-12">
-                {{-- @if (session('success'))
-                    <div class="alert alert-success alert-dismissible fade show" role="alert">
-                        {{ session('success') }}
-                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                @endif --}}
-
                 <div class="card">
                     <div class="card-body">
                         {{-- header table setting --}}
@@ -60,7 +51,8 @@
                                             style="left: 0.75rem; top: 50%; transform: translateY(-50%);"></i>
                                     </div>
                                     <a href="{{ route('formulir-siswa') }}"
-                                        class="btn btn-sm bg-basic text-white mt-0 d-flex align-items-center justify-content-center"><strong>Tambah</strong> </a>
+                                        class="btn btn-sm bg-basic text-white mt-0 d-flex align-items-center justify-content-center"><strong>Tambah</strong>
+                                    </a>
                                 </div>
                             </div>
                         </div>
@@ -71,9 +63,10 @@
                             <table id="pendaftaranTable" class="table table-striped table-hover">
                                 <thead class="bg-basic">
                                     <tr>
-                                        <th class="border-0 text-white" style=" border-top-left-radius: 0.5rem !important">No
+                                        <th class="border-0 text-white" style=" border-top-left-radius: 0.5rem !important">
+                                            No
                                         </th>
-                                        <th class="border-0 text-white" >Nama Lengkap</th>
+                                        <th class="border-0 text-white">Nama Lengkap</th>
                                         <th class="border-0 text-white">NISN</th>
                                         <th class="border-0 text-white">Jenis Kelamin</th>
                                         <th class="border-0 text-white">Tgl Daftar</th>
@@ -82,7 +75,7 @@
                                             Aksi</th>
                                     </tr>
                                 </thead>
-                                <tbody >
+                                <tbody>
                                     @if (isset($pendaftarans) && $pendaftarans->isEmpty())
                                         <tr>
                                             <td colspan="7" class="text-center">Tidak ada data pendaftaran</td>
@@ -137,7 +130,7 @@
         </div>
     </div>
 
-    <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel"
+    {{-- <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel"
         aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -156,14 +149,29 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> --}}
 @stop
 
 @section('js')
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
         $(document).ready(function() {
             let PendaftaranIdToDelete
+            @if (session('success'))
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Berhasil!',
+                    text: '{{ session('success') }}'
+                });
+            @endif
+
+            @if (session('error'))
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Gagal!',
+                    text: '{{ session('error') }}'
+                });
+            @endif
 
             $('.delete-btn').on('click', function(e) {
                 e.preventDefault()
@@ -231,24 +239,6 @@
             }
 
 
-        });
-
-        document.addEventListener('DOMContentLoaded', function() {
-            @if (session('success'))
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Berhasil!',
-                    text: '{{ session('success') }}'
-                });
-            @endif
-
-            @if (session('error'))
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Gagal!',
-                    text: '{{ session('error') }}'
-                });
-            @endif
         });
     </script>
 @stop

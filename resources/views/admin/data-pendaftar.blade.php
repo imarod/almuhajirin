@@ -26,9 +26,9 @@
 
         <div class="card">
             <div class="card-body">
-
+                {{-- filter --}}
                 <div class="row align-items-center mb-6">
-                    <div class="col-md-8">
+                    <div class="col-md-6">
                         <div class="d-flex align-items-center flex-wrap">
                             <div class="d-flex align-items-center mr-3">
                                 <span class="text-dark">Show</span>
@@ -49,25 +49,42 @@
                             </button>
                         </div>
                     </div>
-                    <div class="col-md-4 mt-4 mt-md-0">
-                        <div class="d-flex align-item-center gap-2">
-                            <div class="position-relative w-100"> <input type="text" class="form-control"
-                                    placeholder="Search..." style="padding-left: 2.5rem;">
-                                <i class="fas fa-search position-absolute text-muted"
-                                    style="left: 0.75rem; top: 50%; transform: translateY(-50%);"></i>
+                    <div class="col-md-6 mt-4 mt-md-0">
+                        <div class="d-flex flex-wrap justify-content-end align-items-center">
+                            {{-- filter tahun ajaran --}}
+                            <div class="form-inline mr-4">
+                                <label for="filter-thn-ajaran" class="mr-2">Tahun Ajaran</label>
+                                <select name="thn_ajaran" id="filter-thn-ajaran" class="form-control">
+                                    <option value="">Semua</option>
+                                    @foreach ($thnAjaran as $thn)
+                                        <option value="{{ $thn }}"
+                                            {{ $thn == $defaultThnAjaran ? 'selected' : '' }}>
+                                            {{ $thn }}
+                                        </option>
+                                    @endforeach
+                                </select>
                             </div>
-                            <select class="form-control form-control" style="max-width: 120px;">
-                                <option>Filter</option>
-                                <option>Diterima</option>
-                                <option>Belum Diproses</option>
-                            </select>
+
+                            {{-- filter gelombang --}}
+                            <div class="form-inline">
+                                <label for="filter-gelombang" class="mr-2">Gelombang</label>
+                                <select name="gelombang_pendaftaran" id="filter-gelombang" class="form-control">
+                                    <option value="">Semua</option>
+                                    @foreach ($gelombangPendaftaran as $gelombang)
+                                        <option value="{{ $gelombang }}"
+                                            {{ $gelombang == $defaultGelombang ? 'selected' : '' }}>
+                                            Gelombang{{ $gelombang }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
                         </div>
                     </div>
                 </div>
 
                 <!-- Tabel -->
                 <div class="table-responsive">
-                    <table class="table table-hover table-striped ">
+                    <table class="table table-hover ">
                         <thead class="bg-basic">
                             <tr class="">
                                 <th class="border-0 text-white" style="border-top-left-radius: 0.5rem !important">No.</th>
@@ -75,6 +92,7 @@
                                 <th class="border-0 text-white">NISN</th>
                                 <th class="border-0 text-white">Jenis Kelamin</th>
                                 <th class="border-0 text-white">No Handphone</th>
+                                <th class="border-0 text-white">Gelombang</th>
                                 <th class="border-0 text-white text-center">Status</th>
                                 <th class="border-0 text-white text-center"
                                     style="border-top-right-radius: 0.5rem !important">Aksi</th>
@@ -87,14 +105,21 @@
                                 </tr>
                             @else
                                 @foreach ($pendaftars as $pendaftar)
-                                    <tr>
+                                    <tr style="">
                                         <td>{{ $loop->iteration }}.</td>
                                         <td>{{ $pendaftar->siswa->nama ?? '-' }}</td>
                                         <td>{{ $pendaftar->siswa->nisn ?? '-' }}</td>
                                         <td>{{ $pendaftar->siswa->jenis_kelamin ?? '-' }}</td>
-                                        <td>{{ $pendaftar->siswa->no_hp_siswa }}</td>
+                                        <td>{{ $pendaftar->siswa->no_hp_siswa ?? '-' }}</td>
+                                        <td>
+                                            @if ($pendaftar->jadwal)
+                                               Gelombang {{$pendaftar->jadwal->gelombang_pendaftaran}} ({{$pendaftar->jadwal->thn_ajaran}})
+                                            @else
+                                                -
+                                            @endif
+                                        </td>
                                         <td class="text-center"><span
-                                                class="status-badge status-diterima ">{{ $pendaftar->status_aktual ?? '-' }}</span>
+                                                class="status-badge status-{{strtolower(str_replace(' ', '', $pendaftar->status_aktual ?? ''))}}">{{$pendaftar->status_aktual ?? '-'}}</span>
                                         </td>
                                         <td class=" text-center action-icons">
                                             <a href="{{ route('admin.detail-pendaftar', ['id' => $pendaftar->id]) }}"><i
@@ -126,10 +151,81 @@
                         </nav>
                     </div>
                 </div>
-
             </div>
-
-
         </div>
     </div>
 @endsection
+
+@section('js')
+    <script>
+        $(document).ready(function() {
+            // Fungsi untuk melakukan request AJAX
+            function fetchData() {
+                let thnAjaran = $('#filter-thn-ajaran').val();
+                let gelombang = $('#filter-gelombang').val();
+
+                // Lakukan permintaan AJAX
+                $.ajax({
+                    url: "{{ route('admin.pendaftar.json') }}",
+                    type: "GET",
+                    data: {
+                        thn_ajaran: thnAjaran,
+                        gelombang_pendaftaran: gelombang
+                    },
+                    success: function(response) {
+                        let html = '';
+                        if (response.length > 0) {
+                            $.each(response, function(index, pendaftar) {
+                                let jadwalInfo = '-';
+                                let statusClass = 'status-badge';
+                                if (pendaftar.jadwal) {
+                                    jadwalInfo =
+                                        `Gelombang ${pendaftar.jadwal.gelombang_pendaftaran} (${pendaftar.jadwal.thn_ajaran})`;
+                                }
+                                
+                                if (pendaftar.status_aktual) {
+                                    statusClass += ` status-${pendaftar.status_aktual.toLowerCase().replace(/\s/g, '')}`;
+                                }
+
+                                let detailUrl = "{{ route('admin.detail-pendaftar', ':id') }}";
+                                detailUrl = detailUrl.replace(':id', pendaftar.id);
+
+                                html += `
+                                    <tr>
+                                        <td>${index + 1}</td>
+                                        <td>${pendaftar.siswa?.nama ?? '-'}</td>
+                                        <td>${pendaftar.siswa?.nisn ?? '-'}</td>
+                                        <td>${pendaftar.siswa?.jenis_kelamin ?? '-'}</td>
+                                        <td>${pendaftar.siswa?.no_hp_siswa ?? '-'}</td>
+                                        <td>${jadwalInfo}</td>
+                                        <td class="text-center"><span class="${statusClass}">${pendaftar.status_aktual ?? '-'}</span></td>
+                                        <td class=" text-center action-icons">
+                                            <a href="${detailUrl}"><i class="fas fa-eye text-secondary" title="Lihat"></i></a>
+                                            <i class="fas fa-trash text-danger" title="Hapus"></i>
+                                            <i class="fas fa-edit text-primary" title="Edit"></i>
+                                        </td>
+                                    </tr>
+                                `;
+                            });
+                        } else {
+                            html =
+                                '<tr><td colspan="8" class="text-center">Belum ada pendaftar pada filter yang dipilih.</td></tr>';
+                        }
+                        $('table tbody').html(html);
+                    },
+                    error: function(xhr) {
+                        console.log(xhr.responseText);
+                        $('table tbody').html(
+                            '<tr><td colspan="8" class="text-center text-danger">Terjadi kesalahan saat mengambil data.</td></tr>'
+                        );
+                    }
+                });
+            }
+
+            // Tangkap perubahan pada kedua dropdown filter
+            $('#filter-thn-ajaran, #filter-gelombang').change(function() {
+                fetchData();
+            });
+        });
+    </script>
+@stop

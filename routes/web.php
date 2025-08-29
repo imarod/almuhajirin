@@ -32,7 +32,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/pendaftaran', [PendaftaranController::class, 'store'])
         ->name('pendaftaran.store');
 
-    Route::get('formulir/edit/{id}', [PendaftaranController::class, 'edit'])
+    Route::get('formulir/edit/{id}', [PendaftaranController::class, 'index'])
         ->name('formulir.edit');
     Route::put('formulir/update/{id}', [PendaftaranController::class, 'update'])
         ->name('formulir.update');
@@ -72,6 +72,7 @@ Route::middleware('auth')->group(function () {
 Route::prefix('admin')->middleware(['auth', 'is_admin'])->group(function () {
     Route::get('/dashboard-statistik', [HomeController::class, 'dashboardStatistik'])->name('admin.dashboard-statistik');
     Route::get('/data-pendaftar', [AdminController::class, 'showDataPendaftar'])->name('admin.pendaftar');
+    Route::get('/data-pendaftar/json', [AdminController::class, 'getDataPendaftar'])->name('admin.pendaftar.json');    
     Route::get('/detail-pendaftar', [AdminController::class, 'showDetailPendaftar'])->name('admin.detail-pendaftar');
     Route::get('/detail-pendaftar/{id}', [AdminController::class, 'showDetailPendaftar'])->name('admin.detail-pendaftar');
     Route::put('/pendaftaran/{id}/update-status', [AdminController::class, 'updateStatus'])->name('admin.update-status');

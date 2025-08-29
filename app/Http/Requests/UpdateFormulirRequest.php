@@ -21,7 +21,7 @@ class UpdateFormulirRequest extends FormRequest
      */
     public function rules(): array
     {
-       $pendaftaranId = $this->route('id'); 
+        $pendaftaranId = $this->route('id');
 
         // Gunakan Pendaftaran::find() untuk mengambil model,
         // lalu ambil relasi 'siswa'
@@ -44,15 +44,15 @@ class UpdateFormulirRequest extends FormRequest
             'nama_ibu' => 'required|string|max:255',
             'alamat_ortu' => 'required|string',
             'no_hp_ortu' => 'required|string|max:255',
-            'kk' => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048', // Nullable karena opsional saat update
-            'ijazah' => 'nullable|file|mimes:pdf|max:2048', // Nullable karena opsional saat update
-            'piagam' => 'nullable|file|mimes:pdf|max:2048', // Nullable karena opsional saat update
+            'kk' => 'required|file|mimes:jpg,jpeg,png,pdf|max:1024',
+            'ijazah' => 'required|file|mimes:pdf|max:1024',
+            'piagam' => 'nullable|file|mimes:pdf|max:1024',
             'kategori_prestasi' => 'nullable|array',
             'kategori_prestasi.*' => 'string|max:255',
         ];
     }
 
-     public function messages(): array
+    public function messages(): array
     {
         return [
             'nama.required' => 'Nama lengkap harus diisi',
@@ -70,11 +70,14 @@ class UpdateFormulirRequest extends FormRequest
             'kk.required' => 'File KK harus diunggah',
             'kk.file' => 'File KK harus berupa file',
             'kk.mimes' => 'File KK harus berupa file dengan format PDF',
+            'kk.max' => 'Ukuran file KK tidak boleh melebihi 1 MB',
             'ijazah.required' => 'File ijazah harus diunggah',
             'ijazah.file' => 'File ijazah harus berupa file',
             'ijazah.mimes' => 'File ijazah harus berupa file dengan format PDF',
+            'ijazah.max' => 'Ukuran file ijazah tidak boleh melebihi 1 MB',
             'piagam.file' => 'File piagam harus berupa file',
             'piagam.mimes' => 'File piagam harus berupa file dengan format PDF',
+            'piagam.max' => 'Ukuran file piagam tidak boleh melebihi 1 MB',
         ];
     }
 }

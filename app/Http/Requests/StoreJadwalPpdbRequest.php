@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Models\ManajemenJadwalPpdb;
 use Illuminate\Foundation\Http\FormRequest;
 
 class StoreJadwalPpdbRequest extends FormRequest
@@ -24,7 +25,17 @@ class StoreJadwalPpdbRequest extends FormRequest
             'tahun_akhir' => 'required|integer|digits:4|min:2000|max:2050|after:tahun_awal',
             'gelombang_pendaftaran' => 'required|integer|min:1',
             'kuota' => 'required|integer|min:1',
-            'tgl_mulai' => 'required|date|after_or_equal:today',
+            'tgl_mulai' => [
+                'required',
+                'date',
+                function($attribute, $value, $fail){
+                    $tgl_berakhir = $this->input('tgl_berakhir');
+                    $activeJadwal = ManajemenJadwalPpdb::overlapse($value, $tgl_berakhir)->count();
+                    if($activeJadwal > 0) {
+                        $fail('Tidak dapat membuat jadwal. Terdapat jadwal yang masih berlangsung');
+                    }
+                },
+            ],
             'tgl_berakhir' => 'required|date|after_or_equal:tgl_mulai',
             'tgl_pengumuman'=> 'required|date|after_or_equal:tgl_berakhir',
         ];
