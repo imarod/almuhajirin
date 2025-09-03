@@ -7,6 +7,8 @@ use App\Models\ManajemenJadwalPpdb;
 use App\Http\Requests\StoreJadwalPpdbRequest;
 use App\Http\Requests\UpdateJadwalPpdbRequest;
 use Exception;
+use Illuminate\Support\Facades\DB;
+
 
 class ManajemenJadwalPpdbController extends Controller
 {
@@ -69,9 +71,24 @@ class ManajemenJadwalPpdbController extends Controller
     }
     public function destroy($id)
     {
+        DB::beginTransaction();
         try {
             $jadwal = ManajemenJadwalPpdb::findOrFail($id);
+
+            foreach ($jadwal->pendaftaran as $pendaftaran) {
+                $siswa = $pendaftaran->siswa;
+                if($siswa) {
+                    $ortu = $siswa->orangTua;
+                    $pendaftaran->delete();
+                    $siswa->delete();
+                    if($ortu) {
+                        $ortu->delete();
+                    }
+                }
+            }
             $jadwal->delete();
+
+            DB::commit();
 
             return redirect()->to(route('admin.manajemen-jadwal-ppdb') . '#history')->with('success', 'Jadwal PPDB berhasil Dihapus');
         } catch (\Exception $e) {

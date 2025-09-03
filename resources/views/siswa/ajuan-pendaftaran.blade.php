@@ -1,64 +1,98 @@
 @extends('layouts.adminlte-custom')
 
-@section('content')
-    <div class="content-header">
-        <div class="container-fluid">
-            <div class="row mb-2">
-                <div class="col-sm-6">
-                    <h1>Pendaftaran</h1>
-                </div>
-                <div class="col-sm-6">
-                    <ol class="breadcrumb float-sm-right">
-                        <li class="breadcrumb-item"><a href="#">Home</a></li>
-                        <li class="breadcrumb-item active">Pendaftaran</li>
-                    </ol>
-                </div>
+@section('content_header')
+    <div class="container-fluid">
+        <div class="d-flex justify-content-between align-items-center">
+            <div>
+                <h1 class="h3 mb-0 font-weight-bold text-dark">Pendaftaran</h1>
             </div>
         </div>
+    </div>
+@stop
 
+@section('content')
+    <div class="container-fluid">
         <div class="row justify-content-start">
             <div class="col-md-12">
-                <div class="card">
-                    <div class="card-body">
-                        {{-- header table setting --}}
-                        <div class="row align-items-center mb-6">
-                            <div class="col-md-8">
-                                <div class="d-flex align-items-center flex-wrap">
-                                    <div class="d-flex align-items-center mr-3">
-                                        <span class="text-muted">Show</span>
-                                        <select class="form-control form-control-sm mx-2" style="width: auto;">
-                                            <option>10</option>
-                                            <option>25</option>
-                                            <option>50</option>
-                                        </select>
-                                        <span class="text-muted small">entries</span>
-                                    </div>
-                                    <button class="btn btn-outline-secondary btn-sm d-flex align-items-center mr-2">
-                                        <i class="fas fa-filter text-muted mr-2"></i>
-                                        Filter
-                                    </button>
-                                    <button class="btn btn-outline-secondary btn-sm d-flex align-items-center">
-                                        <i class="fas fa-download text-muted mr-2"></i>
-                                        Export
-                                    </button>
+                <x-jadwal-ppdb-aktif />
+                <div class="card p-4 border-0 shadow-sm rounded-lg" style="background-color: #f8f9fa;">
+                    <div class="d-flex align-items-center mb-3">
+                        <div class="rounded-circle p-2 d-flex justify-content-center align-items-center mr-3"
+                            style="background-color: rgba(94, 124, 227, 0.3); width: 40px; height: 40px;">
+                            <i class="far fa-check-circle text-primary" style="font-size: 2rem;"></i>
+                        </div>
+                        <div>
+                            <h5 class="font-weight-bold mb-0 text-primary">Selamat Datang di Portal PPDB Online!</h5>
+                            <p class="text-secondary small mb-0">Sebelum memulai proses pendaftaran, mohon pastikan Anda
+                                telah menyiapkan dokumen-dokumen berikut:</p>
+                        </div>
+                    </div>
+
+                    <div class="row text-center my-4">
+                        <div class="col-md-4 mb-3">
+                            <div class="card p-3 border-0 shadow-sm rounded-lg h-100 d-flex flex-column align-items-center"
+                                style="background-color: rgba(94, 124, 227, 0.1);">
+                                <div class="rounded-circle p-2 d-flex justify-content-center align-items-center"
+                                    style="background-color: rgba(94, 124, 227, 0.3); width: 50px; height: 50px; position: relative;">
+                                    <h5 class="text-white mb-0"
+                                        style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">1
+                                    </h5>
+                                    <i class="fas fa-user text-white" style="font-size: 2rem;"></i>
                                 </div>
-                            </div>
-                            <div class="col-md-4 mt-4 mt-md-0">
-                                <div class="d-flex align-item-center gap-2">
-                                    <div class="position-relative w-100"> <input type="text" class="form-control"
-                                            placeholder="Search..." style="padding-left: 2.5rem;">
-                                        <i class="fas fa-search position-absolute text-muted"
-                                            style="left: 0.75rem; top: 50%; transform: translateY(-50%);"></i>
-                                    </div>
-                                    <a href="{{ route('formulir-siswa') }}"
-                                        class="btn btn-sm bg-basic text-white mt-0 d-flex align-items-center justify-content-center"><strong>Tambah</strong>
-                                    </a>
+                                <div class="mt-3">
+                                    <p class="mb-0">Kartu Keluarga</p>
                                 </div>
                             </div>
                         </div>
 
+                        <div class="col-md-4 mb-3">
+                            <div class="card p-3 border-0 shadow-sm rounded-lg h-100 d-flex flex-column align-items-center"
+                                style="background-color: rgba(60, 179, 113, 0.1);">
+                                <div class="rounded-circle p-2 d-flex justify-content-center align-items-center"
+                                    style="background-color: rgba(60, 179, 113, 0.3); width: 50px; height: 50px; position: relative;">
+                                    <h5 class="text-white mb-0"
+                                        style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">2
+                                    </h5>
+                                    <i class="fas fa-file-alt text-white" style="font-size: 2rem;"></i>
+                                </div>
+                                <div class="mt-3">
+                                    <p class="mb-0">Ijazah</p>
+                                </div>
+                            </div>
+                        </div>
 
+                        <div class="col-md-4 mb-3">
+                            <div class="card p-3 border-0 shadow-sm rounded-lg h-100 d-flex flex-column align-items-center"
+                                style="background-color: rgba(255, 165, 0, 0.1);">
+                                <div class="rounded-circle p-2 d-flex justify-content-center align-items-center"
+                                    style="background-color: rgba(255, 165, 0, 0.3); width: 50px; height: 50px; position: relative;">
+                                    <h5 class="text-white mb-0"
+                                        style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">3
+                                    </h5>
+                                    <i class="fas fa-trophy text-white" style="font-size: 2rem;"></i>
+                                </div>
+                                <div class="mt-3">
+                                    <p class="mb-0">Piagam (Opsional)</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
+                    <div class="alert text-center rounded-lg d-flex align-items-center justify-content-center mb-0"
+                        style="background-color: #f0f4ff;">
+                        <i class="fas fa-lightbulb text-warning mr-2"></i>
+                        <p class="text-muted mb-0 small">Ikuti setiap langkah dengan teliti dan pastikan data yang diisi
+                            sudah benar.</p>
+                    </div>
+                </div>
+
+                <div class="card">
+
+                    <div class="card-body" style="margin-top: -10px;">
+                        <div class="row" style="margin-left: 4px; margin-bottom: -0px;">
+                            <p><strong> Data Pendaftaran</strong></p>
+
+                        </div>
                         <div class="table-responsive">
                             <table id="pendaftaranTable" class="table table-striped table-hover">
                                 <thead class="bg-basic">
@@ -78,7 +112,18 @@
                                 <tbody>
                                     @if (isset($pendaftarans) && $pendaftarans->isEmpty())
                                         <tr>
-                                            <td colspan="7" class="text-center">Tidak ada data pendaftaran</td>
+                                            <td colspan="7" class="text-center">
+                                                <div colspan="9" class="text-center py-3">
+
+                                                    <i class="fas fa-history fa-2x text-muted mb-3"
+                                                        style="opacity: 0.3;"></i>
+                                                    <h5 class="text-muted">Belum ada data pendaftaran.</h5>
+                                                    <p class="text-muted ">Buat pendaftaran baru</p>
+
+                                                    <a href="{{ route('formulir-siswa') }}"
+                                                        class="btn bg-basic text-white px-4">Daftar</a>
+                                                </div>
+                                            </td>
                                         </tr>
                                     @else
                                         @foreach ($pendaftarans as $pendaftaran)
@@ -106,22 +151,7 @@
                         </div>
 
                         {{-- pagination --}}
-                        <div class="row mt-3">
-                            <div class="col-sm-12 col-md-5">
-                                <div class="dataTables_info text-muted">Showing 1 to 10 of 52 entries</div>
-                            </div>
-                            <div class="col-sm-12 col-md-7">
-                                <nav aria-label="Page navigation" class="float-right">
-                                    <ul class="pagination pagination-sm mb-0">
-                                        <li class="page-item disabled"><a class="page-link" href="#">Previous</a></li>
-                                        <li class="page-item active"><a class="page-link" href="#">1</a></li>
-                                        <li class="page-item"><a class="page-link" href="#">2</a></li>
-                                        <li class="page-item"><a class="page-link" href="#">3</a></li>
-                                        <li class="page-item"><a class="page-link" href="#">Next</a></li>
-                                    </ul>
-                                </nav>
-                            </div>
-                        </div>
+
 
 
                     </div>
@@ -130,30 +160,10 @@
         </div>
     </div>
 
-    {{-- <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel"
-        aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="deleteModalLabel">Konfirmasi Hapus Data</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    Apakah Anda yakin ingin menghapus data pendaftaran ini?
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
-                    <button type="button" class="btn btn-danger" id="confirmDeleteBtn">Hapus</button>
-                </div>
-            </div>
-        </div>
-    </div> --}}
 @stop
 
 @section('js')
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
         $(document).ready(function() {
             let PendaftaranIdToDelete

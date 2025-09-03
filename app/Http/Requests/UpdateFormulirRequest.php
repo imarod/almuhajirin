@@ -5,6 +5,7 @@ namespace App\Http\Requests;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
+
 class UpdateFormulirRequest extends FormRequest
 {
     /**
@@ -32,8 +33,8 @@ class UpdateFormulirRequest extends FormRequest
             'nama' => 'required|string|max:255',
             'nisn' => [
                 'required',
-                'numeric',
-                Rule::unique('siswa', 'nisn')->ignore($siswaId),
+                'numeric', 
+                 Rule::unique('siswa', 'nisn')->ignore($siswaId)->whereNull('deleted_at'),
             ],
             'jenis_kelamin' => 'required|in:Laki-laki,Perempuan',
             'tempat_lahir' => 'required|string|max:255',

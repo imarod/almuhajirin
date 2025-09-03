@@ -14,38 +14,52 @@ use Barryvdh\DomPDF\Facade\Pdf;
 
 class PendaftaranController extends Controller
 {
-    // Siswa
+
     public function index($id = null)
     {
+        $statusPendaftaran = 'closed';
+        $message = "Pendaftaran belum dibuka/sudah ditutup. Silahkan cek kembali jadwal pendaftaran.";
         $jadwalAktif = ManajemenJadwalPpdb::active()->first();
-        $statusPendaftaran ='closed';
-        $message="Pendaftaran belum dibuka. Silahkan cek kembali Jadwal yang terlah ditentukan";
+        $pendaftaran = null;
 
-        if($jadwalAktif){
-            $statusPendaftaran = 'open';
-            $message ="Pendaftaran periode X sedang dibuka";
-        }else{
-            $jadwalSelesai = ManajemenJadwalPpdb::where('tgl_berakhir', '<', now())->first();
-            if($jadwalSelesai){
-                $message = "Pendaftaran periode X telah ditutup";
+        // Jika ID pendaftaran diberikan, coba cari data pendaftaran untuk mode edit
+        if ($id) {
+            try {
+                $pendaftaran = Pendaftaran::with(['siswa.orangTua'])->whereHas('siswa', function ($query) {
+                    $query->where('user_id', Auth::id());
+                })->findOrFail($id);
+                // Jika data ditemukan, set status menjadi 'open' untuk mengizinkan edit
+                $statusPendaftaran = 'open';
+                $message = "Anda sedang mengedit formulir pendaftaran.";
+            } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+                // Jika ID tidak ditemukan atau tidak valid, tampilkan pesan error
+                $message = "Data pendaftaran tidak ditemukan atau tidak memiliki akses.";
+                // Tetap biarkan status 'closed'
+            }
+        } else {
+            // Logika untuk mode 'create' (pendaftaran baru)
+            if (Auth::user()->siswa()->whereNull('deleted_at')->exists()) {
+                $message = "Anda sudah terdaftar. Anda hanya bisa melakukan satu pendaftaran.";
+            } elseif (!$jadwalAktif) {
+                $message = "Pendaftaran belum dibuka. Silahkan cek kembali jadwal pendaftaran";
+            } else {
+                // Cek kuota pendaftar
+                $jumlahPendaftar = Pendaftaran::where('jadwal_id', $jadwalAktif->id)->count();
+                if ($jadwalAktif->kuota <= $jumlahPendaftar) {
+                    $message = "Pendaftaran telah DITUTUP. Kuota pendaftar sudah penuh.";
+                } else {
+                    // Semua kondisi terpenuhi, set status menjadi 'open' untuk pendaftaran baru
+                    $statusPendaftaran = 'open';
+                    $message = "Pendaftaran periode " . $jadwalAktif->thn_ajaran . " Gelombang " . $jadwalAktif->gelombang_pendaftaran . " sedang dibuka";
+                }
             }
         }
 
-        $pendaftaran = null;
-        if($id) {
-            $pendaftaran  = Pendaftaran::with(['siswa.orangTua'])->findOrFail($id);
-        }
-        return view('siswa.formulir-siswa', compact('statusPendaftaran', 'message', 'jadwalAktif'));
+        return view('siswa.formulir-siswa', compact('statusPendaftaran', 'message', 'jadwalAktif', 'pendaftaran'));
     }
     public function store(\App\Http\Requests\FormulirPendaftaranStore $request)
     {
-        if(Auth::user()->siswa()->whereNull('deleted_at')->exists()) {
-            return redirect()->back()->with('error', 'Anda sudah mendaftar.');
-        }
         $jadwalAktif = ManajemenJadwalPpdb::active()->first();
-        if(!$jadwalAktif){
-            return redirect()->back()->with('error', 'Pendaftaran belum dibuka. Silahkan cek kembali Jadwal yang telah ditentukan');
-        }
 
         DB::beginTransaction();
         try {
@@ -74,7 +88,7 @@ class PendaftaranController extends Controller
 
             $pendaftaran = Pendaftaran::create([
                 'siswa_id' => $siswa->id,
-                'jadwal_id'=>$jadwalAktif->id,
+                'jadwal_id' => $jadwalAktif->id,
                 'kk' => $kk,
                 'ijazah' => $ijazah,
                 'piagam' => $piagam,
@@ -92,6 +106,8 @@ class PendaftaranController extends Controller
     public function listPendaftar()
     {
         $userId = Auth::id();
+
+       
 
         $pendaftarans = Pendaftaran::with('siswa')
             ->whereHas('siswa', function ($query) use ($userId) {
@@ -186,7 +202,7 @@ class PendaftaranController extends Controller
         }
     }
 
-      public function listCetakFormulir()
+    public function listCetakFormulir()
     {
         $userId = Auth::id();
 
@@ -201,9 +217,9 @@ class PendaftaranController extends Controller
     {
         $userId = Auth::id();
         $pendaftaran = Pendaftaran::with(['siswa.orangTua'])
-        ->whereHas('siswa', function ($query) use ($userId) {
-            $query->where('user_id', $userId);
-        })->findOrFail($id);
+            ->whereHas('siswa', function ($query) use ($userId) {
+                $query->where('user_id', $userId);
+            })->findOrFail($id);
 
         $pdf = Pdf::loadView('siswa.cetak-formulir', compact('pendaftaran'));
         $namaFile = 'Formulir Pendaftaran_' . $pendaftaran->siswa->nama . '.pdf';

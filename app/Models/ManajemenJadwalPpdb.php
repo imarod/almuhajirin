@@ -4,15 +4,17 @@ namespace App\Models;
 
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
 class ManajemenJadwalPpdb extends Model
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes;
 
     protected $table = 'jadwal_ppdb';
-    protected $fillable = ['tgl_pengumuman', 'thn_ajaran', 'gelombang_pendaftaran', 'kuota', 'tgl_mulai', 'tgl_berakhir'];
+    protected $fillable = ['tgl_pengumuman', 'thn_ajaran', 'gelombang_pendaftaran', 'kuota', 'tgl_mulai', 'tgl_berakhir', 'deleted_at'];
     protected $casts = [
         'tgl_mulai' => 'date',
         'tgl_berakhir' => 'date',
@@ -51,7 +53,9 @@ class ManajemenJadwalPpdb extends Model
                 $q2->where('tgl_mulai', '<', $start)
                 ->where('tgl_berakhir', '>', $end);
             });
-        });
+        })
+        ->whereNull('deleted_at');
+        
         if($exceptId) {
             $query->where('id', '!=', $exceptId);
         }
