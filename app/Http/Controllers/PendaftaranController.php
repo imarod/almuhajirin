@@ -21,6 +21,8 @@ class PendaftaranController extends Controller
         $message = "Pendaftaran belum dibuka/sudah ditutup. Silahkan cek kembali jadwal pendaftaran.";
         $jadwalAktif = ManajemenJadwalPpdb::active()->first();
         $pendaftaran = null;
+        $jumlahPendaftar = 0;
+        
 
         // Jika ID pendaftaran diberikan, coba cari data pendaftaran untuk mode edit
         if ($id) {
@@ -44,18 +46,20 @@ class PendaftaranController extends Controller
                 $message = "Pendaftaran belum dibuka. Silahkan cek kembali jadwal pendaftaran";
             } else {
                 // Cek kuota pendaftar
+                
                 $jumlahPendaftar = Pendaftaran::where('jadwal_id', $jadwalAktif->id)->count();
                 if ($jadwalAktif->kuota <= $jumlahPendaftar) {
                     $message = "Pendaftaran telah DITUTUP. Kuota pendaftar sudah penuh.";
+                   
                 } else {
                     // Semua kondisi terpenuhi, set status menjadi 'open' untuk pendaftaran baru
                     $statusPendaftaran = 'open';
-                    $message = "Pendaftaran periode " . $jadwalAktif->thn_ajaran . " Gelombang " . $jadwalAktif->gelombang_pendaftaran . " sedang dibuka";
+                    $message = "Pendaftaran periode " . $jadwalAktif->thn_ajaran . " Gelombang " . $jadwalAktif->gelombang_pendaftaran . "Telah dibuka";
                 }
             }
         }
 
-        return view('siswa.formulir-siswa', compact('statusPendaftaran', 'message', 'jadwalAktif', 'pendaftaran'));
+        return view('siswa.formulir-siswa', compact('statusPendaftaran', 'message', 'jadwalAktif', 'pendaftaran', 'jumlahPendaftar'));
     }
     public function store(\App\Http\Requests\FormulirPendaftaranStore $request)
     {

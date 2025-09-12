@@ -10,7 +10,7 @@ use Exception;
 use Illuminate\Support\Facades\DB;
 
 
-class ManajemenJadwalPpdbController extends Controller
+class ManajemenJadwalPpdbController extends Controller 
 {
     public function index()
     {

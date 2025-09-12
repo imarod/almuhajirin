@@ -1,6 +1,4 @@
-/* Sidebar */
-/* Aturan ini menimpa semua gaya bawaan AdminLTE untuk menu aktif,
-   baik untuk menu biasa maupun menu dengan dropdown (has-treeview). */
+
 .sidebar-dark-success .nav-sidebar > .nav-item > .nav-link.active,
 .sidebar-dark-success .nav-sidebar .nav-treeview > .nav-item > .nav-link.active,
 .sidebar-dark-success .nav-sidebar .nav-link.active {
@@ -15,9 +13,9 @@
 }
 
 /* Aturan tambahan untuk memastikan warna hover juga konsisten */
-.nav-sidebar .nav-link:hover {
+/* .nav-sidebar .nav-link:hover {
     background-color: rgba(255, 255, 255, 0.1) !important;
-}
+} */
 
 /* Aturan untuk warna tombol dan elemen lain yang Anda buat */
 .bg-basic {

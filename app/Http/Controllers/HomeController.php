@@ -46,9 +46,6 @@ class HomeController extends Controller
     {
         return view('detail-pendaftar');
     }
-    public function dashboardStatistik()
-    {
-        return view('dashboard-statistik');
-    }
+   
     
 }

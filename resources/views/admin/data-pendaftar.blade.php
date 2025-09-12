@@ -1,9 +1,9 @@
 @extends('layouts.adminlte-custom')
 @section('content_header')
-    <div class="container-fluid">
+    <div class="container-fluid mb-3">
         <div class="d-flex justify-content-between align-items-center">
             <div>
-                <h1 class="h3 mb-0 font-weight-bold text-dark">Data Seluruh Pendaftar</h1>
+                <h1 class="h3 mb-0 font-weight-bold">Data Seluruh Pendaftar</h1>
             </div>
 
         </div>
@@ -28,33 +28,31 @@
             <div class="card-body">
                 {{-- filter --}}
                 <div class="row align-items-center mb-6">
-                    <div class="col-md-6">
+                    <div class="col-md-4 mb-4 mb-md-0">
                         <div class="d-flex align-items-center flex-wrap">
-                            <div class="d-flex align-items-center mr-3">
-                                <span class="text-dark">Show</span>
-                                <select class="form-control form-control-sm mx-2" style="width: auto;">
-                                    <option>10</option>
-                                    <option>25</option>
-                                    <option>50</option>
+                            <div class="d-flex align-items-center mr-3 mb-2 mb-lg-0">
+                                <span class="text-dark">Tampilan</span>
+                                <select id="show-entries" class="form-control form-control-sm mx-2" style="width: auto;">
+                                    <option value="10">10 Baris</option>
+                                    <option value="25">25 Baris</option>
+                                    <option value="50">50 Baris</option>
+                                    <option value="100">100 Baris</option>
+                                    <option value="0">Semua Baris</option>
                                 </select>
-                                <span class="text-muted small">entries</span>
                             </div>
-                            <button class="btn btn-outline-secondary btn-sm d-flex align-items-center mr-2">
-                                <i class="fas fa-filter text-muted mr-2"></i>
-                                Filter
-                            </button>
-                            <button class="btn btn-outline-secondary btn-sm d-flex align-items-center">
+                            <button class="btn btn-outline-secondary btn-sm d-flex align-items-center ">
                                 <i class="fas fa-download text-muted mr-2"></i>
                                 Export
                             </button>
                         </div>
                     </div>
-                    <div class="col-md-6 mt-4 mt-md-0">
-                        <div class="d-flex flex-wrap justify-content-end align-items-center">
+                    <div class="col-md-8">
+                        <div class="d-flex flex-wrap justify-content-start justify-content-md-end align-items-center">
                             {{-- filter tahun ajaran --}}
-                            <div class="form-inline mr-4">
+
+                            <div class="form-inline mr-4 mb-3 mb-lg-0">
                                 <label for="filter-thn-ajaran" class="mr-2">Tahun Ajaran</label>
-                                <select name="thn_ajaran" id="filter-thn-ajaran" class="form-control">
+                                <select name="thn_ajaran" id="filter-thn-ajaran" class="form-control form-control-sm">
                                     <option value="">Semua</option>
                                     @foreach ($thnAjaran as $thn)
                                         <option value="{{ $thn }}"
@@ -64,11 +62,22 @@
                                     @endforeach
                                 </select>
                             </div>
+                            <div class="form-inline mr-4 mb-2 mb-lg-0">
+                                <label for="filter-status" class="mr-2">Status</label>
+                                <select name="status_aktual" id="filter-status" class="form-control form-control-sm">
+                                    <option value="">Semua</option>
+                                    <option value="Diterima">Diterima</option>
+                                    <option value="Ditolak">Ditolak</option>
+                                    <option value="Diproses">Diproses</option>
+                                    <option value="Belum diproses">Belum diproses</option>
+                                </select>
+                            </div>
 
                             {{-- filter gelombang --}}
                             <div class="form-inline">
                                 <label for="filter-gelombang" class="mr-2">Gelombang</label>
-                                <select name="gelombang_pendaftaran" id="filter-gelombang" class="form-control">
+                                <select name="gelombang_pendaftaran" id="filter-gelombang"
+                                    class="form-control form-control-sm">
                                     <option value="">Semua</option>
                                     @foreach ($gelombangPendaftaran as $gelombang)
                                         <option value="{{ $gelombang }}"
@@ -78,6 +87,7 @@
                                     @endforeach
                                 </select>
                             </div>
+
                         </div>
                     </div>
                 </div>
@@ -99,13 +109,13 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @if (isset($pendaftars) && $pendaftars->isEmpty())
+                            {{-- @if (isset($pendaftars) && $pendaftars->isEmpty())
                                 <tr>
                                     <td colspan="6" class="text-center">Tidak ada data pendaftar</td>
                                 </tr>
                             @else
                                 @foreach ($pendaftars as $pendaftar)
-                                    <tr style="">
+                                    <tr>
                                         <td>{{ $loop->iteration }}.</td>
                                         <td>{{ $pendaftar->siswa->nama ?? '-' }}</td>
                                         <td>{{ $pendaftar->siswa->nisn ?? '-' }}</td>
@@ -113,13 +123,14 @@
                                         <td>{{ $pendaftar->siswa->no_hp_siswa ?? '-' }}</td>
                                         <td>
                                             @if ($pendaftar->jadwal)
-                                               Gelombang {{$pendaftar->jadwal->gelombang_pendaftaran}} ({{$pendaftar->jadwal->thn_ajaran}})
+                                                Gelombang {{ $pendaftar->jadwal->gelombang_pendaftaran }}
+                                                ({{ $pendaftar->jadwal->thn_ajaran }})
                                             @else
                                                 -
                                             @endif
                                         </td>
                                         <td class="text-center"><span
-                                                class="status-badge status-{{strtolower(str_replace(' ', '', $pendaftar->status_aktual ?? ''))}}">{{$pendaftar->status_aktual ?? '-'}}</span>
+                                                class="status-badge status-{{ strtolower(str_replace(' ', '', $pendaftar->status_aktual ?? '')) }}">{{ $pendaftar->status_aktual ?? '-' }}</span>
                                         </td>
                                         <td class=" text-center action-icons">
                                             <a href="{{ route('admin.detail-pendaftar', ['id' => $pendaftar->id]) }}"><i
@@ -129,7 +140,7 @@
                                         </td>
                                     </tr>
                                 @endforeach
-                            @endif
+                            @endif --}}
                         </tbody>
                     </table>
                 </div>
@@ -137,16 +148,12 @@
                 {{-- pagination --}}
                 <div class="row mt-3">
                     <div class="col-sm-12 col-md-5">
-                        <div class="dataTables_info text-muted">Showing 1 to 10 of 52 entries</div>
+                        <div class="dataTables_info text-muted"></div>
                     </div>
                     <div class="col-sm-12 col-md-7">
                         <nav aria-label="Page navigation" class="float-right">
                             <ul class="pagination pagination-sm mb-0">
-                                <li class="page-item disabled"><a class="page-link" href="#">Previous</a></li>
-                                <li class="page-item active"><a class="page-link" href="#">1</a></li>
-                                <li class="page-item"><a class="page-link" href="#">2</a></li>
-                                <li class="page-item"><a class="page-link" href="#">3</a></li>
-                                <li class="page-item"><a class="page-link" href="#">Next</a></li>
+                                {{-- Tautan paginasi akan dimuat di sini oleh JS --}}
                             </ul>
                         </nav>
                     </div>
@@ -157,75 +164,165 @@
 @endsection
 
 @section('js')
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
-        $(document).ready(function() {
-            // Fungsi untuk melakukan request AJAX
-            function fetchData() {
-                let thnAjaran = $('#filter-thn-ajaran').val();
-                let gelombang = $('#filter-gelombang').val();
+        // Fungsi untuk melakukan request AJAX dengan paginasi
+        function fetchData(page = 1) {
+            let thnAjaran = $('#filter-thn-ajaran').val();
+            let gelombang = $('#filter-gelombang').val();
+            let status = $('#filter-status').val();
+            let perPage = $('select.form-control-sm').val();
 
-                // Lakukan permintaan AJAX
-                $.ajax({
-                    url: "{{ route('admin.pendaftar.json') }}",
-                    type: "GET",
-                    data: {
-                        thn_ajaran: thnAjaran,
-                        gelombang_pendaftaran: gelombang
-                    },
-                    success: function(response) {
-                        let html = '';
-                        if (response.length > 0) {
-                            $.each(response, function(index, pendaftar) {
-                                let jadwalInfo = '-';
-                                let statusClass = 'status-badge';
-                                if (pendaftar.jadwal) {
-                                    jadwalInfo =
-                                        `Gelombang ${pendaftar.jadwal.gelombang_pendaftaran} (${pendaftar.jadwal.thn_ajaran})`;
-                                }
-                                
-                                if (pendaftar.status_aktual) {
-                                    statusClass += ` status-${pendaftar.status_aktual.toLowerCase().replace(/\s/g, '')}`;
-                                }
+            $.ajax({
+                url: "{{ route('admin.pendaftar.json') }}",
+                type: "GET",
+                data: {
+                    thn_ajaran: thnAjaran,
+                    gelombang_pendaftaran: gelombang,
+                    status_aktual: status,
+                    page: page,
+                    per_page: perPage
+                },
+                success: function(response) {
+                    let pendaftars = response.data;
+                    let pagination = response;
 
-                                let detailUrl = "{{ route('admin.detail-pendaftar', ':id') }}";
-                                detailUrl = detailUrl.replace(':id', pendaftar.id);
+                    let html = '';
+                    if (pendaftars.length > 0) {
+                        $.each(pendaftars, function(index, pendaftar) {
+                            let no = (pagination.current_page - 1) * pagination.per_page +
+                                index + 1;
+                            let jadwalInfo = '-';
+                            let statusClass = 'status-badge';
 
-                                html += `
-                                    <tr>
-                                        <td>${index + 1}</td>
-                                        <td>${pendaftar.siswa?.nama ?? '-'}</td>
-                                        <td>${pendaftar.siswa?.nisn ?? '-'}</td>
-                                        <td>${pendaftar.siswa?.jenis_kelamin ?? '-'}</td>
-                                        <td>${pendaftar.siswa?.no_hp_siswa ?? '-'}</td>
-                                        <td>${jadwalInfo}</td>
-                                        <td class="text-center"><span class="${statusClass}">${pendaftar.status_aktual ?? '-'}</span></td>
-                                        <td class=" text-center action-icons">
-                                            <a href="${detailUrl}"><i class="fas fa-eye text-secondary" title="Lihat"></i></a>
-                                            <i class="fas fa-trash text-danger" title="Hapus"></i>
-                                            <i class="fas fa-edit text-primary" title="Edit"></i>
-                                        </td>
-                                    </tr>
-                                `;
-                            });
-                        } else {
-                            html =
-                                '<tr><td colspan="8" class="text-center">Belum ada pendaftar pada filter yang dipilih.</td></tr>';
-                        }
-                        $('table tbody').html(html);
-                    },
-                    error: function(xhr) {
-                        console.log(xhr.responseText);
-                        $('table tbody').html(
-                            '<tr><td colspan="8" class="text-center text-danger">Terjadi kesalahan saat mengambil data.</td></tr>'
-                        );
+                            if (pendaftar.jadwal) {
+                                jadwalInfo =
+                                    `Gelombang ${pendaftar.jadwal.gelombang_pendaftaran} (${pendaftar.jadwal.thn_ajaran})`;
+                            }
+
+                            if (pendaftar.status_aktual) {
+                                statusClass +=
+                                    ` status-${pendaftar.status_aktual.toLowerCase().replace(/\s/g, '')}`;
+                            }
+
+                            let detailUrl = "{{ route('admin.detail-pendaftar', ':id') }}";
+                            detailUrl = detailUrl.replace(':id', pendaftar.id);
+
+                            html += `
+                            <tr>
+                                <td>${no}</td>
+                                <td>${pendaftar.siswa?.nama ?? '-'}</td>
+                                <td>${pendaftar.siswa?.nisn ?? '-'}</td>
+                                <td>${pendaftar.siswa?.jenis_kelamin ?? '-'}</td>
+                                <td>${pendaftar.siswa?.no_hp_siswa ?? '-'}</td>
+                                <td>${jadwalInfo}</td>
+                                <td class="text-center"><span class="${statusClass}">${pendaftar.status_aktual ?? '-'}</span></td>
+                                <td class=" text-center action-icons">
+                                    <a href="${detailUrl}"><i class="fas fa-eye text-secondary" title="Lihat"></i></a>
+                                    <i class="fas fa-trash text-danger delete-btn" data-id="${pendaftar.id}" title="Hapus"></i>
+                                    <i class="fas fa-edit text-primary" title="Edit"></i>
+                                </td>
+                            </tr>
+                        `;
+                        });
+                    } else {
+                        html =
+                            '<tr><td colspan="8" class="text-center">Belum ada pendaftar pada filter yang dipilih.</td></tr>';
                     }
-                });
-            }
+                    $('table tbody').html(html);
 
-            // Tangkap perubahan pada kedua dropdown filter
-            $('#filter-thn-ajaran, #filter-gelombang').change(function() {
-                fetchData();
+                    let infoText =
+                        `Showing ${pagination.from ?? 0} to ${pagination.to ?? 0} of ${pagination.total} entries`;
+                    $('.dataTables_info').text(infoText);
+
+                    let paginationHtml = '';
+                    pagination.links.forEach(link => {
+                        let disabledClass = link.url === null ? 'disabled' : '';
+                        let activeClass = link.active ? 'active' : '';
+                        let pageNumber;
+
+                        if (link.label.includes('Previous')) {
+                            pageNumber = pagination.current_page - 1;
+                        } else if (link.label.includes('Next')) {
+                            pageNumber = pagination.current_page + 1;
+                        } else {
+                            pageNumber = link.label;
+                        }
+
+                        paginationHtml += `
+                        <li class="page-item ${disabledClass} ${activeClass}">
+                            <a class="page-link" href="#" data-page="${pageNumber}" onclick="event.preventDefault(); fetchData(${pageNumber});">
+                                ${link.label}
+                            </a>
+                        </li>
+                    `;
+                    });
+                    $('.pagination').html(paginationHtml);
+                },
+                error: function(xhr) {
+                    console.log(xhr.responseText);
+                    $('table tbody').html(
+                        '<tr><td colspan="8" class="text-center text-danger">Terjadi kesalahan saat mengambil data.</td></tr>'
+                    );
+                }
             });
+        }
+        $(document).ready(function() {
+
+            // Tangkap perubahan pada semua dropdown filter
+            $('#filter-thn-ajaran, #filter-gelombang, #filter-status, #show-entries').change(function() {
+                fetchData(1); // Panggil fetchData dengan parameter halaman 1
+            });
+
+            // Panggil fetchData saat halaman dimuat pertama kali
+            fetchData();
+
+            // Tambahkan event listener untuk tombol hapus
+            $(document).on('click', '.delete-btn', function(e) {
+                e.preventDefault()
+
+                let pendaftaranIdToDelete = $(this).data('id')
+                let deleteUrl = "{{ route('admin.data.pendaftar.destroy', ':id') }}"
+                deleteUrl = deleteUrl.replace(':id', pendaftaranIdToDelete)
+
+                Swal.fire({
+                    title: 'Apakah Anda yakin?',
+                    text: "Data pendaftar akan dihapus secara permanen!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Ya, hapus!',
+                    cancelButtonText: 'Batal'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            url: deleteUrl,
+                            type: 'DELETE',
+                            data: {
+                                _token: '{{ csrf_token() }}'
+                            },
+                            success: function(response) {
+                                Swal.fire(
+                                    'Dihapus!',
+                                    response.success,
+                                    'success'
+                                );
+                                fetchData(1); // Muat ulang data setelah penghapusan
+                            },
+                            error: function(xhr) {
+                                Swal.fire(
+                                    'Gagal!',
+                                    xhr.responseJSON.error ||
+                                    'Terjadi kesalahan saat menghapus data.',
+                                    'error'
+                                );
+                                console.log(xhr.responseText);
+                            }
+                        })
+                    }
+                })
+            })
         });
     </script>
 @stop

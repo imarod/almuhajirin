@@ -25,7 +25,7 @@
     <div class="container-fluid">
 
         @if ($statusPendaftaran === 'open' && $jadwalAktif)
-        <x-jadwal-ppdb-aktif />
+            <x-jadwal-ppdb-aktif />
             {{-- <div class="card mb-4 border-left-primary shadow-sm" style="border-left: 4px solid #5E7CE3 !important;">
                 <div class="card-body" style="background: linear-gradient(135deg, #e3f2fd 0%, #e8eaf6 100%);">
                     <div class="d-flex align-items-center">
@@ -50,7 +50,7 @@
         @endif
 
         <div class="row justify-content-start">
-           
+
             <div class="col-md-12">
                 @if ($statusPendaftaran == 'open')
                     <form
@@ -416,7 +416,7 @@
                             </div>
                         </div>
                     </form>
-                 @else
+                @else
                     {{-- <div class="card mb-4 border-left-primary shadow-sm"
                         style="border-left: 4px solid #ff0000 !important;">
                         <div class="card-body" style="background: linear-gradient(135deg, #fde3e3 0%, #f6e8e8 100%);">
@@ -434,7 +434,7 @@
                         </div>
                     </div>  --}}
                     <x-jadwal-ppdb-aktif />
-                    
+
                     <div class=" card border-bottom">
                         <div colspan="9" class="text-center py-5">
                             <i class="fas fa-history fa-3x text-muted mb-3" style="opacity: 0.3;"></i>
@@ -640,5 +640,27 @@
                 });
             }
         });
+    </script>
+
+    {{-- JANGAN LUPA HAPUS SCRIPT DEBUG INI NANTI --}}
+    <script>
+        var jadwalAktif = @json($jadwalAktif);
+        var message = @json($message);
+        var pendaftaran = @json($pendaftaran);
+        console.log('Pesan:', message);
+        console.log('Jadwal Aktif:', jadwalAktif);
+        console.log('Data Pendaftaran (jika ada):', pendaftaran);
+        if (jadwalAktif) {
+            var kuota = jadwalAktif.kuota;
+            var jumlahPendaftar = jadwalAktif.pendaftaran.length;
+
+            console.log('Jadwal aktif ditemukan.');
+            console.log('Kuota siswa yang disediakan:', kuota);
+            console.log('Jumlah pendaftar saat ini:', jumlahPendaftar);
+
+        } else {
+            console.log('Tidak ada jadwal aktif.');
+            console.log('Pesan dari sistem:', message);
+        }
     </script>
 @endpush

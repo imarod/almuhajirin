@@ -19,36 +19,23 @@
                     <a href="#" class="btn btn-success">
                         <i class="fas fa-edit"></i> Edit Data
                     </a>
-                    <form action="{{ route('admin.update-status', $pendaftars->id) }}" method="POST">
+                    <form id="form-tolak" action="{{ route('admin.update-status', $pendaftars->id) }}" method="POST">
                         @csrf
                         @method('PUT')
                         <input type="hidden" name="status_aktual" value="Ditolak">
-                        <button type="submit" class="btn btn-danger">
+                        <button type="button" id="btn-tolak" class="btn btn-danger">
                             <i class="fas fa-times"></i> Tolak
                         </button>
                     </form>
-                    <form action="{{ route('admin.update-status', $pendaftars->id) }}" method="POST">
+                    <form id="form-terima" action="{{ route('admin.update-status', $pendaftars->id) }}" method="POST">
                         @csrf
                         @method('PUT')
                         <input type="hidden" name="status_aktual" value="Diterima">
-                        <button class="btn btn-primary">
+                        <button type="button" id="btn-terima" class="btn btn-primary">
                             <i class="fas fa-check"></i> Terima
                         </button>
                     </form>
                 </div>
-
-                {{-- DIGANTI --}}
-                {{-- <div class="card-footer">
-                    <form action="{{route('admin.set-announcement-date', $pendaftars->id)}}" method="POST">
-                        @csrf
-                        @method('PUT')
-                        <div class="form-group d-flex align-items-center">
-                            <label for="tgl_pengumuman" class="mr-2 mb-0">Tanggal Pengumuman: </label>
-                            <input type="date" name="tgl_pengumuman" class="form-control col-sm-3 mr-2" value="{{$pendaftars->tgl_pengumuman ? $pendaftars->tgl_pengumuman->format('Y-m-d') : ''}}">
-                            <button type="submit" class="btn btn-info">Simpan Tanggal</button>
-                        </div>
-                    </form>
-                </div> --}}
 
                 <div class="row g-3">
                     {{-- Kolom Kiri --}}
@@ -106,8 +93,7 @@
                                     <i class="fa fa-phone text-primary fs-3 mr-3"></i>
                                     <div class="flex-grow-1">
                                         <p class="text-muted mb-1">No WhatsApp </p>
-                                        <strong
-                                            class="text-dark">{{ $pendaftars->siswa->no_hp_siswa }}</strong>
+                                        <strong class="text-dark">{{ $pendaftars->siswa->no_hp_siswa }}</strong>
                                     </div>
                                 </div>
                             </div>
@@ -116,7 +102,8 @@
                                     <i class="fa fa-calendar-alt text-primary fs-3 mr-3"></i>
                                     <div class="flex-grow-1">
                                         <p class="text-muted mb-1">Kategori Prestasi</p>
-                                        <strong class="text-dark">{{ $pendaftars->siswa->kategori_prestasi ?? '-' }}</strong>
+                                        <strong
+                                            class="text-dark">{{ $pendaftars->siswa->kategori_prestasi ?? '-' }}</strong>
                                     </div>
                                 </div>
                             </div>
@@ -541,4 +528,70 @@
         //     }
         // }
     </script>
+
+
 @stop
+
+@push('js')
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        document.getElementById('btn-terima').addEventListener('click', function(e) {
+            e.preventDefault()
+            Swal.fire({
+                title: 'Apakah Anda yakin?',
+                text: "Status pendaftaran akan diubah menjadi 'Diterima'.",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Ya, Terima!',
+                cancelButtonText: 'Batal'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    Swal.fire({
+                        title: 'Berhasil!',
+                        text: 'Konfirmasi penerimaan berhasil. Anda akan diarahkan ke halaman pendaftar.',
+                        icon: 'success',
+                        timer: 1000, // Tampilan selama 2 detik
+                        timerProgressBar: true,
+                        showConfirmButton: false,
+                       
+                    }).then(()=> {
+                        // Setelah modal sukses tertutup, submit form
+                        document.getElementById('form-terima').submit();
+                    })
+                }
+            })
+        })
+
+        document.getElementById('btn-tolak').addEventListener('click', function(e) {
+            e.preventDefault()
+            Swal.fire({
+                title: 'Apakah Anda yakin?',
+                text: "Status pendaftaran akan diubah menjadi 'Ditolak'.",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Ya, Tolak!',
+                cancelButtonText: 'Batal'
+            }).then((result) => {
+                 if (result.isConfirmed) {
+                    // Tampilkan SweetAlert sukses setelah konfirmasi berhasil
+                    Swal.fire({
+                        title: 'Berhasil!',
+                        text: 'Konfirmasi penolakan berhasil. Anda akan diarahkan ke halaman pendaftar.',
+                        icon: 'success',
+                        timer: 1000,
+                        timerProgressBar: true,
+                        showConfirmButton: false,
+                      
+                     }).then(() => {
+                        // Setelah modal sukses tertutup, submit form
+                        document.getElementById('form-tolak').submit();
+                    });
+                }
+            });
+        });
+    </script>
+@endpush
