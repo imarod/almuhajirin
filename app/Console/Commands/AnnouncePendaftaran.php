@@ -5,6 +5,7 @@ namespace App\Console\Commands;
 use Illuminate\Console\Command;
 use App\Models\Pendaftaran;
 use App\Models\ManajemenJadwalPpdb;
+use App\Models\Siswa;
 use Carbon\Carbon;
 use illuminate\Support\Facades\App;
 use Twilio\Rest\Client;
@@ -16,56 +17,31 @@ class AnnouncePendaftaran extends Command
 
     public function handle()
     {
-        $jadwal = ManajemenJadwalPpdb::first();
+        $jadwal = ManajemenJadwalPpdb::whereDate('tgl_pengumuman', Carbon::today())->first();
 
-        if(!$jadwal || !$jadwal->tgl_pengumuman) {
-            $this->info('Tanggal pengumuman belum diatur');
+        if(!$jadwal) {
+            $this->info('Tidak ada jadwal pengumuman hari ini');
             return Command::SUCCESS;
         }
 
-        $tglPengumuman = \Carbon\Carbon::parse($jadwal->tgl_pengumuman);
+        $pendaftarToAnnounce= Pendaftaran::with('siswa.orangTua')
+        ->where('jadwal_id', $jadwal->id)
+        ->where('is_announced', false)
+        ->get();
 
-        if(!$tglPengumuman->isToday()) {
-            $this->info('Hari ini bukan tanggal pengumuman');
+        if($pendaftarToAnnounce->isEmpty()){
+            $this->info('Tidak ada pendaftar yang perlu diumumkan untuk jadwal hari ini');
             return Command::SUCCESS;
         }
 
-        $pendaftarToAnnounce = Pendaftaran::with('siswa.orangTua')
-            ->where('is_announced', false)
-            ->get();
+        $this->info('Mulai mengumumkan ' . $pendaftarToAnnounce->count() . 'Pendaftar untuk tahun ajaran '. $jadwal->thn_ajaran . 'gelombang' . $jadwal->gelombang_pendaftaran . '...');
 
-            if($pendaftarToAnnounce->isEmpty()){
-                $this->info('Tidak ada pendaftar yang perlu diumumkan hari ini');
-                return Command::SUCCESS;
-            }
+        foreach($pendaftarToAnnounce as $pendaftar) {
+            $this->sendWhatsAppNotification($pendaftar);
+        }
 
-            $this->info('Mulai mengumumkan ' . $pendaftarToAnnounce->count() . ' pendaftar...');    
-
-            foreach($pendaftarToAnnounce as $pendaftar) {
-                $this->sendWhatsAppNotification($pendaftar);
-                $this->info('Pengumuman pendaftaran selesai');
-                return Command::SUCCESS;
-            }
-        // $today = Carbon::today();
-        // $pendaftarToAnnounce = Pendaftaran::with('siswa.orangTua')
-        //     ->whereDate('tgl_pengumuman', $today)
-        //     ->where('is_announced', false)
-        //     ->get();
-
-        // if ($pendaftarToAnnounce->isEmpty()) {
-        //     $this->info('Tidak ada pengumuman pendaftaran untuk hari ini');
-        //     return Command::SUCCESS;
-        // }
-
-        // $this->info('Mulai mengumumkan ' . $pendaftarToAnnounce->count() . ' pendaftar...');
-
-        // foreach ($pendaftarToAnnounce as $pendaftar) {
-        //     // Panggil method pengiriman notifikasi
-        //     $this->sendWhatsAppNotification($pendaftar);
-        // }
-
-        // $this->info('Pengumuman pendaftaran selesai.');
-        // return Command::SUCCESS;
+          $this->info('Pengumuman pendaftaran selesai.');
+        return Command::SUCCESS;
     }
 
     private function sendWhatsAppNotification($pendaftar)
@@ -89,7 +65,7 @@ class AnnouncePendaftaran extends Command
 
             // Ubah is_announced menjadi true HANYA JIKA notifikasi berhasil dikirim
             $pendaftar->is_announced = true;
-            $pendaftar->pesan_whatsapp = true; // Baris ini juga dipindahkan ke sini
+            $pendaftar->pesan_whatsapp = true; 
             $pendaftar->save();
 
         } catch (\Exception $e) {

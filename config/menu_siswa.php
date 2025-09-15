@@ -14,26 +14,13 @@ return [
         'url'  => fn() => route('siswa.daftar-formulir'),
         'icon' => 'fas fa-user',
     ],
+ 
     [
         'text' => 'Profil Saya',
-        'url'  => '/home',
+        'url'  => 'siswa/pendaftaran',
         'icon' => 'fas fa-user',
     ],
-    [
-        'text' => 'Profil Saya',
-        'url'  => '/home',
-        'icon' => 'fas fa-user',
-    ],
-    [
-        'text' => 'Profil Saya',
-        'url'  => '/home',
-        'icon' => 'fas fa-user',
-    ],
-    [
-        'text' => 'Profil Saya',
-        'url'  => '/home',
-        'icon' => 'fas fa-user',
-    ],
+  
 
       // Navbar items:
         [

@@ -8,9 +8,24 @@ use App\Models\Pendaftaran;
 
 class DashboardAdmin extends Controller
 {
-     public function index()
+    public function index()
     {
         return view('admin.dashboard-statistik');
+    }
+
+    public function getTotalPendaftar()
+    {
+        $totalPendaftar = Pendaftaran::count();
+        $totalDiterima = Pendaftaran::where('status_aktual', 'Diterima')->count();
+        $totalDitolak = Pendaftaran::where('status_aktual', 'Ditolak')->count();
+         $belumDiperiksa = Pendaftaran::whereNull('status_aktual')->count();
+
+        return response()->json([
+            'totalPendaftar' => $totalPendaftar,
+            'totalDiterima' => $totalDiterima,
+            'totalDitolak' => $totalDitolak,
+            'belumDiperiksa' => $belumDiperiksa
+        ]);
     }
 
     public function getPendaftarByGender()
@@ -25,9 +40,9 @@ class DashboardAdmin extends Controller
     public function getPendaftarByPrestasi()
     {
         $prestasi = Siswa::select('kategori_prestasi')
-                            ->distinct()
-                            ->pluck('kategori_prestasi');
-        if($prestasi->isEmpty()){
+            ->distinct()
+            ->pluck('kategori_prestasi');
+        if ($prestasi->isEmpty()) {
             return response()->json([
                 'labels' => [],
                 'data' => []
@@ -35,17 +50,17 @@ class DashboardAdmin extends Controller
         }
 
         $prestasiData = [];
-        foreach($prestasi as $label) {
-            $count = Siswa::where('kategori_prestasi', $label) -> count();
+        foreach ($prestasi as $label) {
+            $count = Siswa::where('kategori_prestasi', $label)->count();
             $prestasiData[] = $count;
         }
 
-        return response() ->json([
-             'labels' => $prestasi,
+        return response()->json([
+            'labels' => $prestasi,
             'data' => $prestasiData
         ]);
     }
-      public function getPendaftarByYearAndWave()
+    public function getPendaftarByYearAndWave()
     {
         $data = Pendaftaran::selectRaw('
        jadwal_ppdb.thn_ajaran as tahun, jadwal_ppdb.gelombang_pendaftaran as gelombang, Count(pendaftaran.id) as total')

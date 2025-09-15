@@ -11,26 +11,12 @@ class AdminController extends Controller
 {
     public function showDataPendaftar(Request $request)
     {
-        //thn_ajaran unik
         $thnAjaran = ManajemenJadwalPpdb::select('thn_ajaran')->distinct()->orderBy('thn_ajaran', 'desc')->pluck('thn_ajaran');
-        //gelobang pendaftaran unik
         $gelombangPendaftaran = ManajemenJadwalPpdb::select('gelombang_pendaftaran')->distinct()->orderBy('gelombang_pendaftaran', 'asc')->pluck('gelombang_pendaftaran');
-        //default data pendaftar
+
         $defaultThnAjaran = $request->input('thn_ajaran', $thnAjaran->first());
         $defaultGelombang = $request->input('gelombang_pendaftaran', $gelombangPendaftaran->first());
-        $perPage = $request->input('per_page', 10);
-
-        // id jadwal based on filter
-        $jadwalId = ManajemenJadwalPpdb::where('thn_ajaran', $defaultThnAjaran)
-            ->where('gelombang_pendaftaran', $defaultGelombang)
-            ->first()->id ?? null;
-
-        // data pendaftara based on filter
-        $pendaftars = Pendaftaran::where('jadwal_id', $jadwalId)
-            ->with(['siswa.user', 'siswa.orangTua', 'jadwal'])
-            ->paginate($perPage);
-
-        return view('admin.data-pendaftar', compact('pendaftars', 'thnAjaran', 'gelombangPendaftaran', 'defaultThnAjaran', 'defaultGelombang'));
+        return view('admin.data-pendaftar', compact('thnAjaran', 'gelombangPendaftaran', 'defaultThnAjaran', 'defaultGelombang'));
     }
 
     public function getDataPendaftar(Request $request)
@@ -40,22 +26,33 @@ class AdminController extends Controller
         $gelombangPendaftaran = $request->input('gelombang_pendaftaran');
         $statusAktual = $request->input('status_aktual');
         $perPage = $request->input('per_page', 10);
+        $search = $request->input('search');
 
-        //filter
-        if ($thnAjaran || $gelombangPendaftaran) {
-            $jadwalQuery = ManajemenJadwalPpdb::query();
-            if ($thnAjaran) {
-                $jadwalQuery->where('thn_ajaran', $thnAjaran);
+        // Logika pencarian yang sudah Anda miliki
+        if ($search) {
+            $query->whereHas('siswa', function ($q) use ($search) {
+                $q->where('nisn', 'like', '%' . $search . '%')
+                    ->orWhere('nama', 'like', '%' . $search . '%');
+            });
+            $query->orWhereHas('siswa.user', function ($q) use ($search) {
+                $q->where('email', 'like', '%' . $search . '%');
+            });
+        } else {
+            // Logika filter tahun ajaran dan gelombang tetap berjalan jika tidak ada pencarian.
+            if ($thnAjaran || $gelombangPendaftaran) {
+                $jadwalQuery = ManajemenJadwalPpdb::query();
+                if ($thnAjaran) {
+                    $jadwalQuery->where('thn_ajaran', $thnAjaran);
+                }
+                if ($gelombangPendaftaran) {
+                    $jadwalQuery->where('gelombang_pendaftaran', $gelombangPendaftaran);
+                }
+                $jadwalIds = $jadwalQuery->pluck('id')->toArray();
+                $query->whereIn('jadwal_id', $jadwalIds);
             }
-            if ($gelombangPendaftaran) {
-                $jadwalQuery->where('gelombang_pendaftaran', $gelombangPendaftaran);
-            }
-            //id yang cocok diambil
-            $jadwalIds = $jadwalQuery->pluck('id')->toArray();
-            //filter berdasarkan id jadwal
-            $query->whereIn('jadwal_id', $jadwalIds);
         }
 
+        // Logika filter status aktual
         if ($statusAktual) {
             if ($statusAktual == 'Belum diproses') {
                 $query->whereNull('status_aktual');
@@ -63,6 +60,7 @@ class AdminController extends Controller
                 $query->where('status_aktual', $statusAktual);
             }
         }
+
 
         if ($perPage > 0) {
             $pendaftars = $query->with(['siswa.user', 'siswa.orangTua', 'jadwal'])->paginate($perPage);
@@ -111,28 +109,28 @@ class AdminController extends Controller
     {
         DB::beginTransaction();
 
-        try{
+        try {
             $pendaftaran = Pendaftaran::findOrFail($id);
             $siswa = $pendaftaran->siswa;
 
-            if($siswa) {
+            if ($siswa) {
                 $ortu = $siswa->orangTua;
                 $pendaftaran->delete();
                 $siswa->delete();
 
-                if($ortu){
+                if ($ortu) {
                     $ortu->delete();
                 }
-            }else{
+            } else {
                 $pendaftaran->delete();
             }
 
             DB::commit();
 
             return response()->json(['success' => 'Data pendaftaran berhasil dihapus oleh admin']);
-        } catch(\Exception $e) {
+        } catch (\Exception $e) {
             DB::rollBack();
-            return response()->json(['error'=>'Gagal menghapus data ' . $e->getMessage()], 500);
+            return response()->json(['error' => 'Gagal menghapus data ' . $e->getMessage()], 500);
         }
     }
 }

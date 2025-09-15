@@ -53,7 +53,7 @@ class ManajemenUser extends Controller
         if ($request->filled('search')) {
             $search = $request->input('search');
             $query->where('name', 'like', '%' . $search . '%')
-                ->orWhere('email', 'like', '%' . $search . '%');
+                ->orWhere('email', 'like', '%' . $search . '%'); 
         }
 
         if ($request->filled('role')) {
@@ -66,7 +66,7 @@ class ManajemenUser extends Controller
             $users = $query->paginate($perPage);
             $users->getCollection()->transform(function ($user) {
                 $user->created_at_formatted = $user->created_at->format('d-m-Y');
-                return $user;
+                return $user; 
             });
             return response()->json($users);
         } else {

@@ -17,20 +17,16 @@
                 <div class="card p-0 h-100">
                     <div class="card-body d-flex flex-column justify-content-center">
                         <div class="d-flex align-items-center mb-2">
-                            <h3 class="font-weight-bold mb-0 text-primary">125</h3>
-                            <div class="ml-auto text-primary">
+                            <h3 class="font-weight-bold mb-0" id="totalPendaftar" style="color: #5E7CE3"></h3>
+                            <div class="ml-auto" style="color: #5E7CE3">
                                 <i class="fas fa-user-plus fa-2x"></i>
                             </div>
                         </div>
                         <p class="mb-0 text-muted">Total Pendaftar</p>
                     </div>
-                    <div class="card-footer p-2 text-white"
-                        style="background: linear-gradient(to right, #6a11cb 0%, #2575fc 100%);">
-                        <div class="d-flex align-items-center">
-                            <p class="mb-0 small text-white">% change</p>
-                            <div class="ml-auto">
-                                <i class="fas fa-chart-line"></i>
-                            </div>
+                    <div class="card-footer p-2 text-white bg-basic">
+                        <div class="d-flex align-items-center py-2">
+
                         </div>
                     </div>
                 </div>
@@ -40,15 +36,14 @@
                 <div class="card p-0 h-100">
                     <div class="card-body d-flex flex-column justify-content-center">
                         <div class="d-flex align-items-center mb-2">
-                            <h3 class="font-weight-bold mb-0 text-success">113</h3>
-                            <div class="ml-auto text-success">
+                            <h3 class="font-weight-bold mb-0" id="totalDiterima" style="color: #10B981;"></h3>
+                            <div class="ml-auto " style="color: #10B981;">
                                 <i class="fas fa-check-circle fa-2x"></i>
                             </div>
                         </div>
                         <p class="mb-0 text-muted">Total Diterima</p>
                     </div>
-                    <div class="card-footer p-2 text-white"
-                        style="background: linear-gradient(to right, #43e97b 0%, #38b25c 100%);">
+                    <div class="card-footer p-2 text-white " style="background: #10B981;">
                         <div class="d-flex align-items-center">
                             <p class="mb-0 small text-white">% change</p>
                             <div class="ml-auto">
@@ -63,15 +58,36 @@
                 <div class="card p-0 h-100">
                     <div class="card-body d-flex flex-column justify-content-center">
                         <div class="d-flex align-items-center mb-2">
-                            <h3 class="font-weight-bold mb-0 text-danger">12</h3>
-                            <div class="ml-auto text-danger">
+                            <h3 class="font-weight-bold mb-0" id="belumDiperiksa" style="color: #FF7A30;"></h3>
+                            <div class="ml-auto " style="color: #FF7A30;">
+                                <i class="fas fa-check-circle fa-2x"></i>
+                            </div>
+                        </div>
+                        <p class="mb-0 text-muted">Belum Diperiksa</p>
+                    </div>
+                    <div class="card-footer p-2 text-white " style="background: #FF7A30;">
+                        <div class="d-flex align-items-center">
+                            <p class="mb-0 small text-white">% change</p>
+                            <div class="ml-auto">
+                                <i class="fas fa-chart-line"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-3 col-md-6 col-sm-6 mb-4">
+                <div class="card p-0 h-100">
+                    <div class="card-body d-flex flex-column justify-content-center">
+                        <div class="d-flex align-items-center mb-2">
+                            <h3 class="font-weight-bold mb-0" style="color: #EF4444" id="totalDitolak"></h3>
+                            <div class="ml-auto" style="color: #EF4444">
                                 <i class="fas fa-times-circle fa-2x"></i>
                             </div>
                         </div>
                         <p class="mb-0 text-muted">Total Ditolak</p>
                     </div>
-                    <div class="card-footer p-2 text-white"
-                        style="background: linear-gradient(to right, #ff416c 0%, #ff4b2b 100%);">
+                    <div class="card-footer p-2 text-white" style="background: #EF4444">
                         <div class="d-flex align-items-center">
                             <p class="mb-0 small text-white">% change</p>
                             <div class="ml-auto">
@@ -197,6 +213,17 @@
         }
 
 
+        // Panggil data statistik menggunakan AJAX
+        fetch('{{ route('admin.dashboard.data-counts') }}')
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('totalPendaftar').innerText = data.totalPendaftar;
+                document.getElementById('totalDiterima').innerText = data.totalDiterima;
+                document.getElementById('totalDitolak').innerText = data.totalDitolak;
+                document.getElementById('belumDiperiksa').innerText = data.belumDiperiksa;
+            })
+            .catch(error => console.error('Error fetching dashboard counts:', error));
+
 
         // Ambil data untuk Chart 1 (Gender)
         fetch('{{ route('admin.dashboard.data-gender') }}')
@@ -238,7 +265,6 @@
     </script>
 
 
-    {{-- chart bar --}}
     {{-- chart bar --}}
     <script>
         fetch('{{ route('admin.dashboard.data-pendaftar-gelombang') }}')

@@ -26,30 +26,40 @@
 
         <div class="card">
             <div class="card-body">
-                {{-- filter --}}
+                <div class="row mb-3 col-md-3">
+                    <div class="d-flex align-items-center flex-wrap">
+                        <div class="d-flex align-items-center mr-3 mb-2 mb-lg-0">
+                            <span class="text-dark">Tampilan</span>
+                            <select id="show-entries" class="form-control form-control-sm mx-2" style="width: auto;">
+                                <option value="10">10 Baris</option>
+                                <option value="25">25 Baris</option>
+                                <option value="50">50 Baris</option>
+                                <option value="100">100 Baris</option>
+                                <option value="0">Semua Baris</option>
+                            </select>
+                        </div>
+                        <button class="btn btn-outline-secondary btn-sm d-flex align-items-center ">
+                            <i class="fas fa-download text-muted mr-2"></i>
+                            Export
+                        </button>
+                    </div>
+
+                </div>
+
                 <div class="row align-items-center mb-6">
                     <div class="col-md-4 mb-4 mb-md-0">
-                        <div class="d-flex align-items-center flex-wrap">
-                            <div class="d-flex align-items-center mr-3 mb-2 mb-lg-0">
-                                <span class="text-dark">Tampilan</span>
-                                <select id="show-entries" class="form-control form-control-sm mx-2" style="width: auto;">
-                                    <option value="10">10 Baris</option>
-                                    <option value="25">25 Baris</option>
-                                    <option value="50">50 Baris</option>
-                                    <option value="100">100 Baris</option>
-                                    <option value="0">Semua Baris</option>
-                                </select>
+                        <div class="input-group input-group-sm">
+                            <div class="input-group-append">
+                                <button class="btn btn-outline-secondary" type="button" id="searchBtn"><i
+                                        class="fas fa-search"></i></button>
                             </div>
-                            <button class="btn btn-outline-secondary btn-sm d-flex align-items-center ">
-                                <i class="fas fa-download text-muted mr-2"></i>
-                                Export
-                            </button>
+                            <input type="text" class="form-control" placeholder="Cari pendaftar ..." id="searchUser">
+
                         </div>
                     </div>
                     <div class="col-md-8">
                         <div class="d-flex flex-wrap justify-content-start justify-content-md-end align-items-center">
                             {{-- filter tahun ajaran --}}
-
                             <div class="form-inline mr-4 mb-3 mb-lg-0">
                                 <label for="filter-thn-ajaran" class="mr-2">Tahun Ajaran</label>
                                 <select name="thn_ajaran" id="filter-thn-ajaran" class="form-control form-control-sm">
@@ -109,38 +119,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            {{-- @if (isset($pendaftars) && $pendaftars->isEmpty())
-                                <tr>
-                                    <td colspan="6" class="text-center">Tidak ada data pendaftar</td>
-                                </tr>
-                            @else
-                                @foreach ($pendaftars as $pendaftar)
-                                    <tr>
-                                        <td>{{ $loop->iteration }}.</td>
-                                        <td>{{ $pendaftar->siswa->nama ?? '-' }}</td>
-                                        <td>{{ $pendaftar->siswa->nisn ?? '-' }}</td>
-                                        <td>{{ $pendaftar->siswa->jenis_kelamin ?? '-' }}</td>
-                                        <td>{{ $pendaftar->siswa->no_hp_siswa ?? '-' }}</td>
-                                        <td>
-                                            @if ($pendaftar->jadwal)
-                                                Gelombang {{ $pendaftar->jadwal->gelombang_pendaftaran }}
-                                                ({{ $pendaftar->jadwal->thn_ajaran }})
-                                            @else
-                                                -
-                                            @endif
-                                        </td>
-                                        <td class="text-center"><span
-                                                class="status-badge status-{{ strtolower(str_replace(' ', '', $pendaftar->status_aktual ?? '')) }}">{{ $pendaftar->status_aktual ?? '-' }}</span>
-                                        </td>
-                                        <td class=" text-center action-icons">
-                                            <a href="{{ route('admin.detail-pendaftar', ['id' => $pendaftar->id]) }}"><i
-                                                    class="fas fa-eye text-secondary" title="Lihat"></i></a>
-                                            <i class="fas fa-trash text-danger" title="Hapus"></i>
-                                            <i class="fas fa-edit text-primary" title="Edit"></i>
-                                        </td>
-                                    </tr>
-                                @endforeach
-                            @endif --}}
+                            {{-- ajax data --}}
                         </tbody>
                     </table>
                 </div>
@@ -172,6 +151,7 @@
             let gelombang = $('#filter-gelombang').val();
             let status = $('#filter-status').val();
             let perPage = $('select.form-control-sm').val();
+            let searchQuery = $('#searchUser').val();
 
             $.ajax({
                 url: "{{ route('admin.pendaftar.json') }}",
@@ -181,11 +161,18 @@
                     gelombang_pendaftaran: gelombang,
                     status_aktual: status,
                     page: page,
-                    per_page: perPage
+                    per_page: perPage,
+                    search: searchQuery
                 },
                 success: function(response) {
                     let pendaftars = response.data;
                     let pagination = response;
+
+                    if (searchQuery) {
+                        $('#filter-thn-ajaran').val('');
+                        $('#filter-gelombang').val('');
+                        $('#filter-status').val('');
+                    }
 
                     let html = '';
                     if (pendaftars.length > 0) {
@@ -269,15 +256,20 @@
         }
         $(document).ready(function() {
 
-            // Tangkap perubahan pada semua dropdown filter
             $('#filter-thn-ajaran, #filter-gelombang, #filter-status, #show-entries').change(function() {
-                fetchData(1); // Panggil fetchData dengan parameter halaman 1
+                fetchData(1);
             });
 
-            // Panggil fetchData saat halaman dimuat pertama kali
-            fetchData();
+            $('#searchBtn').click(function() {
+                fetchData(1);
+            });
 
-            // Tambahkan event listener untuk tombol hapus
+
+            $('#searchUser').keypress(function(e) {
+                if (e.which == 13) {
+                    fetchData(1);
+                }
+            });
             $(document).on('click', '.delete-btn', function(e) {
                 e.preventDefault()
 
@@ -323,6 +315,8 @@
                     }
                 })
             })
+
+            fetchData();
         });
     </script>
 @stop

@@ -74,6 +74,8 @@ Route::middleware('auth')->group(function () {
 Route::prefix('admin')->middleware(['auth', 'is_admin'])->group(function () {
     Route::get('/dashboard-statistik', [DashboardAdmin::class, 'index'])
         ->name('admin.dashboard-statistik');
+    Route::get('/dashboard/data-counts', [DashboardAdmin::class, 'getTotalPendaftar'])
+        ->name('admin.dashboard.data-counts');
     Route::get('/dashboard/data-gender', [DashboardAdmin::class, 'getPendaftarByGender'])
         ->name('admin.dashboard.data-gender');
     Route::get('/dashboard/data-prestasi', [DashboardAdmin::class, 'getPendaftarByPrestasi'])

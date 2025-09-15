@@ -1,199 +1,261 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cetak Formulir Pendaftaran</title>
+    <title>Student Data Form - PDF Optimized</title>
     <style>
+        /* PDF-optimized styles for dompdf */
+        @page {
+            margin: 20mm;
+            size: A4;
+        }
+        
         body {
-            font-family: Arial, sans-serif;
+            font-family: "Times New Roman", serif;
+            font-size: 12px;
+            line-height: 1.4;
             margin: 0;
-            padding: 20px;
-            background-color: #f4f4f4;
+            padding: 0;
+            color: #000;
         }
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-            background-color: #fff;
-            padding: 40px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        
+        .header-container {
+            width: 100%;
+            margin-bottom: 20px;
         }
-        .header {
-            display: flex;
-            align-items: center;
-            border-bottom: 2px solid #000;
-            padding-bottom: 15px;
-            margin-bottom: 30px;
+        
+        .header-table {
+            width: 100%;
+            border-collapse: collapse;
         }
-        .header img {
-            height: 80px;
-            margin-right: 20px;
+        
+        .logo-cell {
+            width: 120px;
+            vertical-align: top;
+            padding-right: 20px;
         }
+        
+        .logo {
+            width: 100px;
+            height: 100px;
+            background-color: #4A90E2;
+            border-radius: 50%;
+            display: block;
+            text-align: center;
+            line-height: 100px;
+            color: white;
+            font-weight: bold;
+            font-size: 10px;
+        }
+        
         .header-text {
             text-align: center;
-            flex-grow: 1;
+            vertical-align: top;
         }
-        .header-text h3 {
-            margin: 0;
-            font-size: 1.2em;
+        
+        .ministry-title {
+            font-size: 16px;
+            font-weight: bold;
+            letter-spacing: 1px;
+            margin-bottom: 5px;
         }
-        .header-text p {
-            margin: 0;
-            font-size: 0.9em;
+        
+        .university-title {
+            font-size: 14px;
+            font-weight: bold;
+            color: #8B4513;
+            margin-bottom: 8px;
         }
+        
+        .contact-info {
+            font-size: 10px;
+            line-height: 1.3;
+        }
+        
+        .separator {
+            width: 100%;
+            height: 3px;
+            background-color: #000;
+            margin: 20px 0;
+        }
+        
         .form-title {
             text-align: center;
-            font-size: 1.5em;
+            font-size: 14px;
             font-weight: bold;
-            margin-bottom: 30px;
+            margin: 20px 0;
         }
-        .form-section {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-        }
-        .form-details {
-            width: 70%;
-        }
-        .form-photo {
-            width: 25%;
-            text-align: right;
-        }
-        .form-photo img {
-            width: 150px;
-            height: 200px;
-            border: 1px solid #ddd;
-            object-fit: cover;
-        }
-        .form-row {
-            display: flex;
-            margin-bottom: 10px;
-        }
-        .label {
+        
+        .section-title {
+            font-size: 12px;
             font-weight: bold;
-            width: 150px;
+            margin: 15px 0 10px 0;
+            text-decoration: underline;
         }
-        .data {
-            flex-grow: 1;
-            border-bottom: 1px solid #000;
-            padding-left: 5px;
+        
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
         }
-        .signature-box {
-            text-align: right;
-            margin-top: 50px;
+        
+        .data-table td {
+            padding: 2px 0;
+            vertical-align: top;
         }
-        .signature-text {
-            margin-bottom: 70px;
+        
+        .field-number {
+            width: 25px;
+            text-align: left;
         }
-        .signature-name {
-            font-weight: bold;
-            border-bottom: 1px solid #000;
-            display: inline-block;
-            padding-bottom: 5px;
+        
+        .field-label {
+            width: 200px;
+            text-align: left;
         }
-
-        @media print {
-            body {
-                background-color: #fff;
-            }
-            .container {
-                box-shadow: none;
-                border: 1px solid #000;
-                padding: 20px;
-            }
+        
+        .field-colon {
+            width: 15px;
+            text-align: center;
+        }
+        
+        .field-value {
+            text-align: left;
+        }
+        
+        .participant-number {
+            float: right;
+            margin-top: -20px;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <img src="http://googleusercontent.com/file_content/0" alt="Logo Sekolah"> 
-            <div class="header-text">
-                <h3>SMA Negeri 10 Surabaya</h3>
-                <p>Jalan Raya Candi Lontar No. 10, Surabaya</p>
-                <p>Telepon: (031) 1234567 | Email: info@sman10.sch.id</p>
-            </div>
-        </div>
-
-        <div class="form-title">
-            FORMULIR BUKTI PENDAFTARAN SISWA BARU
-        </div>
-
-        <div class="form-section">
-            <div class="form-details">
-                <div class="form-row">
-                    <span class="label">Nama</span>
-                    <span class="data">{{ $pendaftaran->siswa->nama }}</span>
-                </div>
-                <div class="form-row">
-                    <span class="label">NISN</span>
-                    <span class="data">{{ $pendaftaran->siswa->nisn }}</span>
-                </div>
-                <div class="form-row">
-                    <span class="label">Jenis Kelamin</span>
-                    <span class="data">{{ $pendaftaran->siswa->jenis_kelamin }}</span>
-                </div>
-                <div class="form-row">
-                    <span class="label">Tempat, Tanggal Lahir</span>
-                    <span class="data">{{ $pendaftaran->siswa->tempat_lahir }}, {{ \Carbon\Carbon::parse($pendaftaran->siswa->tanggal_lahir)->format('d F Y') }}</span>
-                </div>
-                <div class="form-row">
-                    <span class="label">Alamat</span>
-                    <span class="data">{{ $pendaftaran->siswa->alamat_siswa }}</span>
-                </div>
-                <div class="form-row">
-                    <span class="label">Nomor HP Siswa</span>
-                    <span class="data">{{ $pendaftaran->siswa->no_hp_siswa }}</span>
-                </div>
-                <div class="form-row">
-                    <span class="label">Kategori Prestasi</span>
-                    <span class="data">{{ $pendaftaran->siswa->kategori_prestasi ?? '-' }}</span>
-                </div>
-                <div class="form-row">
-                    <span class="label">Nama Ayah</span>
-                    <span class="data">{{ $pendaftaran->siswa->orangTua->nama_ayah }}</span>
-                </div>
-                <div class="form-row">
-                    <span class="label">Nama Ibu</span>
-                    <span class="data">{{ $pendaftaran->siswa->orangTua->nama_ibu }}</span>
-                </div>
-                <div class="form-row">
-                    <span class="label">Alamat Orang Tua</span>
-                    <span class="data">{{ $pendaftaran->siswa->orangTua->alamat_ortu }}</span>
-                </div>
-                <div class="form-row">
-                    <span class="label">Nomor HP Orang Tua</span>
-                    <span class="data">{{ $pendaftaran->siswa->orangTua->no_hp_ortu }}</span>
-                </div>
-                <div class="form-row">
-                    <span class="label">Status Verifikasi</span>
-                    <span class="data">{{ $pendaftaran->status_verifikasi }}</span>
-                </div>
-                <div class="form-row">
-                    <span class="label">Tanggal Pendaftaran</span>
-                    <span class="data">{{ \Carbon\Carbon::parse($pendaftaran->created_at)->format('d F Y') }}</span>
-                </div>
-            </div>
-            
-            <div class="form-photo">
-                <img src="http://via.placeholder.com/150x200?text=Foto+Siswa" alt="Foto Siswa">
-            </div>
-        </div>
-        
-        <div class="signature-box">
-            <div class="signature-text">Surabaya, {{ \Carbon\Carbon::now()->format('d F Y') }}</div>
-            <div class="signature-text">Yang bersangkutan,</div>
-            <div class="signature-text" style="margin-top: 50px;">
-                <span class="signature-name">{{ $pendaftaran->siswa->nama }}</span>
-            </div>
-        </div>
-
+    <!-- Header Section -->
+    <div class="header-container">
+        <table class="header-table">
+            <tr>
+                <td class="logo-cell">
+                    <div class="logo">
+                        LOGO<br>UNILA
+                    </div>
+                </td>
+                <td class="header-text">
+                    <div class="ministry-title">KEMENTERIAN PENDIDIKAN DAN KEBUDAYAAN</div>
+                    <div class="university-title">UNIVERSITAS LAMPUNG</div>
+                    <div class="contact-info">
+                        Jalan Prof. Dr. Soemantri Brojonegoro No. 1 Bandar Lampung 35145<br>
+                        Telepon (0721) 701609, 702673, 702971, 703475, 701252, Fax. (0721) 702767<br>
+                        laman http://unila.ac.id
+                    </div>
+                </td>
+            </tr>
+        </table>
     </div>
-    <script>
-        // Otomatis memicu jendela cetak saat halaman dimuat
-        window.onload = function() {
-            window.print();
-        };
-    </script>
+    
+    <div class="separator"></div>
+    
+    <!-- Form Title -->
+    <div class="form-title">
+        <strong>BORANG ISIAN DATA POKOK MAHASISWA</strong><br>
+        <strong>TAHUN AKADEMIK 2021/2022</strong>
+    </div>
+    
+    <div class="participant-number">
+        <strong>Nomor Peserta : 121171160521</strong>
+    </div>
+    
+    <!-- Section I: Student Biodata -->
+    <div class="section-title">I. BIODATA CALON MAHASISWA</div>
+    
+    <table class="data-table">
+        <tr>
+            <td class="field-number">1.</td>
+            <td class="field-label">NAMA LENGKAP </td>
+            <td class="field-colon">:</td>
+            <td class="field-value">{{ $pendaftaran->siswa->nama }}</td>
+        </tr>
+         <tr>
+            <td class="field-number">2.</td>
+            <td class="field-label">NISN</td>
+            <td class="field-colon">:</td>
+            <td class="field-value">{{ $pendaftaran->siswa->nisn }}</td>
+        </tr>
+        <tr>
+            <td class="field-number">3.</td>
+            <td class="field-label">TEMPAT LAHIR</td>
+            <td class="field-colon">:</td>
+            <td class="field-value">{{ $pendaftaran->siswa->tempat_lahir }}, {{ \Carbon\Carbon::parse($pendaftaran->siswa->tanggal_lahir)->format('d F Y') }}</td>
+        </tr>
+        <tr>
+            <td class="field-number">4.</td>
+            <td class="field-label">JENIS KELAMIN</td>
+            <td class="field-colon">:</td>
+            <td class="field-value">{{ $pendaftaran->siswa->jenis_kelamin }}</td>
+        </tr>
+        <tr>
+            <td class="field-number">5.</td>
+            <td class="field-label">ALAMAT SISWA</td>
+            <td class="field-colon">:</td>
+            <td class="field-value">{{ $pendaftaran->siswa->alamat_siswa }}.</td>
+        </tr>       
+        <tr>
+            <td class="field-number">6.</td>
+            <td class="field-label">NOMOR HP</td>
+            <td class="field-colon">:</td>
+            <td class="field-value">{{ $pendaftaran->siswa->no_hp_siswa }}</td>
+        </tr>
+        <tr>
+            <td class="field-number">7.</td>
+            <td class="field-label">KATEGORI PRESTASI</td>
+            <td class="field-colon">:</td>
+            <td class="field-value">{{ $pendaftaran->siswa->kategori_prestasi ?? '-' }}</td>
+        </tr>
+        <tr>
+            <td class="field-number">8.</td>
+            <td class="field-label">STATUS PENDAFTARAN</td>
+            <td class="field-colon">:</td>
+            <td class="field-value">{{ $pendaftaran->status_verifikasi }}</td>
+        </tr>
+        <tr>
+            <td class="field-number">9.</td>
+            <td class="field-label">TANGGAL PENDAFTARAN</td>
+            <td class="field-colon">:</td>
+            <td class="field-value">{{ \Carbon\Carbon::parse($pendaftaran->created_at)->format('d F Y') }}</td>
+        </tr>
+      
+    </table>
+    
+    <!-- Section II: Family Information -->
+    <div class="section-title">II. DATA ORANG TUA</div>
+    
+    <table class="data-table">
+        <tr>
+            <td class="field-number">1.</td>
+            <td class="field-label">NAMA AYAH/WALI</td>
+            <td class="field-colon">:</td>
+            <td class="field-value">{{ $pendaftaran->siswa->orangTua->nama_ayah }}</td>
+        </tr>
+        <tr>
+            <td class="field-number">2.</td>
+            <td class="field-label">NAMA IBU</td>
+            <td class="field-colon">:</td>
+            <td class="field-value">{{ $pendaftaran->siswa->orangTua->nama_ibu }}</td>
+        </tr>
+        <tr>
+            <td class="field-number">3.</td>
+            <td class="field-label">ALAMAT ORANG TUA/WALI</td>
+            <td class="field-colon">:</td>
+            <td class="field-value">{{ $pendaftaran->siswa->orangTua->alamat_ortu }}</td>
+        </tr>      
+       
+        <tr>
+            <td class="field-number">4.</td>
+            <td class="field-label">NOMOR TELEPON AYAH/WALI</td>
+            <td class="field-colon">:</td>
+            <td class="field-value">{{ $pendaftaran->siswa->orangTua->no_hp_ortu }}</td>
+        </tr>
+       
+    </table>
 </body>
 </html>
