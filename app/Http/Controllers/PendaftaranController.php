@@ -11,6 +11,11 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\UpdateFormulirRequest;
 use App\Models\ManajemenJadwalPpdb;
 use Barryvdh\DomPDF\Facade\Pdf;
+use App\Http\Requests\FormulirPendaftaranStore;
+use App\Mail\SubmittedMailNotification;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Session;
+use Carbon\Carbon;
 
 class PendaftaranController extends Controller
 {
@@ -22,7 +27,7 @@ class PendaftaranController extends Controller
         $jadwalAktif = ManajemenJadwalPpdb::active()->first();
         $pendaftaran = null;
         $jumlahPendaftar = 0;
-        
+
 
         // Jika ID pendaftaran diberikan, coba cari data pendaftaran untuk mode edit
         if ($id) {
@@ -30,29 +35,32 @@ class PendaftaranController extends Controller
                 $pendaftaran = Pendaftaran::with(['siswa.orangTua'])->whereHas('siswa', function ($query) {
                     $query->where('user_id', Auth::id());
                 })->findOrFail($id);
-                // Jika data ditemukan, set status menjadi 'open' untuk mengizinkan edit
+
+                //tidak boleh edit kalau pendaftaran sudah diproses atau jadwal selesai
+                $jadwalSelesai = $pendaftaran->jadwal && Carbon::parse($pendaftaran->jadwal->tgl_berakhir)->isPast();
+                if ($pendaftaran->status_aktual !== null || $jadwalSelesai) {
+                    Session::flash('error', 'Formulir pendaftaran tidak dapat diubah karena sudah diproses atau jadwal sudah ditutup.');
+                    return redirect()->route('ajuan.pendaftaran');
+                } 
+
                 $statusPendaftaran = 'open';
                 $message = "Anda sedang mengedit formulir pendaftaran.";
             } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
-                // Jika ID tidak ditemukan atau tidak valid, tampilkan pesan error
                 $message = "Data pendaftaran tidak ditemukan atau tidak memiliki akses.";
-                // Tetap biarkan status 'closed'
             }
         } else {
-            // Logika untuk mode 'create' (pendaftaran baru)
+            // 'create' (pendaftaran baru)
             if (Auth::user()->siswa()->whereNull('deleted_at')->exists()) {
                 $message = "Anda sudah terdaftar. Anda hanya bisa melakukan satu pendaftaran.";
             } elseif (!$jadwalAktif) {
-                $message = "Pendaftaran belum dibuka. Silahkan cek kembali jadwal pendaftaran";
+                $message = "Formulir pendaftaran tidak tersedia saat ini.";
             } else {
-                // Cek kuota pendaftar
-                
+                // Cek kuota pendaftar                
                 $jumlahPendaftar = Pendaftaran::where('jadwal_id', $jadwalAktif->id)->count();
                 if ($jadwalAktif->kuota <= $jumlahPendaftar) {
                     $message = "Pendaftaran telah DITUTUP. Kuota pendaftar sudah penuh.";
-                   
                 } else {
-                    // Semua kondisi terpenuhi, set status menjadi 'open' untuk pendaftaran baru
+                    //pendaftaran baru
                     $statusPendaftaran = 'open';
                     $message = "Pendaftaran periode " . $jadwalAktif->thn_ajaran . " Gelombang " . $jadwalAktif->gelombang_pendaftaran . "Telah dibuka";
                 }
@@ -61,7 +69,7 @@ class PendaftaranController extends Controller
 
         return view('siswa.formulir-siswa', compact('statusPendaftaran', 'message', 'jadwalAktif', 'pendaftaran', 'jumlahPendaftar'));
     }
-    public function store(\App\Http\Requests\FormulirPendaftaranStore $request)
+    public function store(FormulirPendaftaranStore $request)
     {
         $jadwalAktif = ManajemenJadwalPpdb::active()->first();
 
@@ -83,6 +91,7 @@ class PendaftaranController extends Controller
                 'tanggal_lahir' => $request->tanggal_lahir,
                 'alamat_siswa' => $request->alamat_siswa,
                 'no_hp_siswa' => $request->no_hp_siswa,
+                'email_siswa' => $request->email_siswa,
                 'orang_tua_id' => $ortu->id,
                 'kategori_prestasi' => $request->kategori_prestasi ? implode(', ', $request->kategori_prestasi) : null,
             ]);
@@ -99,6 +108,8 @@ class PendaftaranController extends Controller
                 'status_verifikasi' => 'Dikirim',
                 'kategori_prestasi' => $request->kategori_prestasi ? implode(', ', $request->kategori_prestasi) : null,
             ]);
+
+            Mail::to($pendaftaran->siswa->email_siswa)->send(new SubmittedMailNotification($pendaftaran, $pendaftaran->siswa));
             DB::commit();
             return redirect()->route('ajuan.pendaftaran')->with('success', 'Pendaftaran berhasil dikirim');
         } catch (\Exception $e) {
@@ -111,8 +122,6 @@ class PendaftaranController extends Controller
     {
         $userId = Auth::id();
 
-       
-
         $pendaftarans = Pendaftaran::with('siswa')
             ->whereHas('siswa', function ($query) use ($userId) {
                 $query->where('user_id', $userId);
@@ -121,19 +130,19 @@ class PendaftaranController extends Controller
         return view('siswa.ajuan-pendaftaran', compact('pendaftarans'));
     }
 
-    // menampilkan form edit
-    // public function edit($id)
-    // {
-    //     $pendaftaran = Pendaftaran::with(['siswa.orangTua'])->findOrFail($id);
-    //     return view('siswa.formulir-siswa', compact('pendaftaran'));
-    // }
-
     // menyimpan data form edit
     public function update(UpdateFormulirRequest $request, $id)
     {
         DB::beginTransaction();
         try {
             $pendaftaran = Pendaftaran::with(['siswa.orangTua'])->findOrFail($id);
+
+            //tidak boleh edit kalau pendaftaran sudah diproses
+            $jadwalSelesai = $pendaftaran->jadwal && Carbon::parse($pendaftaran->jadwal->tgl_berakhir)->isPast();
+            if ($pendaftaran->status_aktual !== null || $jadwalSelesai) {
+                DB::rollBack();
+                return back()->with('error', 'Gagal memperbarui pendaftaran: Formulir sudah diproses dan tidak dapat diubah diproses atau jadwal sudah ditutup.');
+            }
 
             // Update data Orang Tua
             $pendaftaran->siswa->orangTua->update([
@@ -151,6 +160,7 @@ class PendaftaranController extends Controller
                 'tanggal_lahir' => $request->tanggal_lahir,
                 'alamat_siswa' => $request->alamat_siswa,
                 'no_hp_siswa' => $request->no_hp_siswa,
+                'email_siswa' => $request->email_siswa,
                 'kategori_prestasi' => $request->kategori_prestasi ? implode(', ', $request->kategori_prestasi) : null,
             ]);
 
@@ -199,10 +209,10 @@ class PendaftaranController extends Controller
 
             DB::commit();
 
-            return response()->json(['success' => 'Data pendaftaran dan data terkait berhasil dihapus.']);
+            return redirect()->route('ajuan.pendaftaran')->with('success', 'Pendaftaran berhasil dihapus.');
         } catch (\Exception $e) {
             DB::rollback();
-            return response()->json(['error' => 'Gagal menghapus data: ' . $e->getMessage()], 500);
+            return redirect()->route('ajuan.pendaftaran')->with('error', 'Gagal menghapus pendaftaran: ' . $e->getMessage());
         }
     }
 

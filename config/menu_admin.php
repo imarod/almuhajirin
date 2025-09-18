@@ -11,17 +11,19 @@ return [
         'url'  => 'admin/data-pendaftar',
         'icon' => 'fas fa-users',
     ],
+
+     [
+        'text' => 'Jadwal PPDB',
+        'url'  => 'admin/manajemen-jadwal-ppdb',
+        'icon' => 'fas fa-cog',
+    ],
     
     [
         'text' => 'Manajemen User',
         'url'  => 'admin/manajemen-user',
         'icon' => 'fas fa-cog',
     ],
-    [
-        'text' => 'Jadwal PPDB',
-        'url'  => 'admin/manajemen-jadwal-ppdb',
-        'icon' => 'fas fa-cog',
-    ],
+   
     // [
     //     'text' => 'Manajemen Jadwal PPDB',
     //     'url'  => 'admin/manajemen-jadwal-ppdb',

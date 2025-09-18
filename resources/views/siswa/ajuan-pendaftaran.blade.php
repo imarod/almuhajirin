@@ -114,7 +114,6 @@
                                         <tr>
                                             <td colspan="7" class="text-center">
                                                 <div colspan="9" class="text-center py-3">
-
                                                     <i class="fas fa-history fa-2x text-muted mb-3"
                                                         style="opacity: 0.3;"></i>
                                                     <h5 class="text-muted">Belum ada data pendaftaran.</h5>
@@ -127,21 +126,44 @@
                                         </tr>
                                     @else
                                         @foreach ($pendaftarans as $pendaftaran)
+                                            @php
+                                                $status = $pendaftaran->showStatusPendaftar();
+                                                $statusClass = 'status-badge status-' . str_replace(' ', '', strtolower($status));
+                                            @endphp
                                             <tr>
                                                 <td>{{ $loop->iteration }}</td>
                                                 <td>{{ $pendaftaran->siswa->nama }}</td>
                                                 <td>{{ $pendaftaran->siswa->nisn }}</td>
                                                 <td>{{ $pendaftaran->siswa->jenis_kelamin }}</td>
                                                 <td class="text-muted">{{ $pendaftaran->created_at->format('d-m-Y') }}</td>
-                                                <td><span
-                                                        class="badge badge-warning text-white py-2 px-3">{{ $pendaftaran->showStatusPendaftar() }}</span>
-                                                </td>
+                                                <td><span class="{{ $statusClass }}">
+                                                    {{ $status }}
+                                                </span></td>
                                                 <td class="action-icons">
-                                                    <a href="{{ route('formulir.edit', $pendaftaran->id) }}">
-                                                        <i class="fas fa-edit text-primary me-2" title="Edit"></i>
-                                                    </a>
-                                                    <i class="fas fa-trash text-danger delete-btn" title="Hapus"
-                                                        data-id="{{ $pendaftaran->id }}"></i>
+                                                    @php
+                                                        $jadwalSelesai =
+                                                            $pendaftaran->jadwal &&
+                                                            \Carbon\Carbon::parse(
+                                                                $pendaftaran->jadwal->tgl_berakhir,
+                                                            )->isPast();
+                                                    @endphp
+                                                    @if ($pendaftaran->status_aktual === null && !$jadwalSelesai)
+                                                        <a href="{{ route('formulir.edit', $pendaftaran->id) }}">
+                                                            <i class="fas fa-edit text-primary me-2" title="Edit"></i>
+                                                        </a>
+                                                    @else
+                                                        <i class="fas fa-edit text-muted me-2"
+                                                            title="Tidak dapat diedit"></i>
+                                                    @endif
+                                                    <form action="{{ route('pendaftaran.destroy', $pendaftaran->id) }}"
+                                                        method="POST" class="d-inline">
+                                                        @csrf
+                                                        @method('DELETE')
+                                                        <button type="submit" class="btn btn-link p-0 delete-btn"
+                                                            title="Hapus">
+                                                            <i class="fas fa-trash text-danger"></i>
+                                                        </button>
+                                                    </form>
                                                 </td>
                                             </tr>
                                         @endforeach
@@ -149,11 +171,6 @@
                                 </tbody>
                             </table>
                         </div>
-
-                        {{-- pagination --}}
-
-
-
                     </div>
                 </div>
             </div>
@@ -173,7 +190,7 @@
                     title: 'Berhasil!',
                     text: '{{ session('success') }}'
                 });
-            @endif 
+            @endif
 
             @if (session('error'))
                 Swal.fire({
@@ -183,11 +200,11 @@
                 });
             @endif
 
-            $('.delete-btn').on('click', function(e) {
-                e.preventDefault()
-                PendaftaranIdToDelete = $(this).data('id')
-                let row = $(this).closest('tr');
+           
 
+            $('.delete-btn').on('click', function(e) {
+                e.preventDefault();
+                const form = $(this).closest('form');
                 Swal.fire({
                     title: 'Apakah Anda yakin?',
                     text: "Anda tidak akan bisa mengembalikan data ini!",
@@ -199,41 +216,7 @@
                     cancelButtonText: 'Batal'
                 }).then((result) => {
                     if (result.isConfirmed) {
-                        $.ajax({
-                            url: `/pendaftaran/${PendaftaranIdToDelete}`,
-                            type: 'DELETE',
-                            data: {
-                                _token: '{{ csrf_token() }}'
-                            },
-                            success: function(response) {
-                                if (response.success) {
-                                    row.remove();
-                                    Swal.fire(
-                                        'Dihapus!',
-                                        'Data pendaftaran berhasil dihapus.',
-                                        'success'
-                                    );
-                                    if ($('#pendaftaranTable tbody tr').length === 0) {
-                                        showNoDataMessage();
-                                    }
-
-                                } else {
-                                    Swal.fire(
-                                        'Gagal!',
-                                        'Terjadi kesalahan saat menghapus data.',
-                                        'error'
-                                    );
-                                }
-                            },
-                            error: function(xhr) {
-                                Swal.fire(
-                                    'Gagal!',
-                                    'Terjadi kesalahan saat menghapus data.',
-                                    'error'
-                                );
-                                console.log(xhr.responseText);
-                            }
-                        });
+                        form.submit();
                     }
                 });
             });

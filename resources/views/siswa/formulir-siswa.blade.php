@@ -24,9 +24,9 @@
 @section('content')
     <div class="container-fluid">
 
-        @if ($statusPendaftaran === 'open' && $jadwalAktif)
+        {{-- @if ($statusPendaftaran === 'open' && $jadwalAktif)
             <x-jadwal-ppdb-aktif />
-        @endif
+        @endif --}}
 
         <div class="row justify-content-start">
             <a href="/siswa/pendaftaran" class="btn  rounded-circle mb-4 border">
@@ -200,6 +200,19 @@
                                                 style="border: 1px solid #ced4da; border-radius: 4px;"
                                                 value="{{ isset($pendaftaran) ? $pendaftaran->siswa->alamat_siswa : old('alamat_siswa') }}">
                                             @error('alamat_siswa')
+                                                <div class="invalid-feedback">{{ $message }}</div>
+                                            @enderror
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label class="font-weight-medium text-dark">Email</label>
+                                            <input type="text"
+                                                class="form-control  @error('email_siswa') is-invalid @enderror"
+                                                placeholder="Masukkan Email Aktif" name="email_siswa"
+                                                style="border: 1px solid #ced4da; border-radius: 4px;"
+                                                value="{{ isset($pendaftaran) ? $pendaftaran->siswa->email_siswa : old('email_siswa') }}">
+                                            @error('email_siswa')
                                                 <div class="invalid-feedback">{{ $message }}</div>
                                             @enderror
                                         </div>
@@ -400,14 +413,17 @@
                 @else
                     <x-jadwal-ppdb-aktif />
 
-                    <div class=" card border-bottom">
-                        <div colspan="9" class="text-center py-5">
-                            <i class="fas fa-history fa-3x text-muted mb-3" style="opacity: 0.3;"></i>
-                            <h5 class="text-muted">Pendaftaran tidak tersedia saat ini.</h5>
-                            <p class="text-muted ">Kembali ke menu Daftar</p>
-                            <a href="{{ route('ajuan.pendaftaran') }}" class="btn bg-basic text-white">Kembali</a>
+                    @if ($statusPendaftaran === 'closed')
+                        <div class="card border-bottom">
+                            <div colspan="9" class="text-center py-5">
+                                <i class="fas fa-history fa-3x text-muted mb-3" style="opacity: 0.3;"></i>
+                                <h5 class="text-muted">{{ $message }}</h5>
+                                {{-- Pesan di bawah ini bisa disesuaikan atau dihapus jika tidak relevan --}}
+                                <p class="text-muted ">Kembali ke menu Daftar</p>
+                                <a href="{{ route('ajuan.pendaftaran') }}" class="btn bg-basic text-white">Kembali</a>
+                            </div>
                         </div>
-                    </div>
+                    @endif
                 @endif
             </div>
         </div>

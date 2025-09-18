@@ -17,30 +17,31 @@ class AnnouncePendaftaran extends Command
 
     public function handle()
     {
-        $jadwal = ManajemenJadwalPpdb::whereDate('tgl_pengumuman', Carbon::today())->first();
+        $jadwals = ManajemenJadwalPpdb::whereDate('tgl_pengumuman', Carbon::today())->get();
 
-        if(!$jadwal) {
+        if ($jadwals->isEmpty()) {
             $this->info('Tidak ada jadwal pengumuman hari ini');
             return Command::SUCCESS;
         }
 
-        $pendaftarToAnnounce= Pendaftaran::with('siswa.orangTua')
-        ->where('jadwal_id', $jadwal->id)
-        ->where('is_announced', false)
-        ->get();
+        foreach ($jadwals as $jadwal) {
+            $pendaftarToAnnounce = Pendaftaran::with('siswa.orangTua')
+                ->where('jadwal_id', $jadwal->id)
+                ->where('is_announced', false)
+                ->get();
 
-        if($pendaftarToAnnounce->isEmpty()){
-            $this->info('Tidak ada pendaftar yang perlu diumumkan untuk jadwal hari ini');
-            return Command::SUCCESS;
+            if ($pendaftarToAnnounce->isEmpty()) {
+                $this->info('Tidak ada pendaftar yang perlu diumumkan untuk jadwal hari ini');
+                return Command::SUCCESS;
+            }
+
+            $this->info('Mulai mengumumkan ' . $pendaftarToAnnounce->count() . ' Pendaftar untuk tahun ajaran ' . $jadwal->thn_ajaran . ' gelombang ' . $jadwal->gelombang_pendaftaran . '...');
+            foreach ($pendaftarToAnnounce as $pendaftar) {
+                $this->sendWhatsAppNotification($pendaftar);
+            }
         }
 
-        $this->info('Mulai mengumumkan ' . $pendaftarToAnnounce->count() . 'Pendaftar untuk tahun ajaran '. $jadwal->thn_ajaran . 'gelombang' . $jadwal->gelombang_pendaftaran . '...');
-
-        foreach($pendaftarToAnnounce as $pendaftar) {
-            $this->sendWhatsAppNotification($pendaftar);
-        }
-
-          $this->info('Pengumuman pendaftaran selesai.');
+        $this->info('Pengumuman pendaftaran selesai.');
         return Command::SUCCESS;
     }
 
@@ -52,10 +53,10 @@ class AnnouncePendaftaran extends Command
 
         $to = 'whatsapp:' . $pendaftar->siswa->no_hp_siswa;
         $message = "Halo *{$pendaftar->siswa->nama}*, \n\nKami informasikan hasil pendaftaran siswa baru untuk ananda *{$pendaftar->siswa->nama}* adalah: *{$pendaftar->status_aktual}*. \n\nSilakan cek dashboard Anda untuk mengecek status pendaftaran. \n\nTerima kasih.";
-        
+
         try {
             $twilio = new Client($sid, $token);
-            
+
             $twilio->messages->create($to, [
                 "from" => "whatsapp:" . $twilio_whatsapp_number,
                 "body" => $message,
@@ -65,12 +66,10 @@ class AnnouncePendaftaran extends Command
 
             // Ubah is_announced menjadi true HANYA JIKA notifikasi berhasil dikirim
             $pendaftar->is_announced = true;
-            $pendaftar->pesan_whatsapp = true; 
+            $pendaftar->pesan_whatsapp = true;
             $pendaftar->save();
-
         } catch (\Exception $e) {
-            $this->error("Gagal mengirimkan notifikasi WhatsApp ke " . $pendaftar->siswa->no_hp_siswa . ": " . $e->getMessage()); 
-            
+            $this->error("Gagal mengirimkan notifikasi WhatsApp ke " . $pendaftar->siswa->no_hp_siswa . ": " . $e->getMessage());
         }
     }
 }

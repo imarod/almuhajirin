@@ -6,18 +6,11 @@
     color: #fff !important;
 }
 
-/* Pastikan warna teks dan ikon di submenu tetap putih agar konsisten */
 .nav-sidebar .nav-treeview .nav-link p,
 .nav-sidebar .nav-treeview .nav-link i {
   color: #fff !important;
 }
 
-/* Aturan tambahan untuk memastikan warna hover juga konsisten */
-/* .nav-sidebar .nav-link:hover {
-    background-color: rgba(255, 255, 255, 0.1) !important;
-} */
-
-/* Aturan untuk warna tombol dan elemen lain yang Anda buat */
 .bg-basic {
   background-color: #5E7CE3 !important;
 }
@@ -28,16 +21,22 @@
   border-radius: 5px;
   font-size: 0.875rem;
   font-weight: 600;
+  background-color: #eda73d;
+  color: #ffffff;
 }
 
 .status-diterima {
-  background-color: #d1ecf1;
-  color: #0c5460;
+  background-color: #21ca5f;
+  color: #ffffff;
+}
+.status-ditolak {
+  background-color: #EF4444;;
+  color: #ffffff;
 }
 
-.status-belum {
-  background-color: #fff3cd;
-  color: #856404;
+.status-diproses {
+  background-color: #5E7CE3;
+  color: #ffffff;
 }
 
 .action-icons i {
@@ -48,6 +47,23 @@
 .filter-area .form-control {
   height: calc(1.5em + .5rem + 2px);
   font-size: .875rem;
+}
+
+.badge-admin {
+  background-color: #5E7CE3;
+  color: #ffffff;
+  padding: 4px 8px;
+  border-radius: 5px;
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+.badge-siswa {
+  background-color: #21ca5f;
+  color: #ffffff;
+  padding: 4px 8px;
+  border-radius: 5px;
+  font-size: 0.875rem;
+  font-weight: 600;
 }
 
 /* style form upload dokumen */

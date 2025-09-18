@@ -12,15 +12,15 @@ class Pendaftaran extends Model
 {
     use HasFactory, SoftDeletes;
     protected $table = 'pendaftaran';
-    protected $fillable = ['siswa_id','jadwal_id','kk', 'ijazah', 'piagam', 'status_verifikasi','status_aktual','is_announced','pesan_whatsapp'];
+    protected $fillable = ['siswa_id', 'jadwal_id', 'kk', 'ijazah', 'piagam', 'status_verifikasi', 'status_aktual', 'is_announced', 'pesan_whatsapp'];
     protected $casts = [
-        'is_announced'=>'boolean',
-        'pesan_whatsapp'=>'boolean',
+        'is_announced' => 'boolean',
+        'pesan_whatsapp' => 'boolean',
     ];
 
     public function siswa()
     {
-        return $this->belongsTo(Siswa::class);
+        return $this->belongsTo(Siswa::class); 
     }
     public function jadwal()
     {
@@ -31,17 +31,15 @@ class Pendaftaran extends Model
     {
         $jadwal = ManajemenJadwalPpdb::first();
         $tanggalPengumuman = $jadwal ? Carbon::parse($jadwal->tgl_pengumuman) : null;
-        
-        // Jika notifikasi sudah diumumkan (is_announced), tampilkan status aktual
+
         if ($this->is_announced && $tanggalPengumuman  && $tanggalPengumuman->isPast()) {
             return $this->status_aktual;
         }
 
-        // Jika tanggal pengumuman sudah diatur tapi belum tiba, tampilkan 'Di proses'
-        if ($tanggalPengumuman && $tanggalPengumuman->isFuture()) {
+        if ($this->status_aktual !== null) {
             return 'Di proses';
         }
-        
+
         return $this->status_verifikasi;
     }
 }

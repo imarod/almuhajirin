@@ -6,6 +6,9 @@ use App\Models\ManajemenJadwalPpdb;
 use Illuminate\Http\Request;
 use App\Models\Pendaftaran;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Process;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\ProcessingMailNotification;
 
 class AdminController extends Controller
 {
@@ -28,7 +31,7 @@ class AdminController extends Controller
         $perPage = $request->input('per_page', 10);
         $search = $request->input('search');
 
-        // Logika pencarian yang sudah Anda miliki
+        // Logika pencarian form search
         if ($search) {
             $query->whereHas('siswa', function ($q) use ($search) {
                 $q->where('nisn', 'like', '%' . $search . '%')
@@ -53,14 +56,11 @@ class AdminController extends Controller
         }
 
         // Logika filter status aktual
-        if ($statusAktual) {
-            if ($statusAktual == 'Belum diproses') {
-                $query->whereNull('status_aktual');
-            } else {
-                $query->where('status_aktual', $statusAktual);
-            }
+        if ($statusAktual === 'Belum diproses') {
+            $query->whereNull('status_aktual');
+        } elseif ($statusAktual === 'Diterima' || $statusAktual === 'Ditolak') {
+            $query->where('status_aktual', $statusAktual);
         }
-
 
         if ($perPage > 0) {
             $pendaftars = $query->with(['siswa.user', 'siswa.orangTua', 'jadwal'])->paginate($perPage);
@@ -98,10 +98,16 @@ class AdminController extends Controller
 
     public function updateStatus(Request $request, $id)
     {
-        $pendaftaran = Pendaftaran::findOrFail($id);
+        $pendaftaran = Pendaftaran::with('siswa')->findOrFail($id);
+
+         $oldStatus = $pendaftaran->status_aktual;
         $pendaftaran->update([
             'status_aktual' => $request->status_aktual,
         ]);
+
+        if ($pendaftaran->wasChanged('status_aktual')) {
+            Mail::to($pendaftaran->siswa->email_siswa)->send(new ProcessingMailNotification($pendaftaran, $pendaftaran->siswa));
+        }
 
         return redirect()->route('admin.pendaftar', $pendaftaran->id)->with('success', 'Status pendaftaran berhasil diperbarui.');
     }
@@ -124,7 +130,6 @@ class AdminController extends Controller
             } else {
                 $pendaftaran->delete();
             }
-
             DB::commit();
 
             return response()->json(['success' => 'Data pendaftaran berhasil dihapus oleh admin']);

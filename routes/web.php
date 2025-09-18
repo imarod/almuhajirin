@@ -103,6 +103,8 @@ Route::prefix('admin')->middleware(['auth', 'is_admin'])->group(function () {
 
     Route::get('/manajemen-jadwal-ppdb', [ManajemenJadwalPpdbController::class, 'index'])
         ->name('admin.manajemen-jadwal-ppdb');
+    Route::get('/manajemen-jadwal-ppdb/json', [ManajemenJadwalPpdbController::class, 'getDataJadwal'])
+        ->name('admin.manajemen-jadwal-ppdb.json');
     Route::post('/manajemen-jadwal-ppdb', [ManajemenJadwalPpdbController::class, 'store'])
         ->name('admin.store-jadwal-ppdb');
     Route::get('/manajemen-jadwal-ppdb/{id}/edit', [ManajemenJadwalPpdbController::class, 'edit'])

@@ -167,7 +167,6 @@
                                         <th>Nama</th>
                                         <th>Email</th>
                                         <th>Role</th>
-                                        <th>Status</th>
                                         <th>Tanggal Dibuat</th>
                                         <th>Aksi</th>
                                     </tr>
@@ -314,15 +313,14 @@
                         $.each(users, function(index, user) {
                             let no = offset + index + 1;
                             let roleBadge = user.is_admin === 1 ?
-                                '<span class="badge badge-primary">Admin</span>' :
-                                '<span class="badge badge-success">Siswa</span>';
+                                '<span class="badge-admin">Admin</span>' :
+                                '<span class="badge-siswa">Siswa</span>';
                             let row = `  
                         <tr>
                             <td>${no}</td>
                             <td>${user.name}</td>
                             <td>${user.email}</td>
                             <td>${roleBadge}</td>
-                            <td></td>
                             <td>${user.created_at_formatted}</td>
                             <td class=" text-center action-icons">                               
                                     <i class="fas fa-trash text-danger delete-btn" title="Hapus" data-id="${user.id}"></i>
@@ -339,7 +337,7 @@
                     }
 
                     let infoText =
-                        `Showing ${response.from ?? 0} to ${response.to ?? 0} of ${response.total} entries`
+                        `Menampilkan ${response.from ?? 0} hingga ${response.to ?? 0} dari ${response.total} data`
                     $('.dataTables_info').text(infoText)
 
                     let paginationHtml = ''
@@ -349,17 +347,20 @@
                         let pageNumber
 
                         if (link.label.includes('Previous')) {
+                            labelText = 'Sebelumnya';
                             pageNumber = response.current_page - 1
                         } else if (link.label.includes('Next')) {
+                            labelText = 'Selanjutnya';
                             pageNumber = response.current_page + 1
                         } else {
+                            labelText = link.label;
                             pageNumber = link.label
                         }
 
                         paginationHtml += `
                             <li class="page-item ${disabledClass} ${activeClass}">
                                 <a class="page-link" href="#" data-page="${pageNumber}" onclick="event.preventDefault(); fetchUsers(${pageNumber});">
-                                    ${link.label}
+                                    ${labelText}
                                 </a>
                             </li>
                         `;
@@ -410,7 +411,6 @@
                                     );
                                     // Hapus baris dari tabel
                                     userRow.remove();
-                                    // Atau panggil ulang fetchUsers() untuk memperbarui tabel
                                     fetchUsers();
                                 } else {
                                     Swal.fire(
@@ -442,13 +442,11 @@
                     url: `{{ url('admin/manajemen-user') }}/${userId}/edit`,
                     method: 'GET',
                     success: function(user) {
-                        // Isi data ke dalam modal edit
                         $('#editUserId').val(user.id);
                         $('#editName').val(user.name);
                         $('#editEmail').val(user.email);
                         $('#editIsAdmin').val(user.is_admin);
 
-                        // Tampilkan modal edit
                         $('#editUserModal').modal('show');
                     },
                     error: function(xhr, status, error) {
@@ -479,9 +477,7 @@
                             response.message,
                             'success'
                         );
-                        // Sembunyikan modal
                         $('#editUserModal').modal('hide');
-                        // Refresh tabel data user
                         fetchUsers();
                     },
                     error: function(xhr, status, error) {

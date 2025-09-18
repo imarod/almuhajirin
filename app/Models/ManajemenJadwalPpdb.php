@@ -20,10 +20,11 @@ class ManajemenJadwalPpdb extends Model
         'tgl_berakhir' => 'date',
         'tgl_pengumuman' => 'date',
     ];
+    protected $appends = ['status'];
 
     public function pendaftaran()
     {
-        return $this->hasMany(Pendaftaran::class, 'jadwal_id');
+        return $this->hasMany(Pendaftaran::class, 'jadwal_id'); 
     }
 
     public function getStatusAttribute()

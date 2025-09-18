@@ -196,16 +196,18 @@
                         <!-- History Tab -->
                         <div class="tab-pane fade" id="history" role="tabpanel">
                             <div class="card-header bg-white border-bottom">
-                                {{-- header table setting --}}
                                 <div class="row align-items-center">
                                     <div class="col-md-8">
                                         <div class="d-flex align-items-center flex-wrap">
                                             <div class="d-flex align-items-center mr-3">
                                                 <span class="text-muted small">Show</span>
-                                                <select class="form-control form-control-sm mx-2" style="width: auto;">
-                                                    <option>10</option>
-                                                    <option>25</option>
-                                                    <option>50</option>
+                                                <select id="show-entries" class="form-control form-control-sm mx-2"
+                                                    style="width: auto;">
+                                                    <option value="10">10 Baris</option>
+                                                    <option value="25">25 Baris</option>
+                                                    <option value="50">50 Baris</option>
+                                                    <option value="100">100 Baris</option>
+                                                    <option value="0">Semua Baris</option>
                                                 </select>
                                                 <span class="text-muted small">entries</span>
                                             </div>
@@ -220,14 +222,14 @@
                                             </button>
                                         </div>
                                     </div>
-                                    <div class="col-md-4">
+                                    {{-- <div class="col-md-4">
                                         <div class="position-relative">
                                             <input type="text" class="form-control" placeholder="Search..."
                                                 style="padding-left: 2.5rem;">
                                             <i class="fas fa-search position-absolute text-muted"
                                                 style="left: 0.75rem; top: 50%; transform: translateY(-50%);"></i>
                                         </div>
-                                    </div>
+                                    </div> --}}
                                 </div>
                             </div>
                             <div class="table-responsive">
@@ -259,8 +261,10 @@
                                             </th>
                                         </tr>
                                     </thead>
-                                    <tbody>
-                                        @forelse ($jadwals as $jadwal)
+                                    <tbody id="jadwal-table-body">
+                                        <tr colspan="9" class="text-center py-5 text-muted">
+
+                                            {{-- @forelse ($jadwals as $jadwal)
                                             <tr class="border-bottom">
                                                 <td class="px-2 py-2 text-muted">{{ $loop->iteration }}.
                                                 </td>
@@ -284,12 +288,10 @@
                                                     </span>
                                                 </td>
                                                 <td class="px-2 py-2">
-                                                    {{-- Tombol Edit --}}
                                                     <a href="{{ route('admin.edit-jadwal-ppdb', $jadwal->id) }}"
                                                         class="btn btn-success btn-sm me-3" title="Edit">
                                                         <i class="fas fa-edit"></i>
                                                     </a>
-                                                    {{-- Tombol Hapus --}}
                                                     <button type="button" class="btn btn-danger btn-sm delete-btn"
                                                         title="Hapus" data-target="#deleteConfirmationModal"
                                                         data-id="{{ $jadwal->id }}">
@@ -310,10 +312,24 @@
 
                                                 </td>
                                             </tr>
-                                        @endforelse
+                                        @endforelse --}}
                                     </tbody>
                                 </table>
                             </div>
+
+                            <div class="row mt-3">
+                                <div class="col-sm-12 col-md-5">
+                                    <div id="jadwal-info" class="dataTables_info text-muted"></div>
+                                </div>
+                                <div class="col-sm-12 col-md-7">
+                                    <nav aria-label="Page navigation" class="float-right">
+                                        <ul class="pagination pagination-sm mb-0">
+                                            {{-- Tautan paginasi akan dimuat di sini oleh JS --}}
+                                        </ul>
+                                    </nav>
+                                </div>
+                            </div>
+
                         </div>
                     </div>
                 </div>
@@ -326,7 +342,6 @@
 @section('css')
     <style>
         .nav-tabs .nav-link.active {
-
             font-weight: 700;
             box-shadow:
                 inset 0 5px 6px -5px rgba(0, 0, 0, 0.5);
@@ -359,44 +374,39 @@
 
 @section('js')
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // tab aktif
-            const isEditing = {{ isset($jadwal) ? 'true' : 'false' }}
+            const isEditing = {{ isset($jadwal) ? 'true' : 'false' }};
 
             if (isEditing) {
-
                 document.getElementById('settings-tab').classList.add('active');
                 document.getElementById('settings').classList.add('show', 'active');
                 document.getElementById('history-tab').classList.remove('active');
                 document.getElementById('history').classList.remove('show', 'active');
             }
 
-            // mengaktifkan tab
             function activateTabHash() {
-                const hash = window.location.hash
+                const hash = window.location.hash;
                 if (hash) {
-                    document.querySelectorAll('.nav-link').forEach(link => link.classList.remove('active'))
-                    document.querySelectorAll('.tab-pane').forEach(pane => pane.classList.remove('show', 'active'))
-
-                    const tabLink = document.querySelector(`a[href="${hash}"]`)
+                    document.querySelectorAll('.nav-link').forEach(link => link.classList.remove('active'));
+                    document.querySelectorAll('.tab-pane').forEach(pane => pane.classList.remove('show', 'active'));
+                    const tabLink = document.querySelector(`a[href="${hash}"]`);
                     if (tabLink) {
-                        const tabPane = document.querySelector(hash)
-                        tabLink.classList.add('active')
-                        tabPane.classList.add('show', 'active')
+                        const tabPane = document.querySelector(hash);
+                        tabLink.classList.add('active');
+                        tabPane.classList.add('show', 'active');
                     }
                 }
             }
 
             activateTabHash();
 
-            // ubah url sesuai tab aktif
             document.querySelectorAll('.nav-link').forEach(link => {
                 link.addEventListener('click', function(e) {
-                    if (this.closest('.card-header-tabs')) {
+                    if (this.closest('.card-header')) {
                         const hash = this.getAttribute('href');
                         const currentUrl = window.location.href;
-
                         if (currentUrl.includes('/edit')) {
                             const cleanUrl = '{{ route('admin.manajemen-jadwal-ppdb') }}' + hash;
                             window.location.href = cleanUrl;
@@ -407,9 +417,172 @@
                     }
                 });
             });
-            window.addEventListener('popstate', activateTabHash)
 
-            //    sweet alert
+            window.addEventListener('popstate', activateTabHash);
+
+            // Fungsi baru untuk melakukan request AJAX dengan paginasi
+            function fetchJadwalData(page = 1) {
+                let perPage = $('#history').find('select#show-entries').val();
+                const tableBody = $('#jadwal-table-body');
+                const jadwalInfo = $('#jadwal-info');
+                const pagination = $('#history').find('.pagination');
+
+                $.ajax({
+                    url: '{{ route('admin.manajemen-jadwal-ppdb.json') }}',
+                    method: 'GET',
+                    data: {
+                        page: page,
+                        per_page: perPage
+                    },
+                    success: function(response) {
+                        let html = '';
+                        if (response.data.length > 0) {
+                            $.each(response.data, function(index, jadwal) {
+                                let no = (response.current_page - 1) * response.per_page +
+                                    index + 1;
+                                let statusClass = '';
+                                if (jadwal.status === 'Belum Dimulai') {
+                                    statusClass = 'bg-secondary-subtle text-secondary';
+                                } else if (jadwal.status === 'Aktif') {
+                                    statusClass = 'bg-success-subtle text-success';
+                                } else {
+                                    statusClass = 'bg-danger-subtle text-danger';
+                                }
+
+                                html += `
+                                <tr class="border-bottom">
+                                    <td class="px-2 py-2 text-muted">${no}.</td>
+                                    <td class="px-2 py-2 fw-medium">${jadwal.thn_ajaran}</td>
+                                    <td class="px-2 py-2">${jadwal.gelombang_pendaftaran}</td>
+                                    <td class="px-2 py-2 fw-semibold">${jadwal.kuota}</td>
+                                    <td class="px-2 py-2 text-muted">${new Date(jadwal.tgl_mulai).toLocaleDateString('id-ID')}</td>
+                                    <td class="px-2 py-2 text-muted">${new Date(jadwal.tgl_berakhir).toLocaleDateString('id-ID')}</td>
+                                    <td class="px-2 py-2 text-muted">${new Date(jadwal.tgl_pengumuman).toLocaleDateString('id-ID')}</td>
+                                    <td class="px-2 py-2">
+                                        <span class="badge ${statusClass} py-2 rounded-pill fw-medium">${jadwal.status}</span>
+                                    </td>
+                                    <td class="px-2 py-2">
+                                        <a href="/admin/manajemen-jadwal-ppdb/${jadwal.id}/edit" class="btn btn-success btn-sm me-3" title="Edit">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+                                        <button type="button" class="btn btn-danger btn-sm delete-btn" title="Hapus" data-id="${jadwal.id}">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                            `;
+                            });
+                        } else {
+                            html = `
+                            <tr>
+                                <td colspan="9" class="text-center py-5">
+                                    <i class="fas fa-history fa-3x text-muted mb-3"></i>
+                                    <h5 class="text-muted">Belum ada riwayat jadwal PPDB</h5>
+                                    <a href="#settings" class="btn btn-primary text-white">Buat Jadwal</a>
+                                </td>
+                            </tr>
+                        `;
+                        }
+                        tableBody.html(html);
+
+                        let infoText =
+                            `Menampilkan ${response.from ?? 0} hingga ${response.to ?? 0} dari ${response.total} data`;
+                        jadwalInfo.text(infoText);
+
+                        let paginationHtml = '';
+                        if (response.last_page > 1) {
+                            response.links.forEach(link => {
+                                let disabledClass = link.url === null ? 'disabled' : '';
+                                let activeClass = link.active ? 'active' : '';
+                                let pageNumber;
+                                let labelText = link.label;
+
+                                if (link.label.includes('Previous')) {
+                                    labelText = 'Sebelumnya';
+                                    pageNumber = response.current_page - 1;
+                                } else if (link.label.includes('Next')) {
+                                    labelText = 'Selanjutnya';
+                                    pageNumber = response.current_page + 1;
+                                } else {
+                                    pageNumber = link.label;
+                                }
+
+                                paginationHtml += `
+                                <li class="page-item ${disabledClass} ${activeClass}">
+                                    <a class="page-link" href="#" data-page="${pageNumber}" onclick="event.preventDefault(); fetchJadwalData(${pageNumber});">
+                                        ${labelText}
+                                    </a>
+                                </li>
+                            `;
+                            });
+                        }
+                        pagination.html(paginationHtml);
+
+                        $('.delete-btn').on('click', function(event) {
+                            event.preventDefault();
+                            var jadwalId = $(this).data('id');
+                            var actionUrl = '{{ route('admin.destroy-jadwal-ppdb', ':id') }}';
+                            actionUrl = actionUrl.replace(':id', jadwalId);
+                            Swal.fire({
+                                title: 'Apakah Anda yakin?',
+                                text: "Penghapusan jadwal akan menghapus semua data pendaftaran siswa.\nJadwal yang dihapus tidak dapat dikembalikan!",
+                                icon: 'warning',
+                                showCancelButton: true,
+                                confirmButtonColor: '#d33',
+                                cancelButtonColor: '#6c757d',
+                                confirmButtonText: 'Ya, hapus!',
+                                cancelButtonText: 'Batal'
+                            }).then((result) => {
+                                if (result.isConfirmed) {
+                                    var form = document.createElement('form');
+                                    form.setAttribute('method', 'POST');
+                                    form.setAttribute('action', actionUrl);
+                                    var csrfInput = document.createElement('input');
+                                    csrfInput.setAttribute('type', 'hidden');
+                                    csrfInput.setAttribute('name', '_token');
+                                    csrfInput.setAttribute('value',
+                                        '{{ csrf_token() }}');
+                                    var methodInput = document.createElement('input');
+                                    methodInput.setAttribute('type', 'hidden');
+                                    methodInput.setAttribute('name', '_method');
+                                    methodInput.setAttribute('value', 'DELETE');
+                                    form.appendChild(csrfInput);
+                                    form.appendChild(methodInput);
+                                    document.body.appendChild(form);
+                                    form.submit();
+                                }
+                            });
+                        });
+                    },
+                    error: function(xhr, status, error) {
+                        tableBody.html(
+                            `<tr><td colspan="9" class="text-center py-5 text-danger">Gagal memuat data.</td></tr>`
+                        );
+                        console.error("Error fetching data:", error);
+                    }
+                });
+            }
+
+            $('#show-entries').on('change', function() {
+                fetchJadwalData(1);
+            });
+
+            $(document).on('click', '.pagination .page-link', function(e) {
+                e.preventDefault();
+                const page = $(this).data('page');
+                if (page) {
+                    fetchJadwalData(page);
+                }
+            });
+
+            $('#history-tab').on('click', function() {
+                fetchJadwalData();
+            });
+
+            if (window.location.hash === '#history' && !isEditing) {
+                fetchJadwalData();
+            }
+
             @if (session('success'))
                 Swal.fire({
                     icon: 'success',
@@ -427,44 +600,6 @@
                     text: '{{ session('error') }}',
                 });
             @endif
-
-            $('.delete-btn').on('click', function(event) {
-                event.preventDefault();
-                var jadwalId = $(this).data('id')
-                var actionUrl = '{{ route('admin.destroy-jadwal-ppdb', ':id') }}'
-                actionUrl = actionUrl.replace(':id', jadwalId)
-                Swal.fire({
-                    title: 'Apakah Anda yakin?',
-                    text: "Penghapusan jadwal akan menghapus semua data pendaftaran siswa.\nJadwal yang dihapus tidak dapat dikembalikan!",
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonColor: '#d33',
-                    cancelButtonColor: '#6c757d',
-                    confirmButtonText: 'Ya, hapus!',
-                    cancelButtonText: 'Batal'
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        var form = document.createElement('form');
-                        form.setAttribute('method', 'POST')
-                        form.setAttribute('action', actionUrl)
-
-                        var csrfInput = document.createElement('input')
-                        csrfInput.setAttribute('type', 'hidden')
-                        csrfInput.setAttribute('name', '_token')
-                        csrfInput.setAttribute('value', '{{ csrf_token() }}')
-
-                        var methodInput = document.createElement('input')
-                        methodInput.setAttribute('type', 'hidden')
-                        methodInput.setAttribute('name', '_method')
-                        methodInput.setAttribute('value', 'DELETE')
-                        form.appendChild(csrfInput)
-                        form.appendChild(methodInput)
-
-                        document.body.appendChild(form)
-                        form.submit()
-                    }
-                })
-            })
-        })
+        });
     </script>
 @endsection

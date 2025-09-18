@@ -37,177 +37,160 @@
                     </form>
                 </div>
 
-                <div class="row g-3">
-                    {{-- Kolom Kiri --}}
-                    <div class="col-md-6">
-                        <div class="p-4 bg-white">
-                            <h5 class="text-primary mb-3"><strong>Data Calon Siswa</strong> </h5>
-                            <div class="list-group-item d-flex justify-content-between align-items-center ">
-                                <div class="d-flex align-items-center ">
-                                    <i class="fa fa-user text-primary fs-3 mr-3"></i>
-                                    <div class="flex-grow-1">
-                                        <p class="text-muted mb-1">Nama</p>
-                                        <strong class="text-dark">{{ $pendaftars->siswa->nama }}</strong>
-                                    </div>
+
+                {{-- Kolom Kiri --}}
+                <div class="col-md-12">
+                    <div class="p-3">
+                        <h5 class="text-primary mb-3"><strong>Data Calon Siswa</strong> </h5>
+                        <div class="card">
+                            <div class="row p-3">
+                                <div class="col-md-4 mb-3  border-bottom">
+                                    <i class="fa fa-user text-primary fs-3 me-2"></i>
+                                    <p class="text-muted mb-1">Nama</p>
+                                    <strong class="text-dark">{{ $pendaftars->siswa->nama }}</strong>
                                 </div>
-                            </div>
-                            <div class="list-group-item d-flex justify-content-between align-items-center ">
-                                <div class="d-flex align-items-center ">
-                                    <i class="fa fa-id-card text-primary fs-3 mr-3"></i>
-                                    <div class="flex-grow-1">
-                                        <p class="text-muted mb-1">NISN</p>
-                                        <strong class="text-dark">{{ $pendaftars->siswa->nisn }}</strong>
-                                    </div>
+
+                                <div class="col-md-4 mb-3 border-bottom">
+                                    <i class="fa fa-id-card text-primary fs-3 me-2"></i>
+                                    <p class="text-muted mb-1">NISN</p>
+                                    <strong class="text-dark">{{ $pendaftars->siswa->nisn }}</strong>
                                 </div>
-                            </div>
-                            <div class="list-group-item d-flex justify-content-between align-items-center ">
-                                <div class="d-flex align-items-center ">
-                                    <i class="fa fa-venus-mars text-primary fs-3 mr-3"></i>
-                                    <div class="flex-grow-1">
-                                        <p class="text-muted mb-1">Jenis Kelamin</p>
-                                        <strong class="text-dark">{{ $pendaftars->siswa->jenis_kelamin }}</strong>
-                                    </div>
+
+                                <div class="col-md-4 mb-3 border-bottom">
+                                    <i class="fa fa-venus-mars text-primary fs-3 me-2"></i>
+                                    <p class="text-muted mb-1">Jenis Kelamin</p>
+                                    <strong class="text-dark">{{ $pendaftars->siswa->jenis_kelamin }}</strong>
                                 </div>
-                            </div>
-                            <div class="list-group-item d-flex justify-content-between align-items-center ">
-                                <div class="d-flex align-items-center ">
-                                    <i class="fa fa-map-marker-alt text-primary fs-3 mr-3"></i>
-                                    <div class="flex-grow-1">
-                                        <p class="text-muted mb-1">Tempat Lahir</p>
-                                        <strong class="text-dark">{{ $pendaftars->siswa->tempat_lahir }}</strong>
-                                    </div>
+
+                                <div class="col-md-4 mb-3 border-bottom">
+                                    <i class="fa fa-map-marker-alt text-primary fs-3 me-2"></i>
+                                    <p class="text-muted mb-1">Tempat Lahir</p>
+                                    <strong class="text-dark">{{ $pendaftars->siswa->tempat_lahir }}</strong>
                                 </div>
-                            </div>
-                            <div class="list-group-item d-flex justify-content-between align-items-center ">
-                                <div class="d-flex align-items-center ">
-                                    <i class="fa fa-calendar-alt text-primary fs-3 mr-3"></i>
-                                    <div class="flex-grow-1">
-                                        <p class="text-muted mb-1">Tanggal Lahir</p>
-                                        <strong
-                                            class="text-dark">{{ $pendaftars->siswa->tanggal_lahir->format('d-m-Y') }}</strong>
-                                    </div>
+
+                                <div class="col-md-4 mb-3 border-bottom">
+                                    <i class="fa fa-calendar-alt text-primary fs-3 me-2"></i>
+                                    <p class="text-muted mb-1">Tanggal Lahir</p>
+                                    <strong
+                                        class="text-dark">{{ $pendaftars->siswa->tanggal_lahir->format('d-m-Y') }}</strong>
                                 </div>
-                            </div>
-                            <div class="list-group-item d-flex justify-content-between align-items-center ">
-                                <div class="d-flex align-items-center ">
-                                    <i class="fa fa-phone text-primary fs-3 mr-3"></i>
-                                    <div class="flex-grow-1">
-                                        <p class="text-muted mb-1">No WhatsApp </p>
-                                        <strong class="text-dark">{{ $pendaftars->siswa->no_hp_siswa }}</strong>
-                                    </div>
+
+                                <div class="col-md-4 mb-3 border-bottom">
+                                    <i class="fa fa-phone text-primary fs-3 me-2"></i>
+                                    <p class="text-muted mb-1">No WhatsApp </p>
+                                    <strong class="text-dark">{{ $pendaftars->siswa->no_hp_siswa }}</strong>
                                 </div>
-                            </div>
-                            <div class="list-group-item d-flex justify-content-between align-items-center ">
-                                <div class="d-flex align-items-center ">
-                                    <i class="fa fa-calendar-alt text-primary fs-3 mr-3"></i>
-                                    <div class="flex-grow-1">
-                                        <p class="text-muted mb-1">Kategori Prestasi</p>
-                                        <strong
-                                            class="text-dark">{{ $pendaftars->siswa->kategori_prestasi ?? '-' }}</strong>
-                                    </div>
+
+                                <div class="col-md-4 mb-3">
+                                    <i class="fa fa-home text-primary fs-3 me-2"></i>
+                                    <p class="text-muted mb-1">Alamat </p>
+                                    <strong class="text-dark">{{ $pendaftars->siswa->alamat_siswa }}</strong>
                                 </div>
-                            </div>
-                        </div>
-                        <div class="p-4 bg-white">
-                            <h5 class="text-primary mb-3"><strong>Dokumen Siswa</strong> </h5>
-                            <div class="list-group-item d-flex justify-content-between align-items-center">
-                                <div class="d-flex align-items-center">
-                                    <i class="fas fa-file-pdf fa-2x text-danger mr-3"></i>
-                                    <div>
-                                        <div class="font-weight-bold">Ijazah</div>
-                                        <small class="text-muted">PDF - 2 Mb</small>
-                                    </div>
+
+                                <div class="col-md-4 mb-3">
+                                    <i class="fa fa-star text-primary fs-3 me-2"></i>
+                                    <p class="text-muted mb-1">Kategori Prestasi</p>
+                                    <strong class="text-dark">{{ $pendaftars->siswa->kategori_prestasi ?? '-' }}</strong>
                                 </div>
-                                <div class="d-flex align-items-center">
-                                    @if ($pendaftars->ijazah)
-                                        <button type="button" class="btn btn-outline-primary btn-sm"
-                                            onclick="openDocumentViewer('{{ asset('storage/' . $pendaftars->ijazah) }}', 'Ijazah - {{ $pendaftars->siswa->nama }}')">
-                                            <i class="fas fa-eye"></i> Lihat
-                                        </button>
-                                    @else
-                                        <span class="text-muted">Tidak ada file</span>
-                                    @endif
-                                </div>
-                            </div>
-                            <div class="list-group-item d-flex justify-content-between align-items-center">
-                                <div class="d-flex align-items-center">
-                                    <i class="fas fa-file-pdf fa-2x text-danger mr-3"></i>
-                                    <div>
-                                        <div class="font-weight-bold">Kartu Keluarga</div>
-                                        <small class="text-muted">PDF - 2 Mb</small>
-                                    </div>
-                                </div>
-                                <div class="d-flex align-items-center">
-                                    @if ($pendaftars->kk)
-                                        <button type="button" class="btn btn-outline-primary btn-sm"
-                                            onclick="openDocumentViewer('{{ asset('storage/' . $pendaftars->kk) }}', 'Kartu Keluarga - {{ $pendaftars->siswa->nama }}')">
-                                            <i class="fas fa-eye"></i> Lihat
-                                        </button>
-                                    @else
-                                        <span class="text-muted">Tidak ada file</span>
-                                    @endif
-                                </div>
-                            </div>
-                            <div class="list-group-item d-flex justify-content-between align-items-center">
-                                <div class="d-flex align-items-center">
-                                    <i class="fas fa-file-pdf fa-2x text-danger mr-3"></i>
-                                    <div>
-                                        <div class="font-weight-bold">Piagam Penghargaan</div>
-                                        <small class="text-muted">PDF - 2 Mb</small>
-                                    </div>
-                                </div>
-                                <div class="d-flex align-items-center">
-                                    @if ($pendaftars->piagam)
-                                        <button type="button" class="btn btn-outline-primary btn-sm"
-                                            onclick="openDocumentViewer('{{ asset('storage/' . $pendaftars->piagam) }}', 'Piagam Penghargaan - {{ $pendaftars->siswa->nama }}')">
-                                            <i class="fas fa-eye"></i> Lihat
-                                        </button>
-                                    @else
-                                        <span class="text-muted">Tidak ada file</span>
-                                    @endif
+                                
+                                <div class="col-md-4 mb-3">
+                                    <i class="fa fa-envelope text-primary fs-3 me-2"></i>
+                                    <p class="text-muted mb-1">Email </p>
+                                    <strong class="text-dark">{{ $pendaftars->siswa->email_siswa }}</strong>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    {{-- Kolom Kanan --}}
-                    <div class="col-md-6">
-                        <div class=" p-4 bg-white">
-                            <h5 class="text-primary mb-3"> <strong>Data Orang Tua</strong></h5>
-                            <div class="list-group-item d-flex justify-content-between align-items-center ">
-                                <div class="d-flex align-items-center">
+                </div>
+
+                <div class="col-md-12">
+                    <div class="p-3 bg-white">
+                        <h5 class="text-primary mb-3"> <strong>Data Orang Tua</strong></h5>
+                        <div class="card">
+                            <div class="row p-3">
+                                <div class="col-md-4 mb-3 border-bottom">
                                     <i class="fa fa-user text-primary fs-5 mr-3"></i>
-                                    <div class="flex-grow-1">
-                                        <p class="text-muted mb-1">Nama Ayah</p>
-                                        <strong class="text-dark">{{ $pendaftars->siswa->orangTua->nama_ayah }}</strong>
-                                    </div>
+                                    <p class="text-muted mb-1">Nama Ayah</p>
+                                    <strong class="text-dark">{{ $pendaftars->siswa->orangTua->nama_ayah }}</strong>
+                                </div>
+                                <div class="col-md-4 mb-3 border-bottom">
+                                    <i class="fa fa-user text-primary fs-3 me-2"></i>
+                                    <p class="text-muted mb-1">Nama Ibu</p>
+                                    <strong class="text-dark">{{ $pendaftars->siswa->orangTua->nama_ibu }}</strong>
+                                </div>
+                                <div class="col-md-4 mb-3 border-bottom">
+                                    <i class="fa fa-home text-primary fs-3 me-2"></i>
+                                    <p class="text-muted mb-1">Alamat</p>
+                                    <strong class="text-dark">{{ $pendaftars->siswa->orangTua->alamat_ortu }}</strong>
+                                </div>
+                                <div class="col-md-4 mb-3">
+                                    <i class="fa fa-phone text-primary fs-3 me-2"></i>
+                                    <p class="text-muted mb-1">No. Handphone</p>
+                                    <strong class="text-dark">{{ $pendaftars->siswa->orangTua->no_hp_ortu }}</strong>
                                 </div>
                             </div>
-                            <div class="list-group-item d-flex justify-content-between align-items-center ">
-                                <div class="d-flex align-items-center">
-                                    <i class="fa fa-user text-primary fs-5 mr-3"></i>
-                                    <div class="flex-grow-1">
-                                        <p class="text-muted mb-1">Nama Ibu</p>
-                                        <strong class="text-dark">{{ $pendaftars->siswa->orangTua->nama_ibu }}</strong>
-                                    </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-12">
+                    <div class="p-3 bg-white">
+                        <h5 class="text-primary mb-3"><strong>Dokumen Siswa</strong> </h5>
+                        <div class="list-group-item d-flex justify-content-between align-items-center">
+                            <div class="d-flex align-items-center">
+                                <i class="fas fa-file-pdf fa-2x text-danger mr-3"></i>
+                                <div>
+                                    <div class="font-weight-bold">Ijazah</div>
+                                    <small class="text-muted">PDF - 2 Mb</small>
                                 </div>
                             </div>
-                            <div class="list-group-item d-flex justify-content-between align-items-center ">
-                                <div class="d-flex align-items-center">
-                                    <i class="fa fa-home text-primary fs-5 mr-3"></i>
-                                    <div class="flex-grow-1">
-                                        <p class="text-muted mb-1">Alamat</p>
-                                        <strong class="text-dark">{{ $pendaftars->siswa->orangTua->alamat_ortu }}</strong>
-                                    </div>
+                            <div class="d-flex align-items-center">
+                                @if ($pendaftars->ijazah)
+                                    <button type="button" class="btn btn-outline-primary btn-sm"
+                                        onclick="openDocumentViewer('{{ asset('storage/' . $pendaftars->ijazah) }}', 'Ijazah - {{ $pendaftars->siswa->nama }}')">
+                                        <i class="fas fa-eye"></i> Lihat
+                                    </button>
+                                @else
+                                    <span class="text-muted">Tidak ada file</span>
+                                @endif
+                            </div>
+                        </div>
+                        <div class="list-group-item d-flex justify-content-between align-items-center">
+                            <div class="d-flex align-items-center">
+                                <i class="fas fa-file-pdf fa-2x text-danger mr-3"></i>
+                                <div>
+                                    <div class="font-weight-bold">Kartu Keluarga</div>
+                                    <small class="text-muted">PDF - 2 Mb</small>
                                 </div>
                             </div>
-                            <div class="list-group-item d-flex justify-content-between align-items-center ">
-                                <div class="d-flex align-items-center">
-                                    <i class="fa fa-phone text-primary fs-5 mr-3"></i>
-                                    <div class="flex-grow-1">
-                                        <p class="text-muted mb-1">No. Handphone</p>
-                                        <strong class="text-dark">{{ $pendaftars->siswa->orangTua->no_hp_ortu }}</strong>
-                                    </div>
+                            <div class="d-flex align-items-center">
+                                @if ($pendaftars->kk)
+                                    <button type="button" class="btn btn-outline-primary btn-sm"
+                                        onclick="openDocumentViewer('{{ asset('storage/' . $pendaftars->kk) }}', 'Kartu Keluarga - {{ $pendaftars->siswa->nama }}')">
+                                        <i class="fas fa-eye"></i> Lihat
+                                    </button>
+                                @else
+                                    <span class="text-muted">Tidak ada file</span>
+                                @endif
+                            </div>
+                        </div>
+                        <div class="list-group-item d-flex justify-content-between align-items-center">
+                            <div class="d-flex align-items-center">
+                                <i class="fas fa-file-pdf fa-2x text-danger mr-3"></i>
+                                <div>
+                                    <div class="font-weight-bold">Piagam Penghargaan</div>
+                                    <small class="text-muted">PDF - 2 Mb</small>
                                 </div>
+                            </div>
+                            <div class="d-flex align-items-center">
+                                @if ($pendaftars->piagam)
+                                    <button type="button" class="btn btn-outline-primary btn-sm"
+                                        onclick="openDocumentViewer('{{ asset('storage/' . $pendaftars->piagam) }}', 'Piagam Penghargaan - {{ $pendaftars->siswa->nama }}')">
+                                        <i class="fas fa-eye"></i> Lihat
+                                    </button>
+                                @else
+                                    <span class="text-muted">Tidak ada file</span>
+                                @endif
                             </div>
                         </div>
                     </div>
@@ -249,7 +232,6 @@
                         <p>Memuat Dokumen...</p>
                     </div>
                 </div>
-
                 <iframe id="documentFrame" class="document-frame" style="display: none;" frameborder="0"></iframe>
             </div>
         </div>
@@ -405,7 +387,6 @@
             const titleElement = document.getElementById('documentTitle');
             const spinner = document.getElementById('loadingSpinner');
 
-            // Set title
             titleElement.textContent = title;
 
             // Show overlay
@@ -445,7 +426,6 @@
             overlay.classList.remove('show');
             document.body.style.overflow = '';
 
-            // Reset loading state
             spinner.innerHTML = `
                 <div class="text-center">
                     <i class="fas fa-spinner fa-spin fa-2x mb-2"></i>
@@ -552,12 +532,11 @@
                         title: 'Berhasil!',
                         text: 'Konfirmasi penerimaan berhasil. Anda akan diarahkan ke halaman pendaftar.',
                         icon: 'success',
-                        timer: 1000, // Tampilan selama 2 detik
+                        timer: 1000, 
                         timerProgressBar: true,
                         showConfirmButton: false,
-                       
-                    }).then(()=> {
-                        // Setelah modal sukses tertutup, submit form
+
+                    }).then(() => {
                         document.getElementById('form-terima').submit();
                     })
                 }
@@ -576,8 +555,7 @@
                 confirmButtonText: 'Ya, Tolak!',
                 cancelButtonText: 'Batal'
             }).then((result) => {
-                 if (result.isConfirmed) {
-                    // Tampilkan SweetAlert sukses setelah konfirmasi berhasil
+                if (result.isConfirmed) {
                     Swal.fire({
                         title: 'Berhasil!',
                         text: 'Konfirmasi penolakan berhasil. Anda akan diarahkan ke halaman pendaftar.',
@@ -585,9 +563,8 @@
                         timer: 1000,
                         timerProgressBar: true,
                         showConfirmButton: false,
-                      
-                     }).then(() => {
-                        // Setelah modal sukses tertutup, submit form
+
+                    }).then(() => {
                         document.getElementById('form-tolak').submit();
                     });
                 }

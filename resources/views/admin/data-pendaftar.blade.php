@@ -78,7 +78,6 @@
                                     <option value="">Semua</option>
                                     <option value="Diterima">Diterima</option>
                                     <option value="Ditolak">Ditolak</option>
-                                    <option value="Diproses">Diproses</option>
                                     <option value="Belum diproses">Belum diproses</option>
                                 </select>
                             </div>
@@ -203,7 +202,7 @@
                                 <td>${pendaftar.siswa?.jenis_kelamin ?? '-'}</td>
                                 <td>${pendaftar.siswa?.no_hp_siswa ?? '-'}</td>
                                 <td>${jadwalInfo}</td>
-                                <td class="text-center"><span class="${statusClass}">${pendaftar.status_aktual ?? '-'}</span></td>
+                                <td class="text-center"><span class="${statusClass}">${pendaftar.status_aktual ?? 'Belum Diproses'}</span></td>
                                 <td class=" text-center action-icons">
                                     <a href="${detailUrl}"><i class="fas fa-eye text-secondary" title="Lihat"></i></a>
                                     <i class="fas fa-trash text-danger delete-btn" data-id="${pendaftar.id}" title="Hapus"></i>
@@ -219,7 +218,7 @@
                     $('table tbody').html(html);
 
                     let infoText =
-                        `Showing ${pagination.from ?? 0} to ${pagination.to ?? 0} of ${pagination.total} entries`;
+                        `Menampilkan ${pagination.from ?? 0} hingga ${pagination.to ?? 0} dari ${pagination.total} data`;
                     $('.dataTables_info').text(infoText);
 
                     let paginationHtml = '';
@@ -229,17 +228,20 @@
                         let pageNumber;
 
                         if (link.label.includes('Previous')) {
+                            labelText = 'Sebelumnya';
                             pageNumber = pagination.current_page - 1;
                         } else if (link.label.includes('Next')) {
+                             labelText = 'Selanjutnya';
                             pageNumber = pagination.current_page + 1;
                         } else {
+                            labelText = link.label;
                             pageNumber = link.label;
                         }
 
                         paginationHtml += `
                         <li class="page-item ${disabledClass} ${activeClass}">
                             <a class="page-link" href="#" data-page="${pageNumber}" onclick="event.preventDefault(); fetchData(${pageNumber});">
-                                ${link.label}
+                                ${labelText}
                             </a>
                         </li>
                     `;
