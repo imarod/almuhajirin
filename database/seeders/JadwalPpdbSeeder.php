@@ -17,7 +17,7 @@ class JadwalPpdbSeeder extends Seeder
      */
     public function run(): void
     {
-        // Tentukan tahun ajaran awal secara acak (misal: antara 2010 hingga 5 tahun yang lalu dari tahun sekarang)
+        
         $startYear = fake()->numberBetween(2000, Carbon::now()->year - 5);
         $currentYear = Carbon::now()->year;
 

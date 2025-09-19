@@ -12,6 +12,7 @@
 
 @section('content')
     <div class="container-fluid">
+
         {{-- <div class="row mb-2">
                 <div class="col-sm-6">
                     <h1 class="m-0">Data Pendaftar</h1>
@@ -31,11 +32,11 @@
                         <div class="d-flex align-items-center mr-3 mb-2 mb-lg-0">
                             <span class="text-dark">Tampilan</span>
                             <select id="show-entries" class="form-control form-control-sm mx-2" style="width: auto;">
-                                <option value="10">10 Baris</option>
-                                <option value="25">25 Baris</option>
-                                <option value="50">50 Baris</option>
-                                <option value="100">100 Baris</option>
-                                <option value="0">Semua Baris</option>
+                                <option value="10" {{ $defaultPerPage == 10 ? 'selected' : '' }}>10 Baris</option>
+                                <option value="25" {{ $defaultPerPage == 25 ? 'selected' : '' }}>25 Baris</option>
+                                <option value="50" {{ $defaultPerPage == 50 ? 'selected' : '' }}>50 Baris</option>
+                                <option value="100" {{ $defaultPerPage == 100 ? 'selected' : '' }}>100 Baris</option>
+                                <option value="0" {{ $defaultPerPage == 0 ? 'selected' : '' }}>Semua Baris</option>
                             </select>
                         </div>
                         <button class="btn btn-outline-secondary btn-sm d-flex align-items-center ">
@@ -63,7 +64,7 @@
                             <div class="form-inline mr-4 mb-3 mb-lg-0">
                                 <label for="filter-thn-ajaran" class="mr-2">Tahun Ajaran</label>
                                 <select name="thn_ajaran" id="filter-thn-ajaran" class="form-control form-control-sm">
-                                    <option value="">Semua</option>
+                                     <option value="Semua" {{ $defaultThnAjaran == 'Semua' ? 'selected' : '' }}>Semua</option>
                                     @foreach ($thnAjaran as $thn)
                                         <option value="{{ $thn }}"
                                             {{ $thn == $defaultThnAjaran ? 'selected' : '' }}>
@@ -75,10 +76,13 @@
                             <div class="form-inline mr-4 mb-2 mb-lg-0">
                                 <label for="filter-status" class="mr-2">Status</label>
                                 <select name="status_aktual" id="filter-status" class="form-control form-control-sm">
-                                    <option value="">Semua</option>
-                                    <option value="Diterima">Diterima</option>
-                                    <option value="Ditolak">Ditolak</option>
-                                    <option value="Belum diproses">Belum diproses</option>
+                                    <option value=""{{ $defaultStatus == '' ? 'selected' : '' }}>Semua</option>
+                                    <option value="Diterima" {{ $defaultStatus == 'Diterima' ? 'selected' : '' }}>Diterima
+                                    </option>
+                                    <option value="Ditolak" {{ $defaultStatus == 'Ditolak' ? 'selected' : '' }}>Ditolak
+                                    </option>
+                                    <option value="Belum diproses"
+                                        {{ $defaultStatus == 'Belum diproses' ? 'selected' : '' }}>Belum diproses</option>
                                 </select>
                             </div>
 
@@ -87,7 +91,7 @@
                                 <label for="filter-gelombang" class="mr-2">Gelombang</label>
                                 <select name="gelombang_pendaftaran" id="filter-gelombang"
                                     class="form-control form-control-sm">
-                                    <option value="">Semua</option>
+                                    <option value="Semua" {{ $defaultGelombang == 'Semua' ? 'selected' : '' }}>Semua</option>
                                     @foreach ($gelombangPendaftaran as $gelombang)
                                         <option value="{{ $gelombang }}"
                                             {{ $gelombang == $defaultGelombang ? 'selected' : '' }}>
@@ -144,8 +148,10 @@
 @section('js')
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
+        const defaultPage = "{{ $defaultPage }}";
+        const defaultPerPage = "{{ $defaultPerPage }}";
         // Fungsi untuk melakukan request AJAX dengan paginasi
-        function fetchData(page = 1) {
+        function fetchData(page = defaultPage) {
             let thnAjaran = $('#filter-thn-ajaran').val();
             let gelombang = $('#filter-gelombang').val();
             let status = $('#filter-status').val();
@@ -204,7 +210,7 @@
                                 <td>${jadwalInfo}</td>
                                 <td class="text-center"><span class="${statusClass}">${pendaftar.status_aktual ?? 'Belum Diproses'}</span></td>
                                 <td class=" text-center action-icons">
-                                    <a href="${detailUrl}"><i class="fas fa-eye text-secondary" title="Lihat"></i></a>
+                                    <a href="${detailUrl}?thn_ajaran=${thnAjaran}&gelombang=${gelombang}&status=${status}&page=${pagination.current_page}&per_page=${perPage}&search=${searchQuery}"><i class="fas fa-eye text-secondary" title="Lihat"></i></a>
                                     <i class="fas fa-trash text-danger delete-btn" data-id="${pendaftar.id}" title="Hapus"></i>
                                     <i class="fas fa-edit text-primary" title="Edit"></i>
                                 </td>
@@ -231,7 +237,7 @@
                             labelText = 'Sebelumnya';
                             pageNumber = pagination.current_page - 1;
                         } else if (link.label.includes('Next')) {
-                             labelText = 'Selanjutnya';
+                            labelText = 'Selanjutnya';
                             pageNumber = pagination.current_page + 1;
                         } else {
                             labelText = link.label;
@@ -261,6 +267,8 @@
             $('#filter-thn-ajaran, #filter-gelombang, #filter-status, #show-entries').change(function() {
                 fetchData(1);
             });
+
+            $('#show-entries').val(defaultPerPage);
 
             $('#searchBtn').click(function() {
                 fetchData(1);
@@ -318,7 +326,10 @@
                 })
             })
 
-            fetchData();
+            $('#filter-status').val("{{ $defaultStatus }}");
+
+            
+            fetchData(defaultPage);
         });
     </script>
 @stop

@@ -6,7 +6,7 @@
             <div class="row mb-2">
                 <div class="col-sm-6">
                     <h1 class="m-0">Detail Pendaftaran</h1>
-                </div><!-- /.col -->
+                </div>
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
                         <li class="breadcrumb-item"><a href="#">Home</a></li>
@@ -14,6 +14,11 @@
                     </ol>
                 </div>
             </div>
+
+            <a href="{{ route('admin.pendaftar') }}?thn_ajaran={{ $lastFilters['thn_ajaran'] ?? '' }}&gelombang={{ $lastFilters['gelombang_pendaftaran'] ?? '' }}&status={{ $lastFilters['status_aktual'] ?? '' }}&page={{ $lastFilters['page'] ?? '' }}&per_page={{ $lastFilters['per_page'] ?? '' }}&search={{ $lastFilters['search'] ?? '' }}"
+                class="btn rounded-circle mb-4 border">
+                <i class="fas fa-arrow-left text-black"></i>
+            </a>
             <div class="card">
                 <div class="card-header d-flex justify-content-end gap-2">
                     <a href="#" class="btn btn-success">
@@ -23,6 +28,12 @@
                         @csrf
                         @method('PUT')
                         <input type="hidden" name="status_aktual" value="Ditolak">
+                        <input type="hidden" name="thn_ajaran" value="{{ $lastFilters['thn_ajaran'] ?? '' }}">
+                        <input type="hidden" name="gelombang_pendaftaran"
+                            value="{{ $lastFilters['gelombang_pendaftaran'] ?? '' }}">                       
+                        <input type="hidden" name="page" value="{{ $lastFilters['page'] ?? '' }}">
+                        <input type="hidden" name="per_page" value="{{ $lastFilters['per_page'] ?? '' }}">
+                        <input type="hidden" name="search" value="{{ $lastFilters['search'] ?? '' }}">
                         <button type="button" id="btn-tolak" class="btn btn-danger">
                             <i class="fas fa-times"></i> Tolak
                         </button>
@@ -31,6 +42,12 @@
                         @csrf
                         @method('PUT')
                         <input type="hidden" name="status_aktual" value="Diterima">
+                        <input type="hidden" name="thn_ajaran" value="{{ $lastFilters['thn_ajaran'] ?? '' }}">
+                        <input type="hidden" name="gelombang_pendaftaran"
+                            value="{{ $lastFilters['gelombang_pendaftaran'] ?? '' }}">                       
+                        <input type="hidden" name="page" value="{{ $lastFilters['page'] ?? '' }}">
+                        <input type="hidden" name="per_page" value="{{ $lastFilters['per_page'] ?? '' }}">
+                        <input type="hidden" name="search" value="{{ $lastFilters['search'] ?? '' }}">
                         <button type="button" id="btn-terima" class="btn btn-primary">
                             <i class="fas fa-check"></i> Terima
                         </button>
@@ -92,7 +109,7 @@
                                     <p class="text-muted mb-1">Kategori Prestasi</p>
                                     <strong class="text-dark">{{ $pendaftars->siswa->kategori_prestasi ?? '-' }}</strong>
                                 </div>
-                                
+
                                 <div class="col-md-4 mb-3">
                                     <i class="fa fa-envelope text-primary fs-3 me-2"></i>
                                     <p class="text-muted mb-1">Email </p>
@@ -532,7 +549,7 @@
                         title: 'Berhasil!',
                         text: 'Konfirmasi penerimaan berhasil. Anda akan diarahkan ke halaman pendaftar.',
                         icon: 'success',
-                        timer: 1000, 
+                        timer: 1000,
                         timerProgressBar: true,
                         showConfirmButton: false,
 

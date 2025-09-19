@@ -42,32 +42,12 @@ Route::middleware('auth')->group(function () {
     Route::delete('pendaftaran/{id}', [PendaftaranController::class, 'destroy'])
         ->name('pendaftaran.destroy');
 
-    //cetak pendaftaran
     Route::get('siswa/daftar-cetak-formulir', [PendaftaranController::class, 'listCetakFormulir'])
         ->name('siswa.daftar-formulir');
 
     Route::get('siswa/cetak-formulir/{id}', [PendaftaranController::class, 'printPendaftaran'])
         ->name('cetak.formulir');
 });
-
-// Route::get('/siswa/pendaftaran', [PendaftaranController::class, 'ajuanPendaftaran'])
-//     ->middleware('auth')
-//     ->name('ajuan.pendaftaran');
-// Route::get('/formulir-siswa', [App\Http\Controllers\PendaftaranController::class, 'index'])
-//     ->middleware('auth')
-//     ->name('formulir-siswa');
-//////////////////
-
-///////////////
-
-// route pendaftaran/detail emang belum dibuat detailnya
-// Route::get('pendaftaran/detail', [App\Http\Controllers\PendaftaranController::class, 'detailPendaftaran'])
-//     ->middleware('auth')
-//     ->name('pendaftaran.detail'); 
-
-
-
-
 
 
 // admin

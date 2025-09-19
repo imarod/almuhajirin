@@ -17,9 +17,26 @@ class AdminController extends Controller
         $thnAjaran = ManajemenJadwalPpdb::select('thn_ajaran')->distinct()->orderBy('thn_ajaran', 'desc')->pluck('thn_ajaran');
         $gelombangPendaftaran = ManajemenJadwalPpdb::select('gelombang_pendaftaran')->distinct()->orderBy('gelombang_pendaftaran', 'asc')->pluck('gelombang_pendaftaran');
 
-        $defaultThnAjaran = $request->input('thn_ajaran', $thnAjaran->first());
-        $defaultGelombang = $request->input('gelombang_pendaftaran', $gelombangPendaftaran->first());
-        return view('admin.data-pendaftar', compact('thnAjaran', 'gelombangPendaftaran', 'defaultThnAjaran', 'defaultGelombang'));
+        $lastFilters = $request->session()->get('last_filters', []);
+        $defaultThnAjaran = $request->input('thn_ajaran', $lastFilters['thn_ajaran'] ?? $thnAjaran->first());
+        $defaultGelombang = $request->input('gelombang_pendaftaran', $lastFilters['gelombang_pendaftaran'] ?? $gelombangPendaftaran->first());
+        $defaultStatus = $request->input('status_aktual', $lastFilters['status_aktual'] ?? '');
+        $defaultPage = $request->input('page', $lastFilters['page'] ?? 1);
+        $defaultPerPage = $request->input('per_page', $lastFilters['per_page'] ?? 10);
+        $defaultSearch = $request->input('search', $lastFilters['search'] ?? '');
+
+        $request->session()->forget('last_filters');
+
+        return view('admin.data-pendaftar', compact(
+            'thnAjaran',
+            'gelombangPendaftaran',
+            'defaultThnAjaran',
+            'defaultGelombang',
+            'defaultStatus',
+            'defaultPage',
+            'defaultPerPage',
+            'defaultSearch'
+        ));
     }
 
     public function getDataPendaftar(Request $request)
@@ -41,17 +58,15 @@ class AdminController extends Controller
                 $q->where('email', 'like', '%' . $search . '%');
             });
         } else {
-            // Logika filter tahun ajaran dan gelombang tetap berjalan jika tidak ada pencarian.
-            if ($thnAjaran || $gelombangPendaftaran) {
-                $jadwalQuery = ManajemenJadwalPpdb::query();
-                if ($thnAjaran) {
-                    $jadwalQuery->where('thn_ajaran', $thnAjaran);
-                }
-                if ($gelombangPendaftaran) {
-                    $jadwalQuery->where('gelombang_pendaftaran', $gelombangPendaftaran);
-                }
-                $jadwalIds = $jadwalQuery->pluck('id')->toArray();
-                $query->whereIn('jadwal_id', $jadwalIds);
+            if (!empty($thnAjaran) && $thnAjaran !== 'Semua') {
+                $query->whereHas('jadwal', function ($q) use ($thnAjaran) {
+                    $q->where('thn_ajaran', $thnAjaran);
+                });
+            }
+            if (!empty($gelombangPendaftaran) && $gelombangPendaftaran !== 'Semua') {
+                $query->whereHas('jadwal', function ($q) use ($gelombangPendaftaran) {
+                    $q->where('gelombang_pendaftaran', $gelombangPendaftaran);
+                });
             }
         }
 
@@ -60,6 +75,7 @@ class AdminController extends Controller
             $query->whereNull('status_aktual');
         } elseif ($statusAktual === 'Diterima' || $statusAktual === 'Ditolak') {
             $query->where('status_aktual', $statusAktual);
+        } elseif ($statusAktual === 'Semua') {
         }
 
         if ($perPage > 0) {
@@ -83,33 +99,49 @@ class AdminController extends Controller
             ]);
         }
 
-
         $pendaftars = $query->with(['siswa.user', 'siswa.orangTua', 'jadwal'])->paginate($perPage);
         return response()->json($pendaftars);
     }
 
-    public function showDetailPendaftar($id)
+    public function showDetailPendaftar(Request $request, $id)
     {
+        $thnAjaran = $request->input('thn_ajaran') ?? 'Semua';
+        $gelombang = $request->input('gelombang') ?? 'Semua';
+        $status = $request->input('status') ?? 'Semua';
+
+        //simpan session filter terakhir
+        $filters = [
+            'thn_ajaran' => $request->input('thn_ajaran'),
+            'gelombang_pendaftaran' => $request->input('gelombang'),
+            'status_aktual' => $request->input('status'),
+            'page' => $request->input('page'),
+            'per_page' => $request->input('per_page'),
+            'search' => $request->input('search'),
+        ];
+
+        $request->session()->put('last_filters', $filters);
 
         $pendaftars = Pendaftaran::with(['siswa.orangTua'])->findOrFail($id);
+        $lastFilters = $request->session()->get('last_filters');
 
-        return view('admin.detail-pendaftaran', compact('pendaftars'));
+        return view('admin.detail-pendaftaran', compact('pendaftars', 'lastFilters'));
     }
 
     public function updateStatus(Request $request, $id)
     {
         $pendaftaran = Pendaftaran::with('siswa')->findOrFail($id);
 
-         $oldStatus = $pendaftaran->status_aktual;
+        $newStatus = $request->input('status_aktual');
         $pendaftaran->update([
-            'status_aktual' => $request->status_aktual,
+            'status_aktual' => $newStatus,
         ]);
 
         if ($pendaftaran->wasChanged('status_aktual')) {
             Mail::to($pendaftaran->siswa->email_siswa)->send(new ProcessingMailNotification($pendaftaran, $pendaftaran->siswa));
         }
+        $lastFilters = $request->session()->get('last_filters');
 
-        return redirect()->route('admin.pendaftar', $pendaftaran->id)->with('success', 'Status pendaftaran berhasil diperbarui.');
+        return redirect()->route('admin.pendaftar', $lastFilters)->with('success', 'Status pendaftaran berhasil diperbarui.');
     }
     public function destroy($id)
     {
