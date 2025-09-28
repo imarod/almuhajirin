@@ -17,7 +17,7 @@ class DatabaseSeeder extends Seeder
 
        $this->call([
             JadwalPpdbSeeder::class,
-            // PendaftaranSeeder::class,
+            PendaftaranSeeder::class,
         ]);
     }
 }

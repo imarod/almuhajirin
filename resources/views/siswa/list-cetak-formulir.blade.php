@@ -6,7 +6,7 @@
     <div class="container-fluid justify-content-between align-items-center">
         <div class="d-flex">
             <div>
-                <h1>Daftar Formulir Pendaftaran</h1>
+                <h1 class="h3 mb-0 font-weight-bold text-dark">Cetak Formulir Pendaftaran</h1>
             </div>
         </div>
     </div>
@@ -144,7 +144,7 @@
                                     <p class="mb-2">STATUS VERIFIKASI</p>
                                 </div>
                                 <div class="col-8">
-                                    <p class="mb-2 border-bottom border-secondary border-dotted">{{ $pendaftaran->status_verifikasi }}</p>
+                                    <p class="mb-2 border-bottom border-secondary border-dotted">{{ $pendaftaran->status_aktual ? 'Diproses' : $pendaftaran->status_verifikasi }}</p>
                                 </div>
                             </div>
                             <div class="row">
@@ -164,7 +164,7 @@
                     </div>
                 </div>
             @empty
-                <div class="col-12">
+                <div class="container-fluid">
                     <p class="text-center">Tidak ada formulir pendaftaran yang tersedia.</p>
                 </div>
             @endforelse

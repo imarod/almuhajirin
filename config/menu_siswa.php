@@ -15,19 +15,9 @@ return [
         'icon' => 'fas fa-user',
     ],
  
-    [
-        'text' => 'Profil Saya',
-        'url'  => 'siswa/pendaftaran',
-        'icon' => 'fas fa-user',
-    ],
-  
 
       // Navbar items:
-        [
-            'type' => 'navbar-search',
-            'text' => 'search',
-            'topnav_right' => true,
-        ],
+      
         [
             'type' => 'fullscreen-widget',
             'topnav_right' => true,

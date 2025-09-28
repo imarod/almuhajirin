@@ -3,9 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Student Data Form - PDF Optimized</title>
+    <title></title>
     <style>
-        /* PDF-optimized styles for dompdf */
         @page {
             margin: 20mm;
             size: A4;
@@ -39,14 +38,14 @@
         .logo {
             width: 100px;
             height: 100px;
-            background-color: #4A90E2;
-            border-radius: 50%;
+            /* background-color: #4A90E2;
+            border-radius: 50%; */
             display: block;
-            text-align: center;
+            /* text-align: center; */
             line-height: 100px;
-            color: white;
-            font-weight: bold;
-            font-size: 10px;
+            /* color: white; */
+            /* font-weight: bold;
+            font-size: 10px; */
         }
         
         .header-text {
@@ -137,7 +136,7 @@
             <tr>
                 <td class="logo-cell">
                     <div class="logo">
-                        LOGO<br>UNILA
+                        <img src="{{asset('images/tutwuri.png')}}" alt="Logo" style="width: 100%; height: auto;">
                     </div>
                 </td>
                 <td class="header-text">
@@ -161,9 +160,9 @@
         <strong>TAHUN AKADEMIK 2021/2022</strong>
     </div>
     
-    <div class="participant-number">
+    {{-- <div class="participant-number">
         <strong>Nomor Peserta : 121171160521</strong>
-    </div>
+    </div> --}}
     
     <!-- Section I: Student Biodata -->
     <div class="section-title">I. BIODATA CALON MAHASISWA</div>

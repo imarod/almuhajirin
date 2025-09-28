@@ -58,4 +58,27 @@ class UpdateJadwalPpdbRequest extends FormRequest
             'tgl_pengumuman' => 'required|date|after_or_equal:tgl_berakhir',
         ];
     }
+
+     public function messages(): array
+    {
+        return [
+            'tahun_awal.required' => 'Tahun awal ajaran harus diisi.',
+            'tahun_awal.digits' => 'Tahun awal harus 4 digit.',
+            'tahun_awal.integer' => 'Tahun awal harus berupa angka.',
+            'tahun_akhir.required'  => 'Tahun akhir ajaran harus diisi.',
+            'tahun_akhir.digits' => 'Tahun akhir harus 4 digit.',
+            'tahun_akhir.integer' => 'Tahun akhir harus berupa angka.',
+            'tahun_akhir.after' => 'Tahun akhir harus setelah tahun awal.',
+            'gelombang_pendaftaran.required' => 'Gelombang pendaftaran harus diisi',
+            'kuota.required' => 'Kuota harus diisi',
+            'kuota.integer' => 'Kuota harus berupa angka',
+            'kuota.min' => 'Kuota minimal harus 1',
+            'tgl_mulai.required' => 'Tanggal mulai harus diisi',
+            'tgl_mulai.after_or_equal' => 'Tanggal mulai harus hari ini atau setelahnya',
+            'tgl_berakhir.required' => 'Tanggal berakhir harus diisi',
+            'tgl_berakhir.after_or_equal' => 'Tanggal berakhir harus setelah tanggal mulai',
+            'tgl_pengumuman.required' => 'Tanggal pengumuman harus diisi',
+            'tgl_pengumuman.after_or_equal' => 'Tanggal pengumuman harus setelah tanggal berakhir',
+        ];
+    }
 }

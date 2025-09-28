@@ -13,8 +13,28 @@
 
 @section('content')
     <div class="container-fluid">
+
         <x-jadwal-ppdb-aktif />
+        <div class="btn-group dropright mb-3">
+            <button type="button" class="btn btn-sm btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
+                aria-expanded="false">
+                <i class="fas fa-print mr-1" title="Cetak"></i>
+                Cetak
+            </button>
+            <div class="dropdown-menu">
+                <button id="export-btn" class="dropdown-item btn-sm text-success">
+                    <i class="fas fa-file-excel mr-1"></i>
+                    CSV
+                </button>
+
+                <button id="export-pdf-btn" class="dropdown-item btn-sm text-danger">
+                    <i class="fas fa-file-pdf mr-1"></i>
+                    PDF
+                </button>
+            </div>
+        </div>
         <div class="card ">
+
 
             <form
                 action="{{ isset($jadwal) ? route('admin.update-jadwal-ppdb', $jadwal->id) : route('admin.store-jadwal-ppdb') }}"
@@ -211,15 +231,8 @@
                                                 </select>
                                                 <span class="text-muted small">entries</span>
                                             </div>
-                                            <button
-                                                class="btn btn-outline-secondary btn-sm d-flex align-items-center mr-2">
-                                                <i class="fas fa-filter text-muted mr-2"></i>
-                                                Filter
-                                            </button>
-                                            <button class="btn btn-outline-secondary btn-sm d-flex align-items-center">
-                                                <i class="fas fa-download text-muted mr-2"></i>
-                                                Export
-                                            </button>
+
+
                                         </div>
                                     </div>
                                     {{-- <div class="col-md-4">
@@ -333,7 +346,7 @@
                         </div>
                     </div>
                 </div>
-            </form>
+
         </div>
     </div>
 
@@ -582,6 +595,14 @@
             if (window.location.hash === '#history' && !isEditing) {
                 fetchJadwalData();
             }
+
+            $('#export-btn').on('click', function() {
+                window.location.href = '{{ route('admin.cetak-jadwal.export-csv') }}';
+            });
+
+            $('#export-pdf-btn').on('click', function() {
+                window.location.href = '{{ route('admin.cetak-jadwal.export-pdf') }}';
+            });
 
             @if (session('success'))
                 Swal.fire({

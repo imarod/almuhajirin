@@ -8,6 +8,8 @@ use App\Http\Requests\StoreJadwalPpdbRequest;
 use App\Http\Requests\UpdateJadwalPpdbRequest;
 use Exception;
 use Illuminate\Support\Facades\DB;
+use Spatie\SimpleExcel\SimpleExcelWriter;
+use PDF;
 
 
 class ManajemenJadwalPpdbController extends Controller
@@ -122,5 +124,45 @@ class ManajemenJadwalPpdbController extends Controller
         } catch (\Exception $e) {
             return back()->with('error', 'Jadwal tidak berhasil dihapus' . $e->getMessage());
         }
+    }
+
+    public function exportJadwalToCsv(Request $request)
+    {
+        $query = ManajemenJadwalPpdb::orderBy('created_at', 'desc');
+        $jadwals = $query->get();
+        $fileName = 'jadwal_ppdb_' . now()->format('Ymd_His') . '.csv';
+        $writer = SimpleExcelWriter::create($fileName)->addHeader([
+            'ID', 'Tahun Ajaran', 'Gelombang Pendaftaran', 'Kuota', 'Tanggal Mulai', 'Tanggal Berakhir', 'Tanggal Pengumuman', 'Status', 'Dibuat Pada', 'Diperbarui Pada'
+        ]);
+
+        foreach ($jadwals as $jadwal) {
+            $writer->addRow([
+                $jadwal->id,
+                $jadwal->thn_ajaran,
+                $jadwal->gelombang_pendaftaran,
+                $jadwal->kuota,
+                $jadwal->tgl_mulai->format('d-m-Y'),
+                $jadwal->tgl_berakhir->format('d-m-Y'),
+                $jadwal->tgl_pengumuman->format('d-m-Y'),
+                $jadwal->status,
+                // $jadwal->created_at,
+                // $jadwal->updated_at,
+            ]);
+        }
+
+        $writer->close();
+
+        return response()->download($fileName)->deleteFileAfterSend(true);
+    }
+
+    public function exportJadwalToPdf(Request $request)
+    {
+        $query = ManajemenJadwalPpdb::orderBy('created_at', 'desc');
+        $jadwals = $query->get();
+
+        $pdf = PDF::loadView('admin.cetak-jadwal-ppdb', compact('jadwals'));
+        $fileName = 'jadwal_ppdb_' . now()->format('Ymd_His') . '.pdf';
+
+        return $pdf->download($fileName);
     }
 }

@@ -16,6 +16,19 @@ class ManajemenUser extends Controller
         return view('admin.manajemen-user');
     }
 
+    public function getTotalUser()
+    {
+        $totalUSer = User::count();
+        $totalAdmin = User::where('is_admin', 1)->count();
+        $totalUserBiasa = User::where('is_admin', 0)->count();
+
+        return response()->json([
+            'totalUser' => $totalUSer,
+            'totalAdmin' => $totalAdmin,
+            'totalUserBiasa' => $totalUserBiasa
+        ]);
+    }
+
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -34,7 +47,7 @@ class ManajemenUser extends Controller
         ]);
 
         if ($validator->fails()) {
-            return redirect()->back()->withErrors($validator)->withInput();
+            return response()->json(['success' => false, 'errors' => $validator->errors()], 422);
         }
 
         User::create([
@@ -44,7 +57,7 @@ class ManajemenUser extends Controller
             'is_admin' => $request->is_admin,
         ]);
 
-        return redirect()->route('admin.manajemen-user')->with('success', 'User berhasil ditambahkan!');
+        return response()->json(['success' => true, 'message' => 'User berhasil ditambahkan!']);
     }
     public function getDataUser(Request $request)
     {
@@ -53,7 +66,7 @@ class ManajemenUser extends Controller
         if ($request->filled('search')) {
             $search = $request->input('search');
             $query->where('name', 'like', '%' . $search . '%')
-                ->orWhere('email', 'like', '%' . $search . '%'); 
+                ->orWhere('email', 'like', '%' . $search . '%');
         }
 
         if ($request->filled('role')) {
@@ -66,7 +79,7 @@ class ManajemenUser extends Controller
             $users = $query->paginate($perPage);
             $users->getCollection()->transform(function ($user) {
                 $user->created_at_formatted = $user->created_at->format('d-m-Y');
-                return $user; 
+                return $user;
             });
             return response()->json($users);
         } else {
@@ -140,9 +153,8 @@ class ManajemenUser extends Controller
         $user->email = $request->email;
         $user->is_admin = $request->is_admin;
         if ($request->filled('password')) {
-            $user->password = Hash::make('$request->password');
+            $user->password = Hash::make($request->password);
         }
-
         $user->save();
         return response()->json(['success' => true, 'message' => 'Data user berhasil di update!']);
     }

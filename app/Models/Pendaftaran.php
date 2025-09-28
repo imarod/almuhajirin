@@ -32,12 +32,15 @@ class Pendaftaran extends Model
         $jadwal = ManajemenJadwalPpdb::first();
         $tanggalPengumuman = $jadwal ? Carbon::parse($jadwal->tgl_pengumuman) : null;
 
+        // if ($tanggalPengumuman  && $tanggalPengumuman->isPast()) {
+        //     return $this->status_aktual;
+        // }
         if ($this->is_announced && $tanggalPengumuman  && $tanggalPengumuman->isPast()) {
             return $this->status_aktual;
         }
 
         if ($this->status_aktual !== null) {
-            return 'Di proses';
+            return 'Diproses';
         }
 
         return $this->status_verifikasi;

@@ -16,13 +16,15 @@ class ResultNotificationMail extends Mailable
     use Queueable, SerializesModels;
 
     public $pendaftaran;
+    public $token;
 
     /**
      * Create a new message instance.
      */
-    public function __construct(Pendaftaran $pendaftaran)
+    public function __construct(Pendaftaran $pendaftaran, $token)
     {
         $this->pendaftaran = $pendaftaran;
+        $this->token = $token;
     }
     
 

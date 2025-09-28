@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Support\Facades\Auth;
 
-class RoleMiddleware
+class adminMiddleware
 {
     /**
      * Handle an incoming request.
@@ -21,7 +21,8 @@ class RoleMiddleware
         }
 
         if (Auth::user()->is_admin !== 1) {
-            return redirect('/Home')->with('error', 'Unauthorized: Anda tidak memiliki akses.');
+            //halaman ini nnati ganti abort yang lebih umum
+            return abort(403, 'Unauthorized: Anda tidak memiliki akses.');
         }
         return $next($request);
     }

@@ -12,22 +12,20 @@ class DashboardAdmin extends Controller
     {
         return view('admin.dashboard-statistik');
     }
-
     public function getTotalPendaftar()
     {
         $totalPendaftar = Pendaftaran::count();
         $totalDiterima = Pendaftaran::where('status_aktual', 'Diterima')->count();
         $totalDitolak = Pendaftaran::where('status_aktual', 'Ditolak')->count();
-         $belumDiperiksa = Pendaftaran::whereNull('status_aktual')->count();
+        $belumDiperiksa = Pendaftaran::whereNull('status_aktual')->count();
 
-        return response()->json([
+        return response()->json([ 
             'totalPendaftar' => $totalPendaftar,
             'totalDiterima' => $totalDiterima,
             'totalDitolak' => $totalDitolak,
             'belumDiperiksa' => $belumDiperiksa
         ]);
     }
-
     public function getPendaftarByGender()
     {
         $maleCount = Siswa::where('jenis_kelamin', 'Laki-laki')->count();

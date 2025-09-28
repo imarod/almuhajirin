@@ -9,12 +9,14 @@ use App\Models\Siswa;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\ResultNotificationMail;
-use LDAP\Result;
+use App\Traits\LoginTokenGenerator; 
 
 class SendAnnouncementEmails extends Command
 {
     protected $signature = 'pendaftaran:send-emails';
     protected $description = 'Mengirim email pengumuman ke siswa yang terdaftar pada jadwal yang hari ini tanggal pengumumannya.';
+    use LoginTokenGenerator;
+    
 
     public function handle()
     {
@@ -32,7 +34,7 @@ class SendAnnouncementEmails extends Command
                 ->where('is_announced', false)
                 ->get();
 
-             if ($pendaftarToAnnounce->isEmpty()) {
+            if ($pendaftarToAnnounce->isEmpty()) {
                 $this->info('Tidak ada pendaftar yang perlu diumumkan untuk jadwal hari ini');
                 return Command::SUCCESS;
             }
@@ -41,10 +43,16 @@ class SendAnnouncementEmails extends Command
 
             foreach ($pendaftarToAnnounce as $pendaftar) {
                 if ($pendaftar->siswa && $pendaftar->siswa->email_siswa) {
+                    $user = $pendaftar->siswa->user;
+                    $plainToken = $this->generateLoginToken($user); 
+                    
                     Mail::to($pendaftar->siswa->email_siswa)
-                    ->send(new ResultNotificationMail($pendaftar));
+                        ->queue(new ResultNotificationMail($pendaftar, $plainToken));
 
-                    $pendaftar->is_announced = true;
+                    $pendaftar->pesan_email= true;
+                    if ($pendaftar->pesan_whatsapp) {
+                        $pendaftar->is_announced = true;
+                    }
                     $pendaftar->save();
                     $this->info('Email pengumuman dikirim ke: ' . $pendaftar->siswa->email_siswa);
                 } else {

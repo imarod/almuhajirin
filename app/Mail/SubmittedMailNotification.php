@@ -15,12 +15,14 @@ class SubmittedMailNotification extends Mailable
 {
     use Queueable, SerializesModels;
 
+    public $token;
     public $pendaftaran;
     public $siswa;
-    public function __construct(Pendaftaran $pendaftaran, Siswa $siswa)
+    public function __construct(Pendaftaran $pendaftaran, Siswa $siswa, $token)
     {
         $this->pendaftaran = $pendaftaran;
         $this->siswa = $siswa;
+        $this->token = $token;
     }
 
     /**

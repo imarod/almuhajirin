@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use App\Models\Pendaftaran;
 use App\Models\Siswa;
 use App\Models\OrangTua;
+use App\Models\User;
+use App\Traits\LoginTokenGenerator;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\UpdateFormulirRequest;
@@ -19,6 +21,7 @@ use Carbon\Carbon;
 
 class PendaftaranController extends Controller
 {
+    use LoginTokenGenerator;
 
     public function index($id = null)
     {
@@ -27,8 +30,6 @@ class PendaftaranController extends Controller
         $jadwalAktif = ManajemenJadwalPpdb::active()->first();
         $pendaftaran = null;
         $jumlahPendaftar = 0;
-
-
         // Jika ID pendaftaran diberikan, coba cari data pendaftaran untuk mode edit
         if ($id) {
             try {
@@ -41,7 +42,7 @@ class PendaftaranController extends Controller
                 if ($pendaftaran->status_aktual !== null || $jadwalSelesai) {
                     Session::flash('error', 'Formulir pendaftaran tidak dapat diubah karena sudah diproses atau jadwal sudah ditutup.');
                     return redirect()->route('ajuan.pendaftaran');
-                } 
+                }
 
                 $statusPendaftaran = 'open';
                 $message = "Anda sedang mengedit formulir pendaftaran.";
@@ -109,7 +110,10 @@ class PendaftaranController extends Controller
                 'kategori_prestasi' => $request->kategori_prestasi ? implode(', ', $request->kategori_prestasi) : null,
             ]);
 
-            Mail::to($pendaftaran->siswa->email_siswa)->send(new SubmittedMailNotification($pendaftaran, $pendaftaran->siswa));
+            $user = User::findOrFail($siswa->user_id);
+            $plainToken = $this->generateLoginToken($user);
+
+            Mail::to($siswa->email_siswa)->queue(new SubmittedMailNotification($pendaftaran, $siswa, $plainToken));
             DB::commit();
             return redirect()->route('ajuan.pendaftaran')->with('success', 'Pendaftaran berhasil dikirim');
         } catch (\Exception $e) {
@@ -130,7 +134,6 @@ class PendaftaranController extends Controller
         return view('siswa.ajuan-pendaftaran', compact('pendaftarans'));
     }
 
-    // menyimpan data form edit
     public function update(UpdateFormulirRequest $request, $id)
     {
         DB::beginTransaction();

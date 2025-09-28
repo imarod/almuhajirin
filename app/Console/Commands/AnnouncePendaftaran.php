@@ -12,7 +12,7 @@ use Twilio\Rest\Client;
 
 class AnnouncePendaftaran extends Command
 {
-    protected $signature = 'pendaftaran:announce';
+    protected $signature = 'pendaftaran:send-whatsapp';
     protected $description = 'Umumkan hasil pendaftaran dan kirim notifikasi WhatsApp hari ini';
 
     public function handle()
@@ -64,9 +64,11 @@ class AnnouncePendaftaran extends Command
 
             $this->info("Notifikasi WhatsApp berhasil dikirim ke " . $pendaftar->siswa->no_hp_siswa);
 
-            // Ubah is_announced menjadi true HANYA JIKA notifikasi berhasil dikirim
-            $pendaftar->is_announced = true;
+           
             $pendaftar->pesan_whatsapp = true;
+            if ($pendaftar->pesan_email) { 
+                $pendaftar->is_announced = true;
+            }
             $pendaftar->save();
         } catch (\Exception $e) {
             $this->error("Gagal mengirimkan notifikasi WhatsApp ke " . $pendaftar->siswa->no_hp_siswa . ": " . $e->getMessage());

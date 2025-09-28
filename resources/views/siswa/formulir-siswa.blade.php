@@ -24,10 +24,6 @@
 @section('content')
     <div class="container-fluid">
 
-        {{-- @if ($statusPendaftaran === 'open' && $jadwalAktif)
-            <x-jadwal-ppdb-aktif />
-        @endif --}}
-
         <div class="row justify-content-start">
             <a href="/siswa/pendaftaran" class="btn  rounded-circle mb-4 border">
                 <i class="fas fa-arrow-left text-black"></i>
@@ -234,12 +230,23 @@
                                                 Keluarga</label>
                                             <small class="text-muted d-block mb-2">Unggah dalam bentuk format PDf maks
                                                 1 mb</small>
+                                            @if (isset($pendaftaran) && $pendaftaran->kk)
+                                                <div class="mb-3">
+                                                    <p>Dokumen yang sudah diunggah:</p>
+                                                    <a href="{{ Storage::url($pendaftaran->kk) }}" target="_blank"
+                                                        class="btn btn-sm btn-outline-primary">
+                                                        <i class="fas fa-eye"></i> Lihat Dokumen
+                                                    </a>
+                                                </div>
+                                            @endif
+
                                             <div class="custom-file">
                                                 <input type="file"
                                                     class="custom-file-input @error('kk') is-invalid @enderror"
                                                     id="kkInput" name="kk" accept=".pdf">
-
-                                                <label class="custom-file-label" for="kkInput">Unggah Dokumen</label>
+                                                <label class="custom-file-label" for="kkInput">
+                                                    {{ isset($pendaftaran) && $pendaftaran->kk ? 'Pilih Berkas untuk mengganti' : 'Unggah Dokumen' }}
+                                                </label>
                                                 @error('kk')
                                                     <div class="invalid-feedback">{{ $message }}</div>
                                                 @enderror
@@ -251,12 +258,23 @@
                                             <label class="font-weight-medium text-dark mb-0">Scan Ijazah</label>
                                             <small class="text-muted d-block mb-2">Unggah dalam bentuk format PDf maks
                                                 1 mb</small>
+                                            @if (isset($pendaftaran) && $pendaftaran->ijazah)
+                                                <div class="mb-3">
+                                                    <p>Dokumen yang sudah diunggah:</p>
+                                                    <a href="{{ Storage::url($pendaftaran->ijazah) }}" target="_blank"
+                                                        class="btn btn-sm btn-outline-primary">
+                                                        <i class="fas fa-eye"></i> Lihat Dokumen
+                                                    </a>
+                                                </div>
+                                            @endif
+
                                             <div class="custom-file">
                                                 <input type="file"
                                                     class="custom-file-input @error('ijazah') is-invalid @enderror"
                                                     id="ijazahInput" name="ijazah" accept=".pdf">
-                                                <label class="custom-file-label" for="ijazahInput">Unggah
-                                                    Dokumen</label>
+                                                <label class="custom-file-label" for="ijazahInput">
+                                                    {{ isset($pendaftaran) && $pendaftaran->ijazah ? 'Pilih Berkas untuk mengganti' : 'Unggah Dokumen' }}
+                                                </label>
                                                 @error('ijazah')
                                                     <div class="invalid-feedback">{{ $message }}</div>
                                                 @enderror
@@ -313,12 +331,23 @@
                                                 Ada)</label>
                                             <small class="text-muted d-block mb-2">Unggah dalam bentuk format PDf maks
                                                 1 mb</small>
+                                            @if (isset($pendaftaran) && $pendaftaran->piagam)
+                                                <div class="mb-3">
+                                                    <p>Dokumen yang sudah diunggah:</p>
+                                                    <a href="{{ Storage::url($pendaftaran->piagam) }}" target="_blank"
+                                                        class="btn btn-sm btn-outline-primary">
+                                                        <i class="fas fa-eye"></i> Lihat Dokumen
+                                                    </a>
+                                                </div>
+                                            @endif
+
                                             <div class="custom-file">
                                                 <input type="file"
                                                     class="custom-file-input @error('piagam') is-invalid @enderror"
                                                     id="piagamInput" name="piagam" accept=".pdf">
-                                                <label class="custom-file-label" for="piagamInput">Unggah
-                                                    Dokumen</label>
+                                                <label class="custom-file-label" for="piagamInput">
+                                                    {{ isset($pendaftaran) && $pendaftaran->piagam ? 'Pilih Berkas untuk mengganti' : 'Unggah Dokumen'  }}
+                                                </label>
                                                 @error('piagam')
                                                     <div class="invalid-feedback">{{ $message }}</div>
                                                 @enderror
@@ -412,7 +441,6 @@
                     </form>
                 @else
                     <x-jadwal-ppdb-aktif />
-
                     @if ($statusPendaftaran === 'closed')
                         <div class="card border-bottom">
                             <div colspan="9" class="text-center py-5">

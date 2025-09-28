@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\ConfirmsPasswords;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class ConfirmPasswordController extends Controller
 {
@@ -25,15 +27,27 @@ class ConfirmPasswordController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = '/home';
+    // protected $redirectTo = '/home';
 
     /**
      * Create a new controller instance.
      *
      * @return void
      */
+
+  
     public function __construct()
     {
         $this->middleware('auth');
+    }
+
+     protected function sendConfirmationResponse(Request $request)
+    {
+        // Periksa peran pengguna yang sedang login
+        if (Auth::user()->is_admin == 1) {
+            return redirect()->route('admin.dashboard-statistik');
+        }
+
+        return redirect()->route('ajuan.pendaftaran');
     }
 }

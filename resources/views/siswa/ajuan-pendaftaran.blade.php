@@ -128,6 +128,7 @@
                                         @foreach ($pendaftarans as $pendaftaran)
                                             @php
                                                 $status = $pendaftaran->showStatusPendaftar();
+                                                
                                                 $statusClass = 'status-badge status-' . str_replace(' ', '', strtolower($status));
                                             @endphp
                                             <tr>

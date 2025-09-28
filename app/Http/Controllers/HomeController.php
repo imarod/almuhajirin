@@ -30,7 +30,10 @@ class HomeController extends Controller
     {
         return view('siswa.ajuan-pendaftaran');
     }
-    
+    public function testEmail()
+    {
+        return view('emails.pendaftaran-dikirim');
+    }
 
 
     // Admin
@@ -45,6 +48,10 @@ class HomeController extends Controller
     public function detailPendaftar()
     {
         return view('detail-pendaftar');
+    }
+    public function downloadPdf()
+    {
+        return view('admin.cetak-data-pendaftar');
     }
    
     

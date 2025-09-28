@@ -12,22 +12,9 @@
 
 @section('content')
     <div class="container-fluid">
-
-        {{-- <div class="row mb-2">
-                <div class="col-sm-6">
-                    <h1 class="m-0">Data Pendaftar</h1>
-                </div><!-- /.col -->
-                <div class="col-sm-6">
-                    <ol class="breadcrumb float-sm-right">
-                        <li class="breadcrumb-item"><a href="#">Home</a></li>
-                        <li class="breadcrumb-item active">Data Pendaftar</li>
-                    </ol>
-                </div><!-- /.col -->
-            </div><!-- /.row --> --}}
-
         <div class="card">
             <div class="card-body">
-                <div class="row mb-3 col-md-3">
+                <div class="row mb-3 col-md-12">
                     <div class="d-flex align-items-center flex-wrap">
                         <div class="d-flex align-items-center mr-3 mb-2 mb-lg-0">
                             <span class="text-dark">Tampilan</span>
@@ -39,10 +26,25 @@
                                 <option value="0" {{ $defaultPerPage == 0 ? 'selected' : '' }}>Semua Baris</option>
                             </select>
                         </div>
-                        <button class="btn btn-outline-secondary btn-sm d-flex align-items-center ">
-                            <i class="fas fa-download text-muted mr-2"></i>
-                            Export
-                        </button>
+                        <div class="btn-group dropright">
+                            <button type="button" class="btn btn-sm btn-primary dropdown-toggle" data-toggle="dropdown"
+                                aria-haspopup="true" aria-expanded="false">
+                                <i class="fas fa-print mr-1" title="Cetak"></i>
+                                Cetak
+                            </button>
+                            <div class="dropdown-menu">
+                                <button id="export-btn" class="dropdown-item btn-sm text-success">
+                                    <i class="fas fa-file-excel mr-1"></i>
+                                    CSV
+                                </button>
+
+                                <button id="export-pdf-btn" class="dropdown-item btn-sm text-danger">
+                                    <i class="fas fa-file-pdf mr-1"></i>
+                                     PDF
+                                </button>
+                            </div>
+                        </div>
+
                     </div>
 
                 </div>
@@ -50,11 +52,13 @@
                 <div class="row align-items-center mb-6">
                     <div class="col-md-4 mb-4 mb-md-0">
                         <div class="input-group input-group-sm">
-                            <div class="input-group-append">
-                                <button class="btn btn-outline-secondary" type="button" id="searchBtn"><i
-                                        class="fas fa-search"></i></button>
-                            </div>
+                            
                             <input type="text" class="form-control" placeholder="Cari pendaftar ..." id="searchUser">
+                            <div class="input-group-prepend">
+                                <button class="btn input-group-text px-3" type="button" id="searchBtn">
+                                   <i class="fas fa-search" title="Telusuri"></i>
+                                </button>
+                            </div>
 
                         </div>
                     </div>
@@ -64,7 +68,8 @@
                             <div class="form-inline mr-4 mb-3 mb-lg-0">
                                 <label for="filter-thn-ajaran" class="mr-2">Tahun Ajaran</label>
                                 <select name="thn_ajaran" id="filter-thn-ajaran" class="form-control form-control-sm">
-                                     <option value="Semua" {{ $defaultThnAjaran == 'Semua' ? 'selected' : '' }}>Semua</option>
+                                    <option value="Semua" {{ $defaultThnAjaran == 'Semua' ? 'selected' : '' }}>Semua
+                                    </option>
                                     @foreach ($thnAjaran as $thn)
                                         <option value="{{ $thn }}"
                                             {{ $thn == $defaultThnAjaran ? 'selected' : '' }}>
@@ -91,7 +96,8 @@
                                 <label for="filter-gelombang" class="mr-2">Gelombang</label>
                                 <select name="gelombang_pendaftaran" id="filter-gelombang"
                                     class="form-control form-control-sm">
-                                    <option value="Semua" {{ $defaultGelombang == 'Semua' ? 'selected' : '' }}>Semua</option>
+                                    <option value="Semua" {{ $defaultGelombang == 'Semua' ? 'selected' : '' }}>Semua
+                                    </option>
                                     @foreach ($gelombangPendaftaran as $gelombang)
                                         <option value="{{ $gelombang }}"
                                             {{ $gelombang == $defaultGelombang ? 'selected' : '' }}>
@@ -117,6 +123,7 @@
                                 <th class="border-0 text-white">No Handphone</th>
                                 <th class="border-0 text-white">Gelombang</th>
                                 <th class="border-0 text-white text-center">Status</th>
+                                <th class="border-0 text-white text-center">Notifikasi</th>
                                 <th class="border-0 text-white text-center"
                                     style="border-top-right-radius: 0.5rem !important">Aksi</th>
                             </tr>
@@ -209,6 +216,8 @@
                                 <td>${pendaftar.siswa?.no_hp_siswa ?? '-'}</td>
                                 <td>${jadwalInfo}</td>
                                 <td class="text-center"><span class="${statusClass}">${pendaftar.status_aktual ?? 'Belum Diproses'}</span></td>
+                                <td>Terikirim</td>
+
                                 <td class=" text-center action-icons">
                                     <a href="${detailUrl}?thn_ajaran=${thnAjaran}&gelombang=${gelombang}&status=${status}&page=${pagination.current_page}&per_page=${perPage}&search=${searchQuery}"><i class="fas fa-eye text-secondary" title="Lihat"></i></a>
                                     <i class="fas fa-trash text-danger delete-btn" data-id="${pendaftar.id}" title="Hapus"></i>
@@ -264,22 +273,6 @@
         }
         $(document).ready(function() {
 
-            $('#filter-thn-ajaran, #filter-gelombang, #filter-status, #show-entries').change(function() {
-                fetchData(1);
-            });
-
-            $('#show-entries').val(defaultPerPage);
-
-            $('#searchBtn').click(function() {
-                fetchData(1);
-            });
-
-
-            $('#searchUser').keypress(function(e) {
-                if (e.which == 13) {
-                    fetchData(1);
-                }
-            });
             $(document).on('click', '.delete-btn', function(e) {
                 e.preventDefault()
 
@@ -310,7 +303,7 @@
                                     response.success,
                                     'success'
                                 );
-                                fetchData(1); // Muat ulang data setelah penghapusan
+                                fetchData(1);
                             },
                             error: function(xhr) {
                                 Swal.fire(
@@ -326,10 +319,56 @@
                 })
             })
 
+            $('#filter-thn-ajaran, #filter-gelombang, #filter-status, #show-entries').change(function() {
+                fetchData(1);
+            });
             $('#filter-status').val("{{ $defaultStatus }}");
 
-            
-            fetchData(defaultPage);
+            $('#show-entries').val(defaultPerPage);
+
+            $('#searchBtn').click(function() {
+                fetchData(1);
+            });
+
+            $('#searchUser').keypress(function(e) {
+                if (e.which == 13) {
+                    fetchData(1);
+                }
+            });
+
+            $('#export-btn').click(function() {
+                let thnAjaran = $('#filter-thn-ajaran').val();
+                let gelombang = $('#filter-gelombang').val();
+                let status = $('#filter-status').val();
+                let searchQuery = $('#searchUser').val();
+
+                let exportUrl = "{{ route('admin.pendaftar.export-csv') }}";
+                let params = new URLSearchParams();
+                if (thnAjaran) params.append('thn_ajaran', thnAjaran);
+                if (gelombang) params.append('gelombang_pendaftaran', gelombang);
+                if (status) params.append('status_aktual', status);
+                if (searchQuery) params.append('search', searchQuery);
+
+                window.location.href = exportUrl + '?' + params.toString();
+            });
+
+            $('#export-pdf-btn').click(function() {
+                let thnAjaran = $('#filter-thn-ajaran').val();
+                let gelombang = $('#filter-gelombang').val();
+                let status = $('#filter-status').val();
+                let searchQuery = $('#searchUser').val();
+
+                let exportUrl = "{{ route('admin.pendaftar.export-pdf') }}";
+                let params = new URLSearchParams();
+                if (thnAjaran) params.append('thn_ajaran', thnAjaran);
+                if (gelombang) params.append('gelombang_pendaftaran', gelombang);
+                if (status) params.append('status_aktual', status);
+                if (searchQuery) params.append('search', searchQuery);
+
+                window.location.href = exportUrl + '?' + params.toString();
+            });
+
+            fetchData(defaultPage); 
         });
     </script>
 @stop
