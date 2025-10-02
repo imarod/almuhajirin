@@ -1,7 +1,7 @@
 @if($isRegistered)
     {{-- Blok untuk status Diterima, Ditolak, atau Diproses --}}
     @php
-        $status = $statusPendaftaran;
+        $status; 
         $icon = '';
         $cardClass = '';
         $borderStyle = '';
@@ -9,8 +9,8 @@
         $messageHeader = '';
         $messageBody = '';
 
-        if ($status === 'diterima' || $status === 'ditolak') {
-            $isAccepted = $status === 'diterima';
+        if ($status === 'Diterima' || $status === 'Ditolak') {
+            $isAccepted = $status === 'Diterima';
             $icon = $isAccepted ? 'fas fa-check text-success' : 'fas fa-times text-danger';
             $color = $isAccepted ? '#28a745' : '#dc3545';
             $cardClass = $isAccepted ? 'border-left-success' : 'border-left-danger';
@@ -19,7 +19,7 @@
             $messageHeader = 'Pengumuman Hasil PPDB';
             $messageBody = $message;
 
-        } elseif ($status === 'diproses') {
+        } elseif ($status === 'Diproses') {
             $icon = 'fas fa-user-clock';
             $color = '#17a2b8';
             $cardClass = 'border-left-info';
@@ -28,7 +28,7 @@
             $messageHeader = 'Pendaftaran Sedang Diproses';
             $messageBody = $message;
 
-        } elseif ($status === 'baru') {
+        } elseif ($status === 'Dikirim') {
             $icon = 'fas fa-envelope-open-text';
             $color = '#28a745';
             $cardClass = 'border-left-success';
@@ -37,6 +37,7 @@
             $messageHeader = 'Pendaftaran Berhasil Dikirim';
             $messageBody = $message;
         }
+        
     @endphp
 
     <div class="card mb-4 {{ $cardClass }} shadow-sm" style="{{ $borderStyle }}">

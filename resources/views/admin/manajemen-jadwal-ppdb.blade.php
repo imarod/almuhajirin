@@ -354,12 +354,16 @@
 @stop
 @section('css')
     <style>
+
+        .nav-tabs {
+            border-bottom: none;
+        }
         .nav-tabs .nav-link.active {
             font-weight: 700;
             box-shadow:
                 inset 0 5px 6px -5px rgba(0, 0, 0, 0.5);
         }
-
+        
         .nav-tabs .nav-link.active.text-dark {
             color: #5E7CE3 !important;
         }
@@ -374,8 +378,8 @@
         }
 
         .form-control:focus {
-            border-color: #c52424;
-            box-shadow: 0 0 0 0.2rem rgba(255, 45, 4, 0.25);
+            border-color: #24c58a;
+           
         }
 
         .btn-primary:hover {

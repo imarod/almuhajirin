@@ -47,9 +47,10 @@ class VerifikasiController extends Controller
         $pendaftaran->update([
             'status_aktual' => $newStatus,
         ]);
+        $jadwal = $pendaftaran->jadwal; 
 
         if ($pendaftaran->wasChanged('status_aktual')) {
-            Mail::to($pendaftaran->siswa->email_siswa)->queue(new ProcessingMailNotification($pendaftaran, $siswa, $plainToken));
+            Mail::to($pendaftaran->siswa->email_siswa)->queue(new ProcessingMailNotification($pendaftaran, $siswa, $jadwal, $plainToken));
         }
         $lastFilters = $request->session()->get('last_filters');
 

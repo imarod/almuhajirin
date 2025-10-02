@@ -3,13 +3,13 @@
 namespace App\Mail;
 
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 use App\Models\Pendaftaran;
 use App\Models\Siswa;
+use App\Models\ManajemenJadwalPpdb; 
 
 class ProcessingMailNotification extends Mailable
 {
@@ -18,12 +18,14 @@ class ProcessingMailNotification extends Mailable
     public $pendaftaran;
     public $siswa;
     public $token;
+     public $jadwal; 
 
-    public function __construct(Pendaftaran $pendaftaran, Siswa $siswa, $token)
+    public function __construct(Pendaftaran $pendaftaran, Siswa $siswa, ManajemenJadwalPpdb $jadwal, $token)
     {
         $this->pendaftaran = $pendaftaran;
         $this->siswa = $siswa;
         $this->token = $token;
+        $this->jadwal = $jadwal; 
     }
 
     /**

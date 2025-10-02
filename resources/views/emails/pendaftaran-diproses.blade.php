@@ -24,15 +24,19 @@
 
                     <tr>
                         <td style="padding: 40px 30px;">
-                            <h2 style="color: #333333; font-size: 20px; margin-bottom: 20px;">Halo, {{ $pendaftaran->siswa->nama }}!</h2>
-                            
+                            <h2 style="color: #333333; font-size: 20px; margin-bottom: 20px;">Halo,
+                                {{ $pendaftaran->siswa->nama }}!</h2>
+
 
                             <p style="color: #666666; font-size: 16px; line-height: 1.6; margin-bottom: 20px;">
-                                Pendaftaran Anda telah kami terima!. Saat ini, berkas pendaftaran Anda sedang kami proses dan diverifikasi oleh tim administrasi/panitia penerimaan. Mohon menunggu proses ini hingga selesai.
+                                Saat ini, berkas pendaftaran Anda sedang kami proses dan diverifikasi oleh tim
+                                administrasi/panitia penerimaan. Mohon menunggu proses ini hingga selesai.
                             </p>
 
                             <p style="color: #666666; font-size: 16px; line-height: 1.6; margin-bottom: 20px;">
-                               Pengumuman kelulusan akan disampaikan pada tanggal [Tanggal Pengumuman]. Harap tunggu informasi lebih lanjut.
+                                Pengumuman kelulusan akan disampaikan pada tanggal <span style="font-weight: bold;">
+                                    {{ \Carbon\Carbon::parse($jadwal->tgl_pengumuman)->format('d-m-Y') }}
+                                </span>. Harap tunggu informasi lebih lanjut.
                             </p>
 
                             <table width="100%" cellpadding="0" cellspacing="0" border="0">

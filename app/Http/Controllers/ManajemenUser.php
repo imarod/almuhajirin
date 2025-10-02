@@ -110,10 +110,17 @@ class ManajemenUser extends Controller
         $user = User::find($id);
 
         if (!$user) {
-            return response()->json(['success' => false, 'message' => 'User tidak diterumkan'], 404);
+            return response()->json(['success' => false, 'message' => 'User tidak ditemukan'], 404);
         }
 
         try {
+            if($user->siswa) {
+                $siswa = $user->siswa;
+
+                if($siswa->pendaftaran){
+                    $siswa->pendaftaran->delete();
+                }
+            }
             $user->delete();
             return response()->json(['success' => true, 'message' => 'User berhasil dihapus']);
         } catch (\Exception $e) {

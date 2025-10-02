@@ -20,7 +20,7 @@ class JadwalPpdbAktif extends Component
     public $jadwalAktif;
     public $message;
     public $isRegistered;
-    public $statusPendaftaran;
+    public $status;
 
     public function __construct()
     {
@@ -33,29 +33,17 @@ class JadwalPpdbAktif extends Component
                 $pendaftaran = Pendaftaran::where('siswa_id', $siswa->id)->first();
                 if ($pendaftaran) {
                     $this->isRegistered = true;
-                    $jadwal = $pendaftaran->jadwal;
+                    $this->status = $pendaftaran->showStatusPendaftar();
 
-                    // Logika Baru: Prioritaskan status 'Diproses' atau hasil final
-                    if ($pendaftaran->status_aktual === null) {
-                        // Kondisi 1: Pendaftaran baru, belum diproses admin
-                        $this->statusPendaftaran = 'baru';
+                    if ($this->status === 'Diterima') {
+                        $this->message = "Selamat, pendaftaran Anda Diterima!";
+                    } elseif ($this->status === 'Ditolak') {
+                        $this->message = "Mohon maaf, pendaftaran Anda Ditolak.";
+                    } elseif ($this->status === 'Diproses') {
+                        $this->message = "Pendaftaran Anda sedang diproses. Silakan cek status pendaftaran secara berkala.";
+                    }else {
+                        $this->status = 'Dikirim';
                         $this->message = "Pendaftaran Siswa Baru Berhasil Dikirim.";
-                    } else {
-                        // Kondisi 2: Pendaftaran sudah diproses oleh admin
-                        // Cek apakah tanggal pengumuman sudah tiba atau lewat
-                        if ($jadwal && $jadwal->tgl_pengumuman && ($jadwal->tgl_pengumuman->isToday() || $jadwal->tgl_pengumuman->isPast())) {
-                            if ($pendaftaran->status_aktual === 'Diterima') {
-                                $this->statusPendaftaran = 'diterima';
-                                $this->message = "Selamat, pendaftaran Anda *Diterima*!";
-                            } else { // status_aktual === 'Ditolak'
-                                $this->statusPendaftaran = 'ditolak';
-                                $this->message = "Mohon maaf, pendaftaran Anda *Ditolak*.";
-                            }
-                        } else {
-                            // Tanggal pengumuman belum tiba, tapi status sudah tidak null
-                            $this->statusPendaftaran = 'diproses';
-                            $this->message = "Pendaftaran Anda sedang diproses. Silakan cek status pendaftaran secara berkala.";
-                        }
                     }
                 }
             }

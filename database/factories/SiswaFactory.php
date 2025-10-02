@@ -29,7 +29,7 @@ class SiswaFactory extends Factory
     public function definition(): array
     {
         $gender = fake()->randomElement(['Laki-laki', 'Perempuan']);
-        $email = array_shift(self::$emails);
+        $email = fake()->randomElement(self::$emails);
         
         return [
             'user_id' => User::factory(),
