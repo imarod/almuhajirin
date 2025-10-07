@@ -30,7 +30,7 @@ class FormulirPendaftaranStore extends FormRequest
             'nisn' => [
                 'required',
                 'numeric',
-                    Rule::unique('siswa', 'nisn')->ignore($siswaId)->whereNull('deleted_at'),
+                Rule::unique('siswa', 'nisn')->ignore($siswaId)->whereNull('deleted_at'),
             ],
             'jenis_kelamin' => 'required',
             'tempat_lahir' => 'required',
@@ -45,8 +45,9 @@ class FormulirPendaftaranStore extends FormRequest
             'kk' => 'required|file|mimes:pdf|max:1024',
             'ijazah' => 'required|file|mimes:pdf|max:1024',
             'piagam' => 'nullable|file|mimes:pdf|max:1024|required_with:kategori_prestasi',
+            //tabmbahkan required kalau wajib ada piagam
             'kategori_prestasi' => 'nullable|array',
-            'kategori_prestasi.*' => 'string|max:255|required_with:piagam',
+            'kategori_prestasi.*' => 'integer|exists:kategori_prestasi,id',
         ];
     }
 
@@ -77,10 +78,12 @@ class FormulirPendaftaranStore extends FormRequest
             'ijazah.file' => 'File ijazah harus berupa file',
             'ijazah.mimes' => 'File ijazah harus berupa file dengan format PDF',
             'ijazah.max' => 'Ukuran file ijazah tidak boleh melebihi 1 MB',
-            'piagam.required_with' => 'File piagam harus diunggah jika kategori prestasi diisi',
+            // 'piagam.required_with' => 'File piagam harus diunggah jika kategori prestasi diisi',
             'piagam.file' => 'File piagam harus berupa file',
             'piagam.mimes' => 'File piagam harus berupa file dengan format PDF',
             'piagam.max' => 'Ukuran file piagam tidak boleh melebihi 1 MB',
+            'piagam.required_with' => 'Kategori prestasi harus dipilih jika piagam diunggah.',
+            'kategori_prestasi.*.exists' => 'Salah satu kategori prestasi yang dipilih tidak ditemukan.',
         ];
     }
 }

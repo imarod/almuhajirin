@@ -17,6 +17,11 @@
   background-color: #5E7CE3 !important;
 }
 
+.form-control:focus{
+  border-color: #5E7CE3;
+  box-shadow: none;
+}
+
 /* status */
 .status-badge {
   padding: 4px 8px;

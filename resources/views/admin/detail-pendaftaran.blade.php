@@ -242,7 +242,6 @@
 @stop
 
 @push('js')
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
         function showPdfModal(url, title) {
             document.getElementById('pdfPreviewModalLabel').textContent = title;

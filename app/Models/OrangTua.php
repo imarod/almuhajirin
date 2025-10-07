@@ -22,4 +22,6 @@ class OrangTua extends Model
     {
         return $this->hasOne(Siswa::class);
     }
+
+   
 }

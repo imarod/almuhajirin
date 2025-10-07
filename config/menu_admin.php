@@ -6,8 +6,8 @@ return [
         'url'  => 'admin/dashboard-statistik',
         'icon' => 'fas fa-tachometer-alt',
     ],
-   
-   
+
+
     // [
     //     'text' => 'Manajemen Jadwal PPDB',
     //     'url'  => 'admin/manajemen-jadwal-ppdb',
@@ -16,7 +16,7 @@ return [
 
 
     // Navbar items:
-  
+
     [
         'type' => 'fullscreen-widget',
         'topnav_right' => true,
@@ -41,22 +41,41 @@ return [
     // ],
     // ['header' => 'account_settings'],
 
-     [
+    [
         'text' => 'Data Pendaftar',
         'url'  => 'admin/data-pendaftar',
         'icon' => 'fas fa-users',
     ],
 
-     [
-        'text' => 'Jadwal PPDB',
-        'url'  => 'admin/manajemen-jadwal-ppdb',
+    [
+        'text' => 'Manajemen PPDB',
         'icon' => 'fas fa-cog',
+        'submenu' => [
+            [
+                'text' => 'Jadwal PPDB',
+                'url'  => 'admin/manajemen-jadwal-ppdb',
+            ],
+            [
+                'text' => 'Info Pembukaan PPDB',
+                'url' => 'menu/child2',
+            ],
+            [
+                'text' => 'Jurusan',
+                'url' => 'menu/child2',
+            ],
+            [
+                'text' => 'Jalur Prestasi',
+                'url' => 'admin/kategori-prestasi',
+            ],
+        ],
     ],
-    
+
     [
         'text' => 'Manajemen User',
         'url'  => 'admin/manajemen-user',
         'icon' => 'fas fa-cog',
     ],
-   
+
+    
+
 ];

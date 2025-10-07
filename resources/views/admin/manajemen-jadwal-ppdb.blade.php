@@ -53,14 +53,14 @@
                             <a class="nav-link d-flex align-items-center text-dark {{ !isset($jadwal) ? 'active' : '' }} "
                                 id="settings-tab" data-toggle="tab" href="#settings" role="tab">
                                 {{-- <i class="fas fa-cog mr-2"></i> --}}
-                                Pengaturan PPDB
+                                Pengaturan Jadwal
                             </a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link d-flex align-items-center text-dark" id="history-tab" data-toggle="tab"
                                 href="#history" role="tab">
                                 {{-- <i class="fas fa-history mr-2"></i> --}}
-                                Riwayat PPDB
+                                Riwayat Jadwal PPDB
                             </a>
                         </li>
                     </ul>
@@ -377,10 +377,6 @@
             border-color: #dee2e6;
         }
 
-        .form-control:focus {
-            border-color: #24c58a;
-           
-        }
 
         .btn-primary:hover {
             background-color: #0056b3;
@@ -390,8 +386,6 @@
 @stop
 
 @section('js')
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const isEditing = {{ isset($jadwal) ? 'true' : 'false' }};

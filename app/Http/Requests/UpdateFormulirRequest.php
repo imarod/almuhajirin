@@ -33,8 +33,8 @@ class UpdateFormulirRequest extends FormRequest
             'nama' => 'required|string|max:255',
             'nisn' => [
                 'required',
-                'numeric', 
-                 Rule::unique('siswa', 'nisn')->ignore($siswaId)->whereNull('deleted_at'),
+                'numeric',
+                Rule::unique('siswa', 'nisn')->ignore($siswaId)->whereNull('deleted_at'),
             ],
             'jenis_kelamin' => 'required|in:Laki-laki,Perempuan',
             'tempat_lahir' => 'required|string|max:255',
@@ -50,7 +50,7 @@ class UpdateFormulirRequest extends FormRequest
             'ijazah' => 'nullable|file|mimes:pdf|max:1024',
             'piagam' => 'nullable|file|mimes:pdf|max:1024|required_with:kategori_prestasi',
             'kategori_prestasi' => 'nullable|array',
-            'kategori_prestasi.*' => 'string|max:255|required_with:piagam',
+            'kategori_prestasi.*' => 'integer|exists:kategori_prestasi,id',
         ];
     }
 
@@ -82,6 +82,8 @@ class UpdateFormulirRequest extends FormRequest
             'piagam.file' => 'File piagam harus berupa file',
             'piagam.mimes' => 'File piagam harus berupa file dengan format PDF',
             'piagam.max' => 'Ukuran file piagam tidak boleh melebihi 1 MB',
+            'piagam.required_with' => 'Kategori prestasi harus dipilih jika piagam diunggah.',
+            'kategori_prestasi.*.exists' => 'Salah satu kategori prestasi yang dipilih tidak ditemukan.',
         ];
     }
 }

@@ -79,6 +79,10 @@ class PendaftaranController extends Controller
             $ortu = OrangTua::create([
                 'nama_ayah' => $request->nama_ayah,
                 'nama_ibu' => $request->nama_ibu,
+                'provinsi_ortu_id' => $request->provinsi_ortu_id,
+                'kabupaten_kota_ortu_id' => $request->kabupaten_kota_ortu_id,
+                'kecamatan_ortu_id' => $request->kecamatan_ortu_id,
+                'desa_kelurahan_ortu_id' => $request->desa_kelurahan_ortu_id,
                 'alamat_ortu' => $request->alamat_ortu,
                 'no_hp_ortu' => $request->no_hp_ortu,
             ]);
@@ -90,11 +94,14 @@ class PendaftaranController extends Controller
                 'jenis_kelamin' => $request->jenis_kelamin,
                 'tempat_lahir' => $request->tempat_lahir,
                 'tanggal_lahir' => $request->tanggal_lahir,
+                'provinsi_siswa_id' => $request->provinsi_siswa_id,
+                'kabupaten_kota_siswa_id' => $request->kabupaten_kota_siswa_id,
+                'kecamatan_siswa_id' => $request->kecamatan_siswa_id,
+                'desa_kelurahan_siswa_id' => $request->desa_kelurahan_siswa_id,
                 'alamat_siswa' => $request->alamat_siswa,
                 'no_hp_siswa' => $request->no_hp_siswa,
                 'email_siswa' => $request->email_siswa,
                 'orang_tua_id' => $ortu->id,
-                'kategori_prestasi' => $request->kategori_prestasi ? implode(', ', $request->kategori_prestasi) : null,
             ]);
             $kk = $request->file('kk')?->store('dokumen', 'public');
             $ijazah = $request->file('ijazah')?->store('dokumen', 'public');
@@ -107,14 +114,20 @@ class PendaftaranController extends Controller
                 'ijazah' => $ijazah,
                 'piagam' => $piagam,
                 'status_verifikasi' => 'Dikirim',
-                'kategori_prestasi' => $request->kategori_prestasi ? implode(', ', $request->kategori_prestasi) : null,
+                
             ]);
+
+            if($request->kategori_prestasi){
+                $pendaftaran->kategoriPrestasi()->sync($request->kategori_prestasi);
+            }
 
             $user = User::findOrFail($siswa->user_id);
             $plainToken = $this->generateLoginToken($user);
 
             Mail::to($siswa->email_siswa)->queue(new SubmittedMailNotification($pendaftaran, $siswa, $plainToken));
+           
             DB::commit();
+
             return redirect()->route('ajuan.pendaftaran')->with('success', 'Pendaftaran berhasil dikirim');
         } catch (\Exception $e) {
             DB::rollback();
@@ -151,6 +164,10 @@ class PendaftaranController extends Controller
             $pendaftaran->siswa->orangTua->update([
                 'nama_ayah' => $request->nama_ayah,
                 'nama_ibu' => $request->nama_ibu,
+                'provinsi_ortu_id' => $request->provinsi_ortu_id,
+                'kabupaten_kota_ortu_id' => $request->kabupaten_kota_ortu_id,
+                'kecamatan_ortu_id' => $request->kecamatan_ortu_id,
+                'desa_kelurahan_ortu_id' => $request->desa_kelurahan_ortu_id,
                 'alamat_ortu' => $request->alamat_ortu,
                 'no_hp_ortu' => $request->no_hp_ortu,
             ]);
@@ -161,10 +178,14 @@ class PendaftaranController extends Controller
                 'jenis_kelamin' => $request->jenis_kelamin,
                 'tempat_lahir' => $request->tempat_lahir,
                 'tanggal_lahir' => $request->tanggal_lahir,
+                'provinsi_siswa_id' => $request->provinsi_siswa_id,
+                'kabupaten_kota_siswa_id' => $request->kabupaten_kota_siswa_id,
+                'kecamatan_siswa_id' => $request->kecamatan_siswa_id,
+                'desa_kelurahan_siswa_id' => $request->desa_kelurahan_siswa_id,
                 'alamat_siswa' => $request->alamat_siswa,
                 'no_hp_siswa' => $request->no_hp_siswa,
                 'email_siswa' => $request->email_siswa,
-                'kategori_prestasi' => $request->kategori_prestasi ? implode(', ', $request->kategori_prestasi) : null,
+               
             ]);
 
             $dataPendaftaran = [
@@ -182,6 +203,13 @@ class PendaftaranController extends Controller
             }
 
             $pendaftaran->update($dataPendaftaran);
+
+             if ($request->kategori_prestasi) {
+                $pendaftaran->kategoriPrestasi()->sync($request->kategori_prestasi);
+            } else {
+                // Jika user menghapus semua pilihan, kita hapus semua relasi lama.
+                $pendaftaran->kategoriPrestasi()->detach();
+            }
 
             DB::commit();
 

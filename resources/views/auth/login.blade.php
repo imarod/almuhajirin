@@ -25,12 +25,12 @@
         </div>
 
         <div class="d-flex justify-content-between align-items-center mb-4">
-            <div class="">
+            {{-- <div class="">
                 <input type="checkbox" name="remember" id="remember" {{ old('remember') ? 'checked' : '' }}>
                 <label class="form-check-label small" for="rememberMe">
                     Ingat saya
                 </label>
-            </div>
+            </div> --}}
             <a href="{{ route('password.request') }}" class="text-muted small">Lupa Password?</a>
         </div>
 

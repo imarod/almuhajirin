@@ -228,6 +228,8 @@
                     <th style="width: 15%;">NISN</th>
                     <th style="width: 8%;">L/P</th>
                     <th style="width: 15%;">NO. HP</th>
+                    <th style="width: 15%;">AlAMAT</th>
+
                     <th style="width: 17%;">GELOMBANG</th>
                     <th style="width: 15%;">STATUS</th>
                 </tr>
@@ -241,6 +243,13 @@
                     <td>{{$pendaftaran->siswa->nisn}}</td>
                     <td>{{$pendaftaran->siswa->jenis_kelamin}}</td>
                     <td>{{$pendaftaran->siswa->no_hp_siswa}}</td>
+                    <td>{{ $pendaftaran->siswa->provinsi_siswa_id }},
+                        {{ $pendaftaran->siswa->provinsi_siswa_name }},
+                        {{ $pendaftaran->siswa->kabupaten_kota_siswa_name }},
+                        {{ $pendaftaran->siswa->kecamatan_siswa_name  }},
+                        {{ $pendaftaran->siswa->desa_kelurahan_siswa_name  }},
+
+                    </td>
                     <td>{{ $pendaftaran->jadwal->gelombang_pendaftaran }} ({{ $pendaftaran->jadwal->thn_ajaran }})</td>
                     <td>{{ $pendaftaran->status_aktual ?? 'Belum diproses' }}</td>
                 </tr>

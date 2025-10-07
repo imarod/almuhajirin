@@ -451,8 +451,19 @@ return [
                 ],
             ],
         ],
+        'Jquery' => [
+            'active' => true,
+            'files' => [
+                [
+                    'type' => 'js',
+                    'asset' => false,
+                    'location' => '//cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js', // Cek versi ini
+                    'integrity' => 'sha256-o6EwOQ4m4S6/Hh9E+0F0+0F0+0F0+0F0+0F0=', // <-- Ganti baris ini menjadi null
+                ],
+            ],
+        ],
         'Select2' => [
-            'active' => false,
+            'active' => true,
             'files' => [
                 [
                     'type' => 'js',
@@ -477,12 +488,12 @@ return [
             ],
         ],
         'Sweetalert2' => [
-            'active' => false,
+            'active' => true,
             'files' => [
                 [
                     'type' => 'js',
                     'asset' => false,
-                    'location' => '//cdn.jsdelivr.net/npm/sweetalert2@8',
+                    'location' => '//cdn.jsdelivr.net/npm/sweetalert2@11', 
                 ],
             ],
         ],

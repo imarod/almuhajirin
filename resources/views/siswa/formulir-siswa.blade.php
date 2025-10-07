@@ -130,6 +130,49 @@
 
                                 <div class="row">
                                     <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label class="font-weight-medium text-dark">Email</label>
+                                            <small class="text-muted d-block invisible">Spacer</small>
+                                            <input type="text"
+                                                class="form-control  @error('email_siswa') is-invalid @enderror"
+                                                placeholder="Masukkan Email Aktif" name="email_siswa"
+                                                style="border: 1px solid #ced4da; border-radius: 4px;"
+                                                value="{{ isset($pendaftaran) ? $pendaftaran->siswa->email_siswa : old('email_siswa') }}">
+                                            @error('email_siswa')
+                                                <div class="invalid-feedback">{{ $message }}</div>
+                                            @enderror
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label class="font-weight-medium text-dark mb-0">No Telepon</label>
+                                            <small class="text-muted d-block mb-2">Masukkan nomor telepon diawali angka
+                                                8, tanpa 0 atau +62</small>
+                                            <style>
+
+                                            </style>
+                                            <div class="input-group">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text"> +62</span>
+                                                </div>
+
+                                                <input type="text" id="phoneInput"
+                                                    class="form-control @error('no_hp_siswa') is-invalid @enderror"
+                                                    placeholder="Masukkan No Handphone" name="no_hp_siswa"
+                                                    value="{{ isset($pendaftaran) ? $pendaftaran->siswa->no_hp_siswa : old('no_hp_siswa_display') }}">
+                                                <input type="hidden" name="no_hp_siswa" id="hiddenPhoneInput"
+                                                    value="{{ isset($pendaftaran) ? $pendaftaran->siswa->no_hp_siswa : old('no_hp_siswa') }}">
+                                                @error('no_hp_siswa')
+                                                    <div class="invalid-feedback">{{ $message }}</div>
+                                                @enderror
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-12">
                                         <div class="form-group ">
                                             <label>Jenis Kelamin</label><br>
                                             <div class="form-check form-check-inline">
@@ -150,41 +193,9 @@
                                         </div>
 
                                     </div>
-                                    <div class="col-md-6">
-                                        <div class="form-group">
-                                            <label class="font-weight-medium text-dark mb-0">No Telepon</label>
-                                            <small class="text-muted d-block mb-2">Masukkan nomor telepon diawali angka
-                                                8, tanpa 0 atau +62</small>
-                                            <style>
-                                                .input-group-text {
-                                                    padding: 0.375rem 0.75rem;
-                                                    font-size: 1rem;
-                                                    line-height: 1.5;
-                                                    color: #495057;
-                                                }
-
-                                                .input-group>.form-control {
-                                                    border-left: none;
-                                                    border-radius: 0 0.25rem 0.025rem 0;
-                                                }
-                                            </style>
-                                            <div class="input-group">
-
-                                                <span class="input-group-text"
-                                                    style="background-color: #e9ecef; border-right: none; border-radius: 0.25rem 0 0 0.25rem;">+62</span>
-                                                <input type="text" id="phoneInput"
-                                                    class="form-control @error('no_hp_siswa') is-invalid @enderror"
-                                                    placeholder="Masukkan No Handphone" name="no_hp_siswa"
-                                                    value="{{ isset($pendaftaran) ? $pendaftaran->siswa->no_hp_siswa : old('no_hp_siswa_display') }}">
-                                                <input type="hidden" name="no_hp_siswa" id="hiddenPhoneInput"
-                                                    value="{{ isset($pendaftaran) ? $pendaftaran->siswa->no_hp_siswa : old('no_hp_siswa') }}">
-                                                @error('no_hp_siswa')
-                                                    <div class="invalid-feedback">{{ $message }}</div>
-                                                @enderror
-                                            </div>
-                                        </div>
-                                    </div>
                                 </div>
+
+                           
 
                                 <div class="row">
                                     <div class="col-md-6">
@@ -200,19 +211,7 @@
                                             @enderror
                                         </div>
                                     </div>
-                                    <div class="col-md-6">
-                                        <div class="form-group">
-                                            <label class="font-weight-medium text-dark">Email</label>
-                                            <input type="text"
-                                                class="form-control  @error('email_siswa') is-invalid @enderror"
-                                                placeholder="Masukkan Email Aktif" name="email_siswa"
-                                                style="border: 1px solid #ced4da; border-radius: 4px;"
-                                                value="{{ isset($pendaftaran) ? $pendaftaran->siswa->email_siswa : old('email_siswa') }}">
-                                            @error('email_siswa')
-                                                <div class="invalid-feedback">{{ $message }}</div>
-                                            @enderror
-                                        </div>
-                                    </div>
+                                    
                                 </div>
                             </div>
                         </div>
@@ -346,7 +345,7 @@
                                                     class="custom-file-input @error('piagam') is-invalid @enderror"
                                                     id="piagamInput" name="piagam" accept=".pdf">
                                                 <label class="custom-file-label" for="piagamInput">
-                                                    {{ isset($pendaftaran) && $pendaftaran->piagam ? 'Pilih Berkas untuk mengganti' : 'Unggah Dokumen'  }}
+                                                    {{ isset($pendaftaran) && $pendaftaran->piagam ? 'Pilih Berkas untuk mengganti' : 'Unggah Dokumen' }}
                                                 </label>
                                                 @error('piagam')
                                                     <div class="invalid-feedback">{{ $message }}</div>
@@ -394,6 +393,7 @@
                                         </div>
                                     </div>
                                 </div>
+
 
                                 <div class="row ">
                                     <div class="col-md-6 ">
@@ -459,7 +459,6 @@
 @endsection
 
 @push('js')
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             document.querySelectorAll('.custom-file-input').forEach(function(input) {
@@ -650,26 +649,5 @@
             }
         });
     </script>
-
-    {{-- JANGAN LUPA HAPUS SCRIPT DEBUG INI NANTI --}}
-    <script>
-        var jadwalAktif = @json($jadwalAktif);
-        var message = @json($message);
-        var pendaftaran = @json($pendaftaran);
-        console.log('Pesan:', message);
-        console.log('Jadwal Aktif:', jadwalAktif);
-        console.log('Data Pendaftaran (jika ada):', pendaftaran);
-        if (jadwalAktif) {
-            var kuota = jadwalAktif.kuota;
-            var jumlahPendaftar = jadwalAktif.pendaftaran.length;
-
-            console.log('Jadwal aktif ditemukan.');
-            console.log('Kuota siswa yang disediakan:', kuota);
-            console.log('Jumlah pendaftar saat ini:', jumlahPendaftar);
-
-        } else {
-            console.log('Tidak ada jadwal aktif.');
-            console.log('Pesan dari sistem:', message);
-        }
-    </script>
 @endpush
+

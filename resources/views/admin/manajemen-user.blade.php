@@ -22,7 +22,7 @@
                 <div class="card p-0 h-100">
                     <div class="card-body d-flex flex-column justify-content-center">
                         <div class="d-flex align-items-center mb-2">
-                            <h3 class="font-weight-bold mb-0 total-users-count"  style="color: #5E7CE3"></h3>
+                            <h3 class="font-weight-bold mb-0 total-users-count" style="color: #5E7CE3"></h3>
                             <div class="ml-auto" style="color: #5E7CE3">
                                 <i class="fas fa-user-plus fa-2x"></i>
                             </div>
@@ -41,7 +41,7 @@
                 <div class="card p-0 h-100">
                     <div class="card-body d-flex flex-column justify-content-center">
                         <div class="d-flex align-items-center mb-2">
-                            <h3 class="font-weight-bold mb-0 admin-count"  style="color: #10B981;"></h3>
+                            <h3 class="font-weight-bold mb-0 admin-count" style="color: #10B981;"></h3>
                             <div class="ml-auto " style="color: #10B981;">
                                 <i class="fas fa-check-circle fa-2x"></i>
                             </div>
@@ -63,7 +63,7 @@
                 <div class="card p-0 h-100">
                     <div class="card-body d-flex flex-column justify-content-center">
                         <div class="d-flex align-items-center mb-2">
-                            <h3 class="font-weight-bold mb-0 siswa-count"  style="color: #FF7A30;"></h3>
+                            <h3 class="font-weight-bold mb-0 siswa-count" style="color: #FF7A30;"></h3>
                             <div class="ml-auto " style="color: #FF7A30;">
                                 <i class="fas fa-check-circle fa-2x"></i>
                             </div>
@@ -282,7 +282,6 @@
     </div>
 @endsection
 @push('js')
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
         function fetchUsers(page = 1) {
             const searchQuery = $('#searchUser').val();
@@ -317,9 +316,10 @@
                             <td>${user.email}</td>
                             <td>${roleBadge}</td>
                             <td>${user.created_at_formatted}</td>
-                            <td class=" text-center action-icons">                               
-                                    <i class="fas fa-trash text-danger delete-btn" title="Hapus" data-id="${user.id}"></i>
-                                    <i class="fas fa-edit text-primary edit-btn"  data-id="${user.id}" title="Edit"></i>
+                            <td class=" text-center action-icons">   
+                                <i class="fas fa-edit text-primary edit-btn"  data-id="${user.id}" title="Edit"></i>                            
+                                <i class="fas fa-trash text-danger delete-btn" title="Hapus" data-id="${user.id}"></i>
+                                    
                             </td>
                             </tr>
                             `
@@ -473,7 +473,7 @@
 
             $('#tambahUserModal form').on('submit', function(e) {
                 // Baris ini yang paling penting! Mencegah submit form biasa
-                e.preventDefault(); 
+                e.preventDefault();
                 const formData = $(this).serialize();
 
                 $.ajax({
@@ -505,7 +505,7 @@
                     }
                 });
             });
-            
+
             $('#editUserForm').on('submit', function(e) {
                 e.preventDefault();
 

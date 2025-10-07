@@ -1,6 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
+
+use App\Http\Controllers\Controller;
 
 use Illuminate\Http\Request;
 use App\Models\User;
@@ -114,11 +116,18 @@ class ManajemenUser extends Controller
         }
 
         try {
-            if($user->siswa) {
+            if ($user->siswa) {
                 $siswa = $user->siswa;
+                $ortu = $siswa->orangTua;
 
-                if($siswa->pendaftaran){
+                if ($siswa->pendaftaran) {
                     $siswa->pendaftaran->delete();
+                }
+
+                $siswa->delete();
+
+                if ($ortu) {
+                    $ortu->delete(); 
                 }
             }
             $user->delete();

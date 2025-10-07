@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\Controller;
 use App\Models\ManajemenJadwalPpdb;
 use Illuminate\Http\Request;
 use App\Models\Pendaftaran;
@@ -169,18 +170,33 @@ class AdminController extends Controller
         $pendaftars = $query->with(['siswa.orangTua', 'jadwal'])->get();
 
         $records = $pendaftars->map(function ($pendaftar) {
+            $siswa = $pendaftar->siswa;
+            $ortu = $siswa->orangTua;
             return [
-                'Nama Lengkap' => $pendaftar->siswa->nama ?? 'Tidak ada data',
-                'NISN' => $pendaftar->siswa->nisn ?? 'Tidak ada data',
-                'Tempat Lahir' => $pendaftar->siswa->tempat_lahir ?? 'Tidak ada data',
-                'Tanggal Lahir' => $pendaftar->siswa->tanggal_lahir->format('d-m-Y') ?? 'Tidak ada data',
-                'Jenis Kelamin' => $pendaftar->siswa->jenis_kelamin ?? 'Tidak ada data',
-                'Kategori Prestasi' => $pendaftar->siswa->kategori_prestasi ?? 'Tidak Ada',
-                'No. HP Siswa' => "'" . $pendaftar->siswa->no_hp_siswa ?? 'Tidak ada data',
-                'Email Siswa' => $pendaftar->siswa->email_siswa ?? 'Tidak ada data',
-                'Alamat Siswa' => $pendaftar->siswa->alamat_siswa ?? 'Tidak ada data',
-                'Nama Orang Tua' => $pendaftar->siswa->orangTua->nama_ayah ?? 'Tidak ada data',
-                'No. HP Orang Tua' => "'" . $pendaftar->siswa->orangTua->no_hp_ortu ?? 'Tidak ada data',
+                'Nama Lengkap' => $siswa->nama ?? 'Tidak ada data',
+                'NISN' => $siswa->nisn ?? 'Tidak ada data',
+                'Tempat Lahir' => $siswa->tempat_lahir ?? 'Tidak ada data',
+                'Tanggal Lahir' => $siswa->tanggal_lahir->format('d-m-Y') ?? 'Tidak ada data',
+                'Jenis Kelamin' => $siswa->jenis_kelamin ?? 'Tidak ada data',
+                'Kategori Prestasi' => $siswa->kategori_prestasi ?? 'Tidak Ada',
+                'No. HP Siswa' => "'" . $siswa->no_hp_siswa ?? 'Tidak ada data',
+                'Email Siswa' => $siswa->email_siswa ?? 'Tidak ada data',
+                'Provinsi Siswa' => $siswa->provinsi_siswa_name ?? 'Tidak ada data', 
+                'Kab/Kota Siswa' => $siswa->kabupaten_kota_siswa_name ?? 'Tidak ada data', 
+                'Kecamatan Siswa' => $siswa->kecamatan_siswa_name ?? 'Tidak ada data', 
+                'Desa/Kelurahan Siswa' => $siswa->desa_kelurahan_siswa_name ?? 'Tidak ada data',
+                'Alamat Siswa' => $siswa->alamat_siswa ?? 'Tidak ada data',
+
+
+                'Nama Orang Tua' => $ortu->nama_ayah ?? 'Tidak ada data',
+                'No. HP Orang Tua' => "'" . $ortu->no_hp_ortu ?? 'Tidak ada data',
+                'Provinsi Ortu' => $ortu->provinsi_ortu_name ?? 'Tidak ada data', 
+                'Kab/Kota Ortu' => $ortu->kabupaten_kota_ortu_name ?? 'Tidak ada data', 
+                'Kecamatan Ortu' => $ortu->kecamatan_ortu_name ?? 'Tidak ada data', 
+                'Desa/Kelurahan Ortu' => $ortu->desa_kelurahan_ortu_name ?? 'Tidak ada data', 
+                'Alamat Ortu' => $ortu->alamat_ortu ?? 'Tidak ada data',
+
+
                 'Tahun Ajaran' => $pendaftar->jadwal->thn_ajaran ?? 'Tidak ada data',
                 'Gelombang' => $pendaftar->jadwal->gelombang_pendaftaran ?? 'Tidak ada data',
                 'Status' => $pendaftar->status_aktual ?? 'Belum diproses',

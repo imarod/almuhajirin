@@ -2,15 +2,20 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
-use App\Http\Controllers\AdminController;
-use App\Http\Controllers\VerifikasiController;
-use App\Http\Controllers\DashboardAdmin;
-use App\Http\Controllers\ManajemenJadwalPpdb;
-use App\Http\Controllers\ManajemenJadwalPpdbController;
-use App\Http\Controllers\ManajemenUser;
+
+use App\Http\Controllers\Admin\AdminController;
+use App\Http\Controllers\Admin\VerifikasiController;
+use App\Http\Controllers\Admin\DashboardAdmin;
+use App\Http\Controllers\Admin\ManajemenJadwalPpdbController;
+use App\Http\Controllers\Admin\ManajemenUser;
+use App\Http\Controllers\Admin\KategoriPrestasiController; 
+
+
 use App\Http\Controllers\PendaftaranController;
 use App\Http\Controllers\LoginTokenController;
-use Illuminate\Auth\Events\Login;
+use App\Http\Controllers\WilayahController;
+
+
 
 Route::get('/', function () {
     if (Auth::check()) {
@@ -19,8 +24,8 @@ Route::get('/', function () {
         }
         return redirect()->route('ajuan.pendaftaran');
     }
-    return view('welcome'); 
-})->name('root'); 
+    return view('welcome');
+})->name('root');
 
 Auth::routes();
 
@@ -30,7 +35,7 @@ Auth::routes();
 // Route::get('/test-download-pdf', [HomeController::class, 'downloadPdf'])->name('test.download.pdf');
 
 
-
+//siswa
 Route::middleware('auth', 'is_siswa')->group(function () {
     Route::get('/siswa/pendaftaran', [PendaftaranController::class, 'listPendaftar'])
         ->name('ajuan.pendaftaran');
@@ -51,7 +56,6 @@ Route::middleware('auth', 'is_siswa')->group(function () {
     Route::get('siswa/cetak-formulir/{id}', [PendaftaranController::class, 'printPendaftaran'])
         ->name('cetak.formulir');
 });
-
 
 // admin
 Route::prefix('admin')->middleware(['auth', 'is_admin'])->group(function () {
@@ -81,8 +85,7 @@ Route::prefix('admin')->middleware(['auth', 'is_admin'])->group(function () {
     Route::get('/data-pendaftar/export-csv', [AdminController::class, 'exportPendaftarToCsv'])
         ->name('admin.pendaftar.export-csv');
     Route::get('/data-pendaftar/export-pdf', [AdminController::class, 'exportPendaftarToPdf'])
-        ->name('admin.pendaftar.export-pdf');  
-
+        ->name('admin.pendaftar.export-pdf');
 
     Route::get('/manajemen-jadwal-ppdb', [ManajemenJadwalPpdbController::class, 'index'])
         ->name('admin.manajemen-jadwal-ppdb');
@@ -101,6 +104,10 @@ Route::prefix('admin')->middleware(['auth', 'is_admin'])->group(function () {
     Route::get('/cetak-jadwal/export-pdf', [ManajemenJadwalPpdbController::class, 'exportJadwalToPdf'])
         ->name('admin.cetak-jadwal.export-pdf');
 
+    Route::get('/kategori-prestasi', [KategoriPrestasiController::class, 'index'])
+        ->name('admin.kategori-prestasi');
+    Route::post('/kategori-prestasi', [KategoriPrestasiController::class, 'store'])
+        ->name('admin.kategori-prestasi.store');
 
     Route::get('/manajemen-user', [ManajemenUser::class, 'index'])
         ->name('admin.manajemen-user');
@@ -119,8 +126,8 @@ Route::prefix('admin')->middleware(['auth', 'is_admin'])->group(function () {
 
 
 
-    Route::get('/dashboard', [HomeController::class, 'adminDashboard'])
-        ->name('admin.dashboard');
+    // Route::get('/dashboard', [HomeController::class, 'adminDashboard'])
+    //     ->name('admin.dashboard');
     // Route::get('/data-pendaftar', [HomeController::class, 'dataPendaftar'])->name('admin.data-pendaftar');
 
 

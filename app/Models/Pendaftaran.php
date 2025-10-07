@@ -12,7 +12,17 @@ class Pendaftaran extends Model
 {
     use HasFactory, SoftDeletes;
     protected $table = 'pendaftaran';
-    protected $fillable = ['siswa_id', 'jadwal_id', 'kk', 'ijazah', 'piagam', 'status_verifikasi', 'status_aktual', 'is_announced', 'pesan_whatsapp'];
+    protected $fillable = [
+        'siswa_id',
+        'jadwal_id',
+        'kk',
+        'ijazah',
+        'piagam',
+        'status_verifikasi',
+        'status_aktual',
+        'is_announced',
+        'pesan_whatsapp'
+    ];
     protected $casts = [
         'is_announced' => 'boolean',
         'pesan_whatsapp' => 'boolean',
@@ -20,12 +30,15 @@ class Pendaftaran extends Model
 
     public function siswa()
     {
-        return $this->belongsTo(Siswa::class); 
+        return $this->belongsTo(Siswa::class);
     }
+
     public function jadwal()
     {
         return $this->belongsTo(ManajemenJadwalPpdb::class, 'jadwal_id');
     }
+
+
 
     public function showStatusPendaftar()
     {
