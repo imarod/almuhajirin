@@ -21,7 +21,6 @@ class Siswa extends Model
         'alamat_siswa',
         'no_hp_siswa',
         'email_siswa',
-        'kategori_prestasi'
     ];
     protected $casts = [
         'tanggal_lahir' => 'date',

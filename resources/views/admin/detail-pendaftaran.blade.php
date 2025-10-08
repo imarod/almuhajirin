@@ -51,8 +51,7 @@
                             <i class="fas fa-check"></i> Terima
                         </button>
                     </form>
-                    </div>
-                  
+                    </div>                  
                 </div>
 
 
@@ -108,7 +107,7 @@
                                 <div class="col-md-4 mb-3">
                                     <i class="fa fa-star text-primary fs-3 me-2"></i>
                                     <p class="text-muted mb-1">Kategori Prestasi</p>
-                                    <strong class="text-dark">{{ $pendaftars->siswa->kategori_prestasi ?? '-' }}</strong>
+                                    <strong class="text-dark">{{ $pendaftars->kategoriPrestasi->nama_prestasi ?? '-'  }}</strong>
                                 </div>
 
                                 <div class="col-md-4 mb-3">

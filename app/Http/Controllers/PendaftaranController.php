@@ -7,17 +7,20 @@ use App\Models\Pendaftaran;
 use App\Models\Siswa;
 use App\Models\OrangTua;
 use App\Models\User;
-use App\Traits\LoginTokenGenerator;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Auth;
-use App\Http\Requests\UpdateFormulirRequest;
+use App\Models\KategoriPrestasi;
 use App\Models\ManajemenJadwalPpdb;
-use Barryvdh\DomPDF\Facade\Pdf;
+use App\Traits\LoginTokenGenerator;
+
+use App\Http\Requests\UpdateFormulirRequest;
 use App\Http\Requests\FormulirPendaftaranStore;
 use App\Mail\SubmittedMailNotification;
+
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Session;
 use Carbon\Carbon;
+use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 
 class PendaftaranController extends Controller
 {
@@ -30,6 +33,10 @@ class PendaftaranController extends Controller
         $jadwalAktif = ManajemenJadwalPpdb::active()->first();
         $pendaftaran = null;
         $jumlahPendaftar = 0;
+
+        $kategoriPrestasiAktif = KategoriPrestasi::active()->get();
+
+
         // Jika ID pendaftaran diberikan, coba cari data pendaftaran untuk mode edit
         if ($id) {
             try {
@@ -68,7 +75,7 @@ class PendaftaranController extends Controller
             }
         }
 
-        return view('siswa.formulir-siswa', compact('statusPendaftaran', 'message', 'jadwalAktif', 'pendaftaran', 'jumlahPendaftar'));
+        return view('siswa.formulir-siswa', compact('statusPendaftaran', 'message', 'jadwalAktif', 'pendaftaran', 'jumlahPendaftar', 'kategoriPrestasiAktif'));
     }
     public function store(FormulirPendaftaranStore $request)
     {
@@ -76,13 +83,13 @@ class PendaftaranController extends Controller
 
         DB::beginTransaction();
         try {
+            $request->validate([
+                'kategori_prestasi_id' => 'nullable|exists:kategori_prestasi,id,is_active,1',
+            ]);
+
             $ortu = OrangTua::create([
                 'nama_ayah' => $request->nama_ayah,
                 'nama_ibu' => $request->nama_ibu,
-                'provinsi_ortu_id' => $request->provinsi_ortu_id,
-                'kabupaten_kota_ortu_id' => $request->kabupaten_kota_ortu_id,
-                'kecamatan_ortu_id' => $request->kecamatan_ortu_id,
-                'desa_kelurahan_ortu_id' => $request->desa_kelurahan_ortu_id,
                 'alamat_ortu' => $request->alamat_ortu,
                 'no_hp_ortu' => $request->no_hp_ortu,
             ]);
@@ -94,10 +101,6 @@ class PendaftaranController extends Controller
                 'jenis_kelamin' => $request->jenis_kelamin,
                 'tempat_lahir' => $request->tempat_lahir,
                 'tanggal_lahir' => $request->tanggal_lahir,
-                'provinsi_siswa_id' => $request->provinsi_siswa_id,
-                'kabupaten_kota_siswa_id' => $request->kabupaten_kota_siswa_id,
-                'kecamatan_siswa_id' => $request->kecamatan_siswa_id,
-                'desa_kelurahan_siswa_id' => $request->desa_kelurahan_siswa_id,
                 'alamat_siswa' => $request->alamat_siswa,
                 'no_hp_siswa' => $request->no_hp_siswa,
                 'email_siswa' => $request->email_siswa,
@@ -106,26 +109,24 @@ class PendaftaranController extends Controller
             $kk = $request->file('kk')?->store('dokumen', 'public');
             $ijazah = $request->file('ijazah')?->store('dokumen', 'public');
             $piagam = $request->file('piagam')?->store('dokumen', 'public');
-
+           
             $pendaftaran = Pendaftaran::create([
                 'siswa_id' => $siswa->id,
                 'jadwal_id' => $jadwalAktif->id,
                 'kk' => $kk,
                 'ijazah' => $ijazah,
                 'piagam' => $piagam,
+                'kategori_prestasi_id' => $request->input('kategori_prestasi_id'),
                 'status_verifikasi' => 'Dikirim',
-                
+
             ]);
 
-            if($request->kategori_prestasi){
-                $pendaftaran->kategoriPrestasi()->sync($request->kategori_prestasi);
-            }
 
             $user = User::findOrFail($siswa->user_id);
             $plainToken = $this->generateLoginToken($user);
 
             Mail::to($siswa->email_siswa)->queue(new SubmittedMailNotification($pendaftaran, $siswa, $plainToken));
-           
+
             DB::commit();
 
             return redirect()->route('ajuan.pendaftaran')->with('success', 'Pendaftaran berhasil dikirim');
@@ -153,6 +154,10 @@ class PendaftaranController extends Controller
         try {
             $pendaftaran = Pendaftaran::with(['siswa.orangTua'])->findOrFail($id);
 
+             $request->validate([
+                'kategori_prestasi_id' => 'nullable|exists:kategori_prestasi,id,is_active,1',
+            ]);
+
             //tidak boleh edit kalau pendaftaran sudah diproses
             $jadwalSelesai = $pendaftaran->jadwal && Carbon::parse($pendaftaran->jadwal->tgl_berakhir)->isPast();
             if ($pendaftaran->status_aktual !== null || $jadwalSelesai) {
@@ -164,10 +169,6 @@ class PendaftaranController extends Controller
             $pendaftaran->siswa->orangTua->update([
                 'nama_ayah' => $request->nama_ayah,
                 'nama_ibu' => $request->nama_ibu,
-                'provinsi_ortu_id' => $request->provinsi_ortu_id,
-                'kabupaten_kota_ortu_id' => $request->kabupaten_kota_ortu_id,
-                'kecamatan_ortu_id' => $request->kecamatan_ortu_id,
-                'desa_kelurahan_ortu_id' => $request->desa_kelurahan_ortu_id,
                 'alamat_ortu' => $request->alamat_ortu,
                 'no_hp_ortu' => $request->no_hp_ortu,
             ]);
@@ -178,18 +179,15 @@ class PendaftaranController extends Controller
                 'jenis_kelamin' => $request->jenis_kelamin,
                 'tempat_lahir' => $request->tempat_lahir,
                 'tanggal_lahir' => $request->tanggal_lahir,
-                'provinsi_siswa_id' => $request->provinsi_siswa_id,
-                'kabupaten_kota_siswa_id' => $request->kabupaten_kota_siswa_id,
-                'kecamatan_siswa_id' => $request->kecamatan_siswa_id,
-                'desa_kelurahan_siswa_id' => $request->desa_kelurahan_siswa_id,
                 'alamat_siswa' => $request->alamat_siswa,
                 'no_hp_siswa' => $request->no_hp_siswa,
                 'email_siswa' => $request->email_siswa,
-               
+
             ]);
 
             $dataPendaftaran = [
                 'status_verifikasi' => 'Dikirim',
+                'kategori_prestasi_id' => $request->input('kategori_prestasi_id'),
             ];
 
             if ($request->hasFile('kk')) {
@@ -203,13 +201,6 @@ class PendaftaranController extends Controller
             }
 
             $pendaftaran->update($dataPendaftaran);
-
-             if ($request->kategori_prestasi) {
-                $pendaftaran->kategoriPrestasi()->sync($request->kategori_prestasi);
-            } else {
-                // Jika user menghapus semua pilihan, kita hapus semua relasi lama.
-                $pendaftaran->kategoriPrestasi()->detach();
-            }
 
             DB::commit();
 
@@ -265,6 +256,8 @@ class PendaftaranController extends Controller
             ->whereHas('siswa', function ($query) use ($userId) {
                 $query->where('user_id', $userId);
             })->findOrFail($id);
+
+         $pendaftaran->load('kategoriPrestasi');
 
         $pdf = Pdf::loadView('siswa.cetak-formulir', compact('pendaftaran'));
         $namaFile = 'Formulir Pendaftaran_' . $pendaftaran->siswa->nama . '.pdf';

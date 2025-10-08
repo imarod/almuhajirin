@@ -42,12 +42,7 @@ class SiswaFactory extends Factory
             'alamat_siswa' => fake()->address(),
             'no_hp_siswa' => '+628' . fake()->numerify('##########'),
             'email_siswa' => $email, 
-            'kategori_prestasi' => fake()->randomElement([
-                null,
-                'Hafidz Qur\'an 1-3 Juz',
-                'Peringkat 1-5',
-                'Prestasi Non Akademik Tingkat Kabupaten',
-            ]),
+            
         ];
     }
 }

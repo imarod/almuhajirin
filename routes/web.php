@@ -8,7 +8,7 @@ use App\Http\Controllers\Admin\VerifikasiController;
 use App\Http\Controllers\Admin\DashboardAdmin;
 use App\Http\Controllers\Admin\ManajemenJadwalPpdbController;
 use App\Http\Controllers\Admin\ManajemenUser;
-use App\Http\Controllers\Admin\KategoriPrestasiController; 
+use App\Http\Controllers\Admin\KategoriPrestasiController;
 
 
 use App\Http\Controllers\PendaftaranController;
@@ -108,6 +108,12 @@ Route::prefix('admin')->middleware(['auth', 'is_admin'])->group(function () {
         ->name('admin.kategori-prestasi');
     Route::post('/kategori-prestasi', [KategoriPrestasiController::class, 'store'])
         ->name('admin.kategori-prestasi.store');
+    Route::put('/kategori-prestasi/{kategoriPrestasi}', [KategoriPrestasiController::class, 'update'])
+        ->name('admin.kategori-prestasi.update');
+    Route::delete('/kategori-prestasi/{kategoriPrestasi}', [KategoriPrestasiController::class, 'destroy'])
+        ->name('admin.kategori-prestasi.destroy');
+
+
 
     Route::get('/manajemen-user', [ManajemenUser::class, 'index'])
         ->name('admin.manajemen-user');

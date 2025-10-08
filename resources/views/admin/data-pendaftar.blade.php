@@ -113,7 +113,7 @@
 
                 <!-- Tabel -->
                 <div class="table-responsive">
-                    <table class="table table-hover ">
+                    <table class="table table-hover " >
                         <thead class="bg-basic">
                             <tr class="">
                                 <th class="border-0 text-white" style="border-top-left-radius: 0.5rem !important">No.</th>
@@ -163,6 +163,8 @@
             let status = $('#filter-status').val();
             let perPage = $('select.form-control-sm').val();
             let searchQuery = $('#searchUser').val();
+
+      
 
             $.ajax({
                 url: "{{ route('admin.pendaftar.json') }}",

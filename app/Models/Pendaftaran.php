@@ -17,6 +17,7 @@ class Pendaftaran extends Model
         'jadwal_id',
         'kk',
         'ijazah',
+        'kategori_prestasi_id',
         'piagam',
         'status_verifikasi',
         'status_aktual',
@@ -38,7 +39,10 @@ class Pendaftaran extends Model
         return $this->belongsTo(ManajemenJadwalPpdb::class, 'jadwal_id');
     }
 
-
+    public function kategoriPrestasi()
+    {
+        return $this->belongsTo(KategoriPrestasi::class, 'kategori_prestasi_id');
+    }
 
     public function showStatusPendaftar()
     {
