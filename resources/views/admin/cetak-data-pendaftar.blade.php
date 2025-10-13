@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <meta charset="UTF-8">
     <title>Data Pendaftar</title>
@@ -39,17 +40,17 @@
             color: #64748b;
         }
 
-       .info-section {
+        .info-section {
             padding: 8px;
             margin: 10px 0;
         }
-        
+
         .info-row {
             display: table;
             width: 100%;
             margin: 3px 0;
         }
-        
+
         .info-label {
             display: table-cell;
             width: 120px;
@@ -57,7 +58,7 @@
             font-size: 12px;
             padding-right: 10px;
         }
-        
+
         .info-value {
             display: table-cell;
             font-size: 12px;
@@ -97,17 +98,41 @@
             font-weight: bold;
         }
 
-        .stat-card.accepted { background-color: #dcfce7; border-color: #16a34a; }
-        .stat-card.accepted .stat-number { color: #16a34a; }
+        .stat-card.accepted {
+            background-color: #dcfce7;
+            border-color: #16a34a;
+        }
 
-        .stat-card.pending { background-color: #fef3c7; border-color: #d97706; }
-        .stat-card.pending .stat-number { color: #d97706; }
+        .stat-card.accepted .stat-number {
+            color: #16a34a;
+        }
 
-        .stat-card.rejected { background-color: #fee2e2; border-color: #dc2626; }
-        .stat-card.rejected .stat-number { color: #dc2626; }
+        .stat-card.pending {
+            background-color: #fef3c7;
+            border-color: #d97706;
+        }
 
-        .stat-card.unprocessed { background-color: #f1f5f9; border-color: #64748b; }
-        .stat-card.unprocessed .stat-number { color: #64748b; }
+        .stat-card.pending .stat-number {
+            color: #d97706;
+        }
+
+        .stat-card.rejected {
+            background-color: #fee2e2;
+            border-color: #dc2626;
+        }
+
+        .stat-card.rejected .stat-number {
+            color: #dc2626;
+        }
+
+        .stat-card.unprocessed {
+            background-color: #f1f5f9;
+            border-color: #64748b;
+        }
+
+        .stat-card.unprocessed .stat-number {
+            color: #64748b;
+        }
 
         .table-section {
             margin-bottom: 20px;
@@ -176,9 +201,12 @@
             text-align: right;
         }
 
-        .text-center { text-align: center; }
+        .text-center {
+            text-align: center;
+        }
     </style>
 </head>
+
 <body>
     <div class="header">
         <div class="school-name">MAS AL MUHAJIRIN TUGUMULYO</div>
@@ -186,7 +214,7 @@
         {{-- <div class="academic-year">Tahun Ajaran 2024/2025</div> --}}
     </div>
 
-   <div class="info-section">       
+    <div class="info-section">
         <div class="info-row">
             <div class="info-label">Total Pendaftar</div>
             <div class="info-value">: {{ $totalPendaftar }} Siswa</div>
@@ -194,10 +222,10 @@
         <div class="info-row">
             <div class="info-label">Tanggal Cetak</div>
             <div class="info-value">: {{ $tanggalCetak }}</div>
-        </div>   
+        </div>
     </div>
-    
-{{-- 
+
+    {{-- 
     <div class="stats-container">
         <div class="stats-grid">
             <div class="stat-card accepted">
@@ -228,33 +256,39 @@
                     <th style="width: 15%;">NISN</th>
                     <th style="width: 8%;">L/P</th>
                     <th style="width: 15%;">NO. HP</th>
-                    <th style="width: 15%;">AlAMAT</th>
+                    <th style="width: 15%;">ALAMAT</th>
 
                     <th style="width: 17%;">GELOMBANG</th>
                     <th style="width: 15%;">STATUS</th>
                 </tr>
             </thead>
             <tbody>
-                
-                @foreach($pendaftars as $pendaftaran)
-                <tr>
-                    <td>{{ $loop->iteration }}</td>
-                    <td>{{$pendaftaran->siswa->nama}}</td>
-                    <td>{{$pendaftaran->siswa->nisn}}</td>
-                    <td>{{$pendaftaran->siswa->jenis_kelamin}}</td>
-                    <td>{{$pendaftaran->siswa->no_hp_siswa}}</td>
-                    <td>{{ $pendaftaran->siswa->provinsi_siswa_id }},
-                        {{ $pendaftaran->siswa->provinsi_siswa_name }},
-                        {{ $pendaftaran->siswa->kabupaten_kota_siswa_name }},
-                        {{ $pendaftaran->siswa->kecamatan_siswa_name  }},
-                        {{ $pendaftaran->siswa->desa_kelurahan_siswa_name  }},
 
-                    </td>
-                    <td>{{ $pendaftaran->jadwal->gelombang_pendaftaran }} ({{ $pendaftaran->jadwal->thn_ajaran }})</td>
-                    <td>{{ $pendaftaran->status_aktual ?? 'Belum diproses' }}</td>
-                </tr>
+                @foreach ($pendaftars as $pendaftaran)
+                    <tr>
+                        <td>{{ $loop->iteration }}</td>
+                        <td>{{ $pendaftaran->siswa->nama }}</td>
+                        <td>{{ $pendaftaran->siswa->nisn }}</td>
+                        <td>{{ $pendaftaran->siswa->jenis_kelamin }}</td>
+                        <td>{{ $pendaftaran->siswa->no_hp_siswa }}</td>
+                        <td>{{ $pendaftaran->siswa->alamat_siswa }}</td>
+
+                        <td>{{ $pendaftaran->jadwal->gelombang_pendaftaran }} ({{ $pendaftaran->jadwal->thn_ajaran }})
+                        </td>
+                        @php
+                            $statusPendaftar = $pendaftaran->status_aktual;
+                            if (is_null($statusPendaftar)) {
+                                if ($pendaftaran->status_verifikasi === 'Perbaikan') {
+                                    $statusPendaftar = 'Perbaikan';
+                                } else {
+                                    $statusPendaftar = 'Belum diproses';
+                                }
+                            }
+                        @endphp
+                        <td>{{ $statusPendaftar }}</td>
+                    </tr>
                 @endforeach
-               
+
             </tbody>
         </table>
     </div>
@@ -271,4 +305,5 @@
         </div>
     </div>
 </body>
+
 </html>

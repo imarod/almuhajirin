@@ -23,35 +23,43 @@
                         <i class="fas fa-arrow-left text-black"></i>
                     </a>
                     <div class="d-flex ms-auto gap-2">
-                          <form id="form-tolak" action="{{ route('admin.update-status', $pendaftars->id) }}" method="POST">
-                        @csrf
-                        @method('PUT')
-                        <input type="hidden" name="status_aktual" value="Ditolak">
-                        <input type="hidden" name="thn_ajaran" value="{{ $lastFilters['thn_ajaran'] ?? '' }}">
-                        <input type="hidden" name="gelombang_pendaftaran"
-                            value="{{ $lastFilters['gelombang_pendaftaran'] ?? '' }}">
-                        <input type="hidden" name="page" value="{{ $lastFilters['page'] ?? '' }}">
-                        <input type="hidden" name="per_page" value="{{ $lastFilters['per_page'] ?? '' }}">
-                        <input type="hidden" name="search" value="{{ $lastFilters['search'] ?? '' }}">
-                        <button type="button" id="btn-tolak" class="btn btn-danger">
-                            <i class="fas fa-times"></i> Tolak
-                        </button>
-                    </form>
-                    <form id="form-terima" action="{{ route('admin.update-status', $pendaftars->id) }}" method="POST">
-                        @csrf
-                        @method('PUT')
-                        <input type="hidden" name="status_aktual" value="Diterima">
-                        <input type="hidden" name="thn_ajaran" value="{{ $lastFilters['thn_ajaran'] ?? '' }}">
-                        <input type="hidden" name="gelombang_pendaftaran"
-                            value="{{ $lastFilters['gelombang_pendaftaran'] ?? '' }}">
-                        <input type="hidden" name="page" value="{{ $lastFilters['page'] ?? '' }}">
-                        <input type="hidden" name="per_page" value="{{ $lastFilters['per_page'] ?? '' }}">
-                        <input type="hidden" name="search" value="{{ $lastFilters['search'] ?? '' }}">
-                        <button type="button" id="btn-terima" class="btn btn-primary">
-                            <i class="fas fa-check"></i> Terima
-                        </button>
-                    </form>
-                    </div>                  
+
+                        <form id="form-terima" action="{{ route('admin.update-status', $pendaftars->id) }}" method="POST">
+                            @csrf
+                            @method('PUT')
+                            <input type="hidden" name="status_aktual" value="Diterima">
+                            <input type="hidden" name="thn_ajaran" value="{{ $lastFilters['thn_ajaran'] ?? '' }}">
+                            <input type="hidden" name="gelombang_pendaftaran"
+                                value="{{ $lastFilters['gelombang_pendaftaran'] ?? '' }}">
+                            <input type="hidden" name="page" value="{{ $lastFilters['page'] ?? '' }}">
+                            <input type="hidden" name="per_page" value="{{ $lastFilters['per_page'] ?? '' }}">
+                            <input type="hidden" name="search" value="{{ $lastFilters['search'] ?? '' }}">
+                            <button type="button" id="btn-terima" class="btn btn-success">
+                                <i class="fas fa-check"></i> Terima
+                            </button>
+                        </form>
+                        <form action="">
+                            <div>
+                                <button type="button" class="btn btn-primary" data-toggle="modal"
+                                    data-target="#modalPerbaikan">Perbaikan</button>
+                            </div>
+                        </form>
+                        <form id="form-tolak" action="{{ route('admin.update-status', $pendaftars->id) }}" method="POST">
+                            @csrf
+                            @method('PUT')
+                            <input type="hidden" name="status_aktual" value="Ditolak">
+                            <input type="hidden" name="thn_ajaran" value="{{ $lastFilters['thn_ajaran'] ?? '' }}">
+                            <input type="hidden" name="gelombang_pendaftaran"
+                                value="{{ $lastFilters['gelombang_pendaftaran'] ?? '' }}">
+                            <input type="hidden" name="page" value="{{ $lastFilters['page'] ?? '' }}">
+                            <input type="hidden" name="per_page" value="{{ $lastFilters['per_page'] ?? '' }}">
+                            <input type="hidden" name="search" value="{{ $lastFilters['search'] ?? '' }}">
+                            <button type="button" id="btn-tolak" class="btn btn-danger">
+                                <i class="fas fa-times"></i> Tolak
+                            </button>
+                        </form>
+
+                    </div>
                 </div>
 
 
@@ -107,7 +115,8 @@
                                 <div class="col-md-4 mb-3">
                                     <i class="fa fa-star text-primary fs-3 me-2"></i>
                                     <p class="text-muted mb-1">Kategori Prestasi</p>
-                                    <strong class="text-dark">{{ $pendaftars->kategoriPrestasi->nama_prestasi ?? '-'  }}</strong>
+                                    <strong
+                                        class="text-dark">{{ $pendaftars->kategoriPrestasi->nama_prestasi ?? '-' }}</strong>
                                 </div>
 
                                 <div class="col-md-4 mb-3">
@@ -235,9 +244,44 @@
         </div>
     </div>
 
+    <div class="modal fade" id="modalPerbaikan" tabindex="-1" role="dialog" aria-labelledby="modalPerbaikanLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalPerbaikanLabel">Tambah Catatan Perbaikan</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="formPerbaikan" action="{{ route('admin.update-perbaikan-status', $pendaftars->id) }}"
+                        method="POST">
+                        @csrf
 
+                        <input type="hidden" name="thn_ajaran" value="{{ $lastFilters['thn_ajaran'] ?? '' }}">
+                        <input type="hidden" name="gelombang_pendaftaran"
+                            value="{{ $lastFilters['gelombang_pendaftaran'] ?? '' }}">
+                        <input type="hidden" name="page" value="{{ $lastFilters['page'] ?? '' }}">
+                        <input type="hidden" name="per_page" value="{{ $lastFilters['per_page'] ?? '' }}">
+                        <input type="hidden" name="search" value="{{ $lastFilters['search'] ?? '' }}">
 
+                        <div class="form-group">
+                            <label for="catatan">Catatan Perbaikan</label>
+                            <textarea class="form-control" id="catatan" name="catatan" rows="3"
+                                placeholder="Contoh: Dokumen Kartu Keluarga kurang jelas, mohon upload ulang dengan kualitas lebih baik." required></textarea>
+                        </div>
 
+                    </form>
+                </div>
+                <div class="modal-footer d-flex justify-content-end">
+                    <button type="submit" form="formPerbaikan" class="btn btn-success">Simpan</button>
+                    <button type="button" class="btn btn-default mr-2" data-dismiss="modal">Batal</button>
+
+                </div>
+            </div>
+        </div>
+    </div>
 @stop
 
 @push('js')
@@ -308,5 +352,50 @@
                 }
             });
         });
+
+        $('#formPerbaikan').on('submit', function(e) {
+            e.preventDefault();
+            const form = this;
+            Swal.fire({
+                title: 'Kirim Catatan Perbaikan?',
+                text: "Status pendaftaran akan diubah menjadi 'Perbaikan' dan catatan akan dikirim.",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#ffc107',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Ya, Kirim Catatan!',
+                cancelButtonText: 'Batal'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    Swal.fire({
+                        title: 'Mengirim...',
+                        text: 'Silakan tunggu sebentar.',
+                        icon: 'info',
+                        showConfirmButton: false,
+                        allowOutsideClick: false,
+                        didOpen: () => {
+                            Swal.showLoading();
+                        }
+                    });
+                    form.submit();
+                }
+            });
+        });
+
+        @if (session('error'))
+            Swal.fire({
+                icon: 'error',
+                title: 'Gagal!',
+                text: "{{ session('error') }}"
+            });
+        @endif
+
+        @if (session('success'))
+            Swal.fire({
+                icon: 'success',
+                title: 'Berhasil!',
+                text: "{{ session('success') }}"
+            });
+        @endif
     </script>
 @endpush

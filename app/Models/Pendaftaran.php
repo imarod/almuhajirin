@@ -17,12 +17,14 @@ class Pendaftaran extends Model
         'jadwal_id',
         'kk',
         'ijazah',
+        'jurusan_id',
         'kategori_prestasi_id',
         'piagam',
         'status_verifikasi',
         'status_aktual',
         'is_announced',
-        'pesan_whatsapp'
+        'pesan_whatsapp',
+        'catatan'
     ];
     protected $casts = [
         'is_announced' => 'boolean',
@@ -44,6 +46,11 @@ class Pendaftaran extends Model
         return $this->belongsTo(KategoriPrestasi::class, 'kategori_prestasi_id');
     }
 
+    public function jurusan()
+    {
+        return $this->belongsTo(Jurusan::class, 'jurusan_id');
+    }
+
     public function showStatusPendaftar()
     {
         $jadwal = ManajemenJadwalPpdb::first();
@@ -54,6 +61,10 @@ class Pendaftaran extends Model
         // }
         if ($this->pesan_email && $tanggalPengumuman  && $tanggalPengumuman->isPast()) {
             return $this->status_aktual;
+        }
+
+        if ($this->status_verifikasi === 'Perbaikan') {
+            return $this->status_verifikasi;
         }
 
         if ($this->status_aktual !== null) {

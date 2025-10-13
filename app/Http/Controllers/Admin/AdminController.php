@@ -45,6 +45,7 @@ class AdminController extends Controller
         $thnAjaran = $request->input('thn_ajaran');
         $gelombangPendaftaran = $request->input('gelombang_pendaftaran');
         $statusAktual = $request->input('status_aktual');
+        $statusVerifikasi = $request->input('status_verifikasi');
         $perPage = $request->input('per_page', 10);
         $search = $request->input('search');
 
@@ -72,9 +73,12 @@ class AdminController extends Controller
 
         // Logika filter status aktual
         if ($statusAktual === 'Belum diproses') {
-            $query->whereNull('status_aktual');
+            $query->whereNull('status_aktual')
+                ->where('status_verifikasi', '!=', 'Perbaikan');
         } elseif ($statusAktual === 'Diterima' || $statusAktual === 'Ditolak') {
             $query->where('status_aktual', $statusAktual);
+        } elseif ($statusAktual === 'Perbaikan') {
+            $query->where('status_verifikasi', 'Perbaikan');
         } elseif ($statusAktual === 'Semua') {
         }
 
@@ -136,8 +140,6 @@ class AdminController extends Controller
         $query = Pendaftaran::query();
         $thnAjaran = $request->input('thn_ajaran');
         $gelombangPendaftaran = $request->input('gelombang_pendaftaran');
-        $statusAktual = $request->input('status_aktual');
-        $statusVerifikasi = $request->input('status_verifikasi');
         $search = $request->input('search');
 
         if ($search) {
@@ -161,17 +163,18 @@ class AdminController extends Controller
             }
         }
 
-        if ($statusAktual === 'Belum diproses') {
-            $query->whereNull('status_aktual');
-        } elseif ($statusAktual === 'Diterima' || $statusAktual === 'Ditolak') {
-            $query->where('status_aktual', $statusAktual);
-        }
-
         $pendaftars = $query->with(['siswa.orangTua', 'jadwal'])->get();
 
         $records = $pendaftars->map(function ($pendaftar) {
             $siswa = $pendaftar->siswa;
             $ortu = $siswa->orangTua;
+
+            $statusToPrint = 'Belum diproses';
+            if ($siswa->pendaftaran->status_aktual) {
+                $statusToPrint = $siswa->pendaftaran->status_aktual;
+            } elseif ($siswa->pendaftaran->status_verifikasi === 'Perbaikan') {
+                $statusToPrint = 'Perbaikan';
+            }
             return [
                 'Nama Lengkap' => $siswa->nama ?? 'Tidak ada data',
                 'NISN' => $siswa->nisn ?? 'Tidak ada data',
@@ -181,25 +184,15 @@ class AdminController extends Controller
                 'Kategori Prestasi' => $siswa->kategori_prestasi ?? 'Tidak Ada',
                 'No. HP Siswa' => "'" . $siswa->no_hp_siswa ?? 'Tidak ada data',
                 'Email Siswa' => $siswa->email_siswa ?? 'Tidak ada data',
-                'Provinsi Siswa' => $siswa->provinsi_siswa_name ?? 'Tidak ada data', 
-                'Kab/Kota Siswa' => $siswa->kabupaten_kota_siswa_name ?? 'Tidak ada data', 
-                'Kecamatan Siswa' => $siswa->kecamatan_siswa_name ?? 'Tidak ada data', 
-                'Desa/Kelurahan Siswa' => $siswa->desa_kelurahan_siswa_name ?? 'Tidak ada data',
                 'Alamat Siswa' => $siswa->alamat_siswa ?? 'Tidak ada data',
-
 
                 'Nama Orang Tua' => $ortu->nama_ayah ?? 'Tidak ada data',
                 'No. HP Orang Tua' => "'" . $ortu->no_hp_ortu ?? 'Tidak ada data',
-                'Provinsi Ortu' => $ortu->provinsi_ortu_name ?? 'Tidak ada data', 
-                'Kab/Kota Ortu' => $ortu->kabupaten_kota_ortu_name ?? 'Tidak ada data', 
-                'Kecamatan Ortu' => $ortu->kecamatan_ortu_name ?? 'Tidak ada data', 
-                'Desa/Kelurahan Ortu' => $ortu->desa_kelurahan_ortu_name ?? 'Tidak ada data', 
                 'Alamat Ortu' => $ortu->alamat_ortu ?? 'Tidak ada data',
-
 
                 'Tahun Ajaran' => $pendaftar->jadwal->thn_ajaran ?? 'Tidak ada data',
                 'Gelombang' => $pendaftar->jadwal->gelombang_pendaftaran ?? 'Tidak ada data',
-                'Status' => $pendaftar->status_aktual ?? 'Belum diproses',
+                'Status' => $statusToPrint,
             ];
         });
         $filePath = 'data_pendaftar_' . now()->format('Ymd_His') . '.csv';
@@ -217,6 +210,7 @@ class AdminController extends Controller
         $thnAjaran = $request->input('thn_ajaran');
         $gelombangPendaftaran = $request->input('gelombang_pendaftaran');
         $statusAktual = $request->input('status_aktual');
+        $statusVerifikasi = $request->input('status_verifikasi');
         $search = $request->input('search');
 
         if ($search) {
@@ -237,12 +231,6 @@ class AdminController extends Controller
                     $q->where('gelombang_pendaftaran', $gelombangPendaftaran);
                 });
             }
-        }
-
-        if ($statusAktual === 'Belum diproses') {
-            $query->whereNull('status_aktual');
-        } elseif ($statusAktual === 'Diterima' || $statusAktual === 'Ditolak') {
-            $query->where('status_aktual', $statusAktual);
         }
 
         $pendaftars = $query->with(['siswa.orangTua', 'jadwal'])->get();

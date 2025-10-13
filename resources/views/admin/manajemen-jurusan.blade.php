@@ -1,44 +1,39 @@
-
 @extends('layouts.adminlte-custom')
+
 @section('content_header')
     <div class="container-fluid mb-3">
         <div class="d-flex justify-content-between align-items-center">
             <div>
-                <h1 class="h3 mb-0 font-weight-bold">Manajemen Jalur Prestasi</h1>
-                <p>Kelola kategori prestasi untuk pendaftaran siswa baru.</p>
+                <h1 class="h3 mb-0 font-weight-bold">Manajemen Jurusan </h1>
             </div>
-           
+
         </div>
     </div>
-@stop
+@endsection
 
-@section('content') 
+@section('content')
     <div class="container-fluid">
-        
         <div class="card">
             <div class="card-body">
-                 {{-- Tombol Tambah --}}
-            <button class="btn btn-success mb-4" data-toggle="modal" data-target="#modalTambahKategori">
-               Tambah Kategori
-            </button>
-                <table id="dataTable" class="table table-bordered table-striped">
+                <button class="btn btn-success mb-4" data-toggle="modal" data-target="#modalTambahJurusan">Tambah
+                    Jurusan</button>
+
+                <table id="dataTableJurusan" class="table table-bordered table-striped">
                     <thead>
                         <tr>
                             <th>No</th>
-                            <th>Nama Prestasi</th>
-                            <th>Deskripsi</th>
+                            <th>Nama Jurusan</th>
                             <th>Status</th>
                             <th>Aksi</th>
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach ($kategoriPrestasi as $kategori)
+                        @foreach ($jurusan as $jrs)
                             <tr>
                                 <td>{{ $loop->iteration }}</td>
-                                <td>{{ $kategori->nama_prestasi }}</td>
-                                <td>{{ $kategori->deskripsi ?? '-' }}</td>
+                                <td>{{ $jrs->nama_jurusan }}</td>
                                 <td>
-                                    @if ($kategori->is_active)
+                                    @if ($jrs->is_active)
                                         <span class="badge badge-success px-3 py-2 ">Aktif</span>
                                     @else
                                         <span class="badge badge-danger px-3 py-2">Tidak Aktif</span>
@@ -46,12 +41,12 @@
                                 </td>
                                 <td>
                                     <button class="btn btn-sm " data-toggle="modal"
-                                        data-target="#modalEditKategori{{ $kategori->id }}">
+                                        data-target="#modalEditJurusan{{ $jrs->id }}">
                                         <i class="fas fa-edit text-primary"></i>
                                     </button>
 
-                                    <form action="{{ route('admin.kategori-prestasi.destroy', $kategori->id) }}"
-                                        method="POST" class="d-inline form-delete-prestasi">
+                                    <form action="{{ route('admin.manajemen-jurusan.destroy', $jrs->id) }}" method="POST"
+                                        class="d-inline form-delete-jurusan">
                                         @csrf
                                         @method('DELETE')
                                         <button type="submit" class="btn btn-sm ">
@@ -61,103 +56,91 @@
                                 </td>
                             </tr>
 
-                            {{-- Modal Edit Kategori (Per Loop) --}}
-                            <div class="modal fade" id="modalEditKategori{{ $kategori->id }}" tabindex="-1"
-                                role="dialog" aria-labelledby="modalEditKategoriLabel" aria-hidden="true">
+                            <div class="modal fade" id="modalEditJurusan{{ $jrs->id }}" tabindex="-1" role="dialog"
+                                aria-labelledby="modalEditJurusanLabel" aria-hidden="true">
                                 <div class="modal-dialog" role="document">
                                     <div class="modal-content">
                                         <div class="modal-header">
-                                            <h5 class="modal-title" id="modalEditKategoriLabel">Edit Kategori Prestasi</h5>
+                                            <h5 class="modal-title" id="modalEditJurusanLabel">Edit Jurusan</h5>
                                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                                 <span aria-hidden="true">&times;</span>
                                             </button>
                                         </div>
                                         <div class="modal-body">
-                                            <form id="formEditKategori{{ $kategori->id }}"
-                                                action="{{ route('admin.kategori-prestasi.update', $kategori->id) }}"
+                                            <form id="formEditJurusan{{ $jrs->id }}"
+                                                action="{{ route('admin.manajemen-jurusan.update', $jrs->id) }}"
                                                 method="POST">
                                                 @csrf
                                                 @method('PUT')
+
                                                 <div class="form-group">
-                                                    <label for="nama_prestasi">Nama Prestasi</label>
+                                                    <label for="nama_jurusan">Nama Jurusan</label>
                                                     <input type="text"
-                                                        class="form-control @error('nama_prestasi') is-invalid @enderror"
-                                                        id="nama_prestasi" name="nama_prestasi"
+                                                        class="form-control @error('nama_jurusan') is-invalid @enderror"
+                                                        id="nama_jurusan" name="nama_jurusan"
                                                         placeholder="Contoh: Juara Olimpiade Sains"
-                                                        value="{{ old('nama_prestasi', $kategori->nama_prestasi) }}" required>
-                                                    @error('nama_prestasi')
+                                                        value="{{ old('nama_jurusan', $jrs->nama_jurusan) }}" required>
+                                                    @error('nama_jurusan')
                                                         <span class="invalid-feedback" role="alert">
                                                             <strong>{{ $message }}</strong>
                                                         </span>
                                                     @enderror
                                                 </div>
-                                                <div class="form-group">
-                                                    <label for="deskripsi">Deskripsi (opsional)</label>
-                                                    <input type="text" class="form-control" id="deskripsi"
-                                                        name="deskripsi" placeholder="Deskripsi singkat"
-                                                        value="{{ old('deskripsi', $kategori->deskripsi) }}">
-                                                </div>
+
                                                 <div class="form-group form-check">
                                                     <input type="hidden" name="is_active" value="0">
-
                                                     <input type="checkbox" class="form-check-input" id="status_aktif"
                                                         name="is_active" value="1"
-                                                        {{ old('is_active', $kategori->is_active) ? 'checked' : '' }}>
+                                                        {{ old('is_active', $jrs->is_active) ? 'checked' : '' }}>
                                                     <label class="form-check-label" for="status_aktif">Aktif</label>
                                                 </div>
                                             </form>
                                         </div>
                                         <div class="modal-footer d-flex justify-content-end">
-                                            <button type="submit" form="formEditKategori{{ $kategori->id }}"
-                                                class="btn btn-success">Simpan Perubahan</button>
+                                            <button type="submit" form="formEditJurusan{{ $jrs->id }}"
+                                                class="btn btn-success">Simpan
+                                                Perubahan</button>
                                             <button type="button" class="btn btn-default mr-2"
                                                 data-dismiss="modal">Batal</button>
-                                            
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         @endforeach
+
                     </tbody>
                 </table>
             </div>
         </div>
     </div>
 
-
-    {{-- Modal Tambah Kategori (Di luar Loop) --}}
-    <div class="modal fade" id="modalTambahKategori" tabindex="-1" role="dialog"
-        aria-labelledby="modalTambahKategoriLabel" aria-hidden="true">
+    <div class="modal fade" id="modalTambahJurusan" tabindex="-1" role="dialog" aria-labelledby="modalTambahJurusanLabel"
+        aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="modalTambahKategoriLabel">Tambah Kategori Prestasi Baru</h5>
+                    <h5 class="modal-title" id="modalTambahJurusanLabel">Tambah Jurusan Baru</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <div class="modal-body">
-                    <form id="formTambahKategori" action="{{ route('admin.kategori-prestasi.store') }}" method="POST">
+                    <form id="formTambahJurusan" action="{{ route('admin.manajemen-jurusan.store') }}" method="POST">
                         @csrf
                         <div class="form-group">
-                            <label for="nama_prestasi">Nama Prestasi</label>
-                            <input type="text" class="form-control @error('nama_prestasi') is-invalid @enderror"
-                                id="nama_prestasi" name="nama_prestasi" placeholder="Contoh: Juara Olimpiade Sains"
-                                value="{{ old('nama_prestasi') }}" required>
-                            @error('nama_prestasi')
+                            <label for="nama_jurusan">Nama Jurusan</label>
+                            <input type="text" class="form-control  @error('nama_jurusan') is-invalid @enderror"
+                                id="nama_jurusan" name="nama_jurusan" placeholder="Contoh: IPS"
+                                value="{{ old('nama_jurusan') }}" required>
+                            @error('nama_jurusan')
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>
                                 </span>
                             @enderror
                         </div>
-                        <div class="form-group">
-                            <label for="deskripsi">Deskripsi (opsional)</label>
-                            <input type="text" class="form-control" id="deskripsi" name="deskripsi"
-                                placeholder="Deskripsi singkat" value="{{ old('deskripsi') }}">
-                        </div>
+
                         <div class="form-group form-check">
                             <input type="hidden" name="is_active" value="0">
-
                             <input type="checkbox" class="form-check-input" id="status_aktif" name="is_active"
                                 value="1" checked>
                             <label class="form-check-label" for="status_aktif">Aktif</label>
@@ -165,20 +148,21 @@
                     </form>
                 </div>
                 <div class="modal-footer d-flex justify-content-end">
-                    <button type="submit" form="formTambahKategori" class="btn btn-success">Simpan</button>
+                    <button type="submit" form="formTambahJurusan" class="btn btn-success">Simpan
+                        Perubahan</button>
                     <button type="button" class="btn btn-default mr-2" data-dismiss="modal">Batal</button>
-                    
+
                 </div>
             </div>
         </div>
     </div>
-@stop
+@endsection
 
 @push('js')
     <script>
-        $(function () {
+        $(function() {
             try {
-                $('#dataTable').DataTable({
+                $('#dataTableJurusan').DataTable({
                     "paging": true,
                     "lengthChange": true,
                     "searching": true,
@@ -188,7 +172,9 @@
                     "responsive": true,
                 });
             } catch (error) {
-                console.error("Error DataTable: Pastikan plugin Datatables di adminlte.php sudah aktif dan library ter-load.");
+                console.error(
+                    "Error DataTable: Pastikan plugin Datatables di adminlte.php sudah aktif dan library ter-load."
+                );
             }
 
             const Toast = Swal.mixin({
@@ -231,19 +217,18 @@
                 })
             @endif
 
-            // 2. SweetAlert untuk Konfirmasi Hapus
-            $(document).on('submit', '.form-delete-prestasi', function(e) {
-                e.preventDefault(); 
+            $(document).on('submit', '.form-delete-jurusan', function(e) {
+                e.preventDefault();
                 const form = this;
 
                 if (typeof Swal !== 'undefined') {
                     Swal.fire({
                         title: 'Apakah Anda yakin?',
-                        text: "Kategori yang dihapus tidak dapat dikembalikan!",
+                        text: "Jurusan yang dihapus tidak dapat dikembalikan!",
                         icon: 'warning',
                         showCancelButton: true,
-                        confirmButtonColor: '#3085d6',
-                        cancelButtonColor: '#d33',
+                        confirmButtonColor: '#d33',
+                        cancelButtonColor: '#3085d6',
                         confirmButtonText: 'Ya, Hapus!',
                         cancelButtonText: 'Batal'
                     }).then((result) => {
@@ -258,16 +243,18 @@
             });
 
             @if ($errors->any())
-                const isEditing = $('input[name="_method"]').val() === 'PUT';
-
-                if (!isEditing) {
-                    $('#modalTambahKategori').modal('show');
-                } else {
-                    @if (Session::has('edit_id'))
-                        $('#modalEditKategori{{ Session::get('edit_id') }}').modal('show');
-                    @endif
+                if ($('#formTambahJurusan .is-invalid').length > 0) {
+                    $('#modalTambahJurusan').modal('show');
                 }
+
+                @foreach ($jurusan as $jrs)
+                    @if (Session::get('edit_id') == $jrs->id || ($errors->has('nama_jurusan') && old('_method') === 'PUT'))
+                        $('#modalEditJurusan{{ $jrs->id }}').modal('show');
+                    @endif
+                @endforeach
             @endif
-        });
+
+
+        })
     </script>
 @endpush

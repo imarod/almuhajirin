@@ -105,6 +105,8 @@
                                         <th class="border-0 text-white">Jenis Kelamin</th>
                                         <th class="border-0 text-white">Tgl Daftar</th>
                                         <th class="border-0 text-white">Status</th>
+                                        <th class="border-0 text-white text-center">Catatan</th>
+
                                         <th class="border-0 text-white" style="border-top-right-radius: 0.5rem !important">
                                             Aksi</th>
                                     </tr>
@@ -128,8 +130,9 @@
                                         @foreach ($pendaftarans as $pendaftaran)
                                             @php
                                                 $status = $pendaftaran->showStatusPendaftar();
-                                                
-                                                $statusClass = 'status-badge status-' . str_replace(' ', '', strtolower($status));
+
+                                                $statusClass =
+                                                    'status-badge status-' . str_replace(' ', '', strtolower($status));
                                             @endphp
                                             <tr>
                                                 <td>{{ $loop->iteration }}</td>
@@ -138,8 +141,15 @@
                                                 <td>{{ $pendaftaran->siswa->jenis_kelamin }}</td>
                                                 <td class="text-muted">{{ $pendaftaran->created_at->format('d-m-Y') }}</td>
                                                 <td><span class="{{ $statusClass }}">
-                                                    {{ $status }}
-                                                </span></td>
+                                                        {{ $status }}
+                                                    </span></td>
+                                                <td
+                                                    style="
+ 
+    color: #000000;
+    font-size: 0.8rem;
+">
+                                                    {{ $pendaftaran->catatan }}</td>
                                                 <td class="action-icons">
                                                     @php
                                                         $jadwalSelesai =
@@ -181,7 +191,7 @@
 @stop
 
 @section('js')
-    
+
 
     <script>
         $(document).ready(function() {
@@ -202,7 +212,7 @@
                 });
             @endif
 
-           
+
 
             $('.delete-btn').on('click', function(e) {
                 e.preventDefault();

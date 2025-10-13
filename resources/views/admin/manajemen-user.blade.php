@@ -223,7 +223,7 @@
                         <div class="form-group">
                             <label for="is_admin">Role</label>
                             <select class="form-control" id="is_admin" name="is_admin" required>
-                                <option value="0">User Siswa</option>
+                                <option value="0">Siswa</option>
                                 <option value="1">Admin</option>
                             </select>
                         </div>
@@ -267,7 +267,7 @@
                         <div class="form-group">
                             <label for="editIsAdmin">Role</label>
                             <select class="form-control" id="editIsAdmin" name="is_admin" required>
-                                <option value="0">User Siswa</option>
+                                <option value="0">Siswa</option>
                                 <option value="1">Admin</option>
                             </select>
                         </div>
@@ -282,6 +282,7 @@
     </div>
 @endsection
 @push('js')
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script>
         function fetchUsers(page = 1) {
             const searchQuery = $('#searchUser').val();

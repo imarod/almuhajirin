@@ -23,7 +23,6 @@
 
 @section('content')
     <div class="container-fluid">
-
         <div class="row justify-content-start">
             <a href="/siswa/pendaftaran" class="btn  rounded-circle mb-4 border">
                 <i class="fas fa-arrow-left text-black"></i>
@@ -50,9 +49,8 @@
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <label class="font-weight-medium text-dark">NISN</label>
-                                            <input type="text" class="form-control @error('nisn') is-invalid @enderror" 
+                                            <input type="text" class="form-control @error('nisn') is-invalid @enderror"
                                                 placeholder="Masukkan NISN" name="nisn" id="nisnInput"
-                                                
                                                 value="{{ isset($pendaftaran) ? $pendaftaran->siswa->nisn : old('nisn') }}"
                                                 pattern="\d*" inputmode="numeric">
 
@@ -67,7 +65,6 @@
                                             <input type="text"
                                                 class="form-control @error('tempat_lahir') is-invalid @enderror"
                                                 placeholder="Masukkan Tempat Lahir" name="tempat_lahir"
-                                                
                                                 value="{{ isset($pendaftaran) ? $pendaftaran->siswa->tempat_lahir : old('tempat_lahir') }}">
                                             @error('tempat_lahir')
                                                 <div class="invalid-feedback">{{ $message }}</div>
@@ -83,7 +80,6 @@
                                             <label class="font-weight-medium text-dark">Nama Lengkap</label>
                                             <input type="text" class="form-control @error('nama') is-invalid @enderror"
                                                 placeholder="Masukkan Nama Lengkap" name="nama"
-                                                
                                                 value="{{ isset($pendaftaran) ? $pendaftaran->siswa->nama : old('nama') }}">
                                             @error('nama')
                                                 <div class="invalid-feedback">{{ $message }}</div>
@@ -136,7 +132,6 @@
                                             <input type="text"
                                                 class="form-control  @error('email_siswa') is-invalid @enderror"
                                                 placeholder="Masukkan Email Aktif" name="email_siswa"
-                                                
                                                 value="{{ isset($pendaftaran) ? $pendaftaran->siswa->email_siswa : old('email_siswa') }}">
                                             @error('email_siswa')
                                                 <div class="invalid-feedback">{{ $message }}</div>
@@ -176,8 +171,7 @@
                                         <div class="form-group ">
                                             <label>Jenis Kelamin</label><br>
                                             <div class="form-check form-check-inline">
-                                                <input
-                                                    class="form-check-input @error('jenis_kelamin') is-invalid @enderror"
+                                                <input class="form-check-input @error('jenis_kelamin') is-invalid @enderror"
                                                     type="radio" name="jenis_kelamin" value="Laki-laki"
                                                     {{ isset($pendaftaran) && $pendaftaran->siswa->jenis_kelamin == 'Laki-laki' ? 'checked' : (old('jenis_kelamin') == 'Laki-laki' ? 'checked' : '') }}>
                                                 <label class="form-check-label">Laki-laki</label>
@@ -205,7 +199,6 @@
                                             <input type="text"
                                                 class="form-control  @error('alamat_siswa') is-invalid @enderror"
                                                 placeholder="Masukkan Alamat Lengkap" name="alamat_siswa"
-                                                
                                                 value="{{ isset($pendaftaran) ? $pendaftaran->siswa->alamat_siswa : old('alamat_siswa') }}">
                                             @error('alamat_siswa')
                                                 <div class="invalid-feedback">{{ $message }}</div>
@@ -283,41 +276,78 @@
                                     </div>
                                 </div>
 
-                                <div class="form-group">
-                                    <label class="font-weight-medium text-dark">Kategori Prestasi (Jika
-                                        Ada)</label>
-                                    <br>
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="radio" name="kategori_prestasi_id"
-                                            id="prestasi_none" value=""
-                                            {{ old('kategori_prestasi_id', $pendaftaran->kategori_prestasi_id ?? '') == '' ? 'checked' : '' }}>
-                                        <label class="form-check-label" for="prestasi_none">Tidak Ada Prestasi</label>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label class="font-weight-medium text-dark">Kategori Prestasi (Jika
+                                                Ada)</label>
+                                            <br>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="radio"
+                                                    name="kategori_prestasi_id" id="prestasi_none" value=""
+                                                    {{ old('kategori_prestasi_id', $pendaftaran->kategori_prestasi_id ?? '') == '' ? 'checked' : '' }}>
+                                                <label class="form-check-label" for="prestasi_none">Tidak Ada
+                                                    Prestasi</label>
+                                            </div>
+
+                                            @foreach ($kategoriPrestasiAktif as $kategori)
+                                                @php
+                                                    $selectedId = old(
+                                                        'kategori_prestasi_id',
+                                                        $pendaftaran->kategori_prestasi_id ?? '',
+                                                    );
+                                                @endphp
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="radio"
+                                                        name="kategori_prestasi_id" id="prestasi_{{ $kategori->id }}"
+                                                        value="{{ $kategori->id }}"
+                                                        {{ $selectedId == $kategori->id ? 'checked' : '' }}>
+                                                    <label class="form-check-label" for="prestasi_{{ $kategori->id }}">
+                                                        {{ $kategori->nama_prestasi }}
+                                                    </label>
+                                                </div>
+                                            @endforeach
+                                            @error('kategori_prestasi_id')
+                                                <div class="alert alert-danger mt-2">{{ $message }}</div>
+                                            @enderror
+                                        </div>
                                     </div>
 
-                                    @foreach ($kategoriPrestasiAktif as $kategori)
-                                        @php
-                                            $selectedId = old(
-                                                'kategori_prestasi_id',
-                                                $pendaftaran->kategori_prestasi_id ?? '',
-                                            );
-                                        @endphp
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="radio" name="kategori_prestasi_id"
-                                                id="prestasi_{{ $kategori->id }}" value="{{ $kategori->id }}"
-                                                {{ $selectedId == $kategori->id ? 'checked' : '' }}>
-                                            <label class="form-check-label" for="prestasi_{{ $kategori->id }}">
-                                                {{ $kategori->nama_prestasi }}
-                                                {{-- @if ($kategori->deskripsi)
-                                                        - ({{ $kategori->deskripsi }})
-                                                    @endif --}}
-                                            </label>
-                                        </div>
-                                    @endforeach
-                                    @error('kategori_prestasi_id')
-                                        <div class="alert alert-danger mt-2">{{ $message }}</div>
-                                    @enderror
-                                </div>
+                                    @if ($jurusanAktif->count() > 0)
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label class="font-weight-medium text-dark">Jurusan</label>
+                                                <br>
 
+                                                @foreach ($jurusanAktif as $jrs)
+                                                    <div class="form-check">
+                                                        <input class="form-check-input" type="radio" name="jurusan_id"
+                                                            id="jurusan-{{ $jrs->id }}" value="{{ $jrs->id }}"
+                                                            {{ old('jurusan_id', $pendaftaran->jurusan_id ?? '') == $jrs->id ? 'checked' : '' }}
+                                                            required>
+                                                        <label class="form-check-label"
+                                                            for="jurusan-{{ $jrs->id }}">
+                                                            {{ $jrs->nama_jurusan }}
+                                                        </label>
+                                                    </div>
+                                                @endforeach
+
+                                                @error('jurusan_id')
+                                                    <div class="text-danger mt-2">
+                                                        <strong>{{ $message }}</strong>
+                                                    </div>
+                                                @enderror
+                                            </div>
+                                        </div>
+                                    @else
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                               
+                                            </div>
+                                        </div>
+                                    @endif
+
+                                </div>
 
                                 <div class="row">
                                     <div class="col-md-6">
@@ -368,7 +398,6 @@
                                             <input type="text"
                                                 class="form-control @error('nama_ayah') is-invalid @enderror"
                                                 placeholder="Masukkan Nama Ayah" name="nama_ayah"
-                                                
                                                 value="{{ isset($pendaftaran) ? $pendaftaran->siswa->orangTua->nama_ayah : old('nama_ayah') }}">
                                             @error('nama_ayah')
                                                 <div class="invalid-feedback">{{ $message }}</div>
@@ -381,7 +410,6 @@
                                             <input type="text"
                                                 class="form-control @error('nama_ibu') is-invalid @enderror"
                                                 placeholder="Masukkan Nama Ibu" name="nama_ibu"
-                                                
                                                 value="{{ isset($pendaftaran) ? $pendaftaran->siswa->orangTua->nama_ibu : old('nama_ibu') }}">
                                             @error('nama_ibu')
                                                 <div class="invalid-feedback">{{ $message }}</div>
@@ -399,7 +427,6 @@
                                             <input type="text"
                                                 class="form-control @error('alamat_ortu') is-invalid @enderror"
                                                 placeholder="Masukkan Alamat" name="alamat_ortu"
-                                                
                                                 value="{{ isset($pendaftaran) ? $pendaftaran->siswa->orangTua->alamat_ortu : old('alamat_ortu') }}">
                                             @error('alamat_ortu')
                                                 <div class="invalid-feedback">{{ $message }}</div>

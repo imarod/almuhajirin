@@ -76,6 +76,9 @@ class ManajemenUser extends Controller
             $query->where('is_admin', $role);
         }
 
+          $query->orderByDesc('is_admin')
+              ->orderByDesc('created_at');
+
         $perPage = $request->input('per_page', 10);
         if ($perPage > 0) {
             $users = $query->paginate($perPage);

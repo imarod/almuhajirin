@@ -9,6 +9,7 @@ use App\Models\OrangTua;
 use App\Models\User;
 use App\Models\KategoriPrestasi;
 use App\Models\ManajemenJadwalPpdb;
+use App\Models\Jurusan;
 use App\Traits\LoginTokenGenerator;
 
 use App\Http\Requests\UpdateFormulirRequest;
@@ -35,7 +36,7 @@ class PendaftaranController extends Controller
         $jumlahPendaftar = 0;
 
         $kategoriPrestasiAktif = KategoriPrestasi::active()->get();
-
+        $jurusanAktif = Jurusan::active()->get();
 
         // Jika ID pendaftaran diberikan, coba cari data pendaftaran untuk mode edit
         if ($id) {
@@ -75,7 +76,15 @@ class PendaftaranController extends Controller
             }
         }
 
-        return view('siswa.formulir-siswa', compact('statusPendaftaran', 'message', 'jadwalAktif', 'pendaftaran', 'jumlahPendaftar', 'kategoriPrestasiAktif'));
+        return view('siswa.formulir-siswa', compact(
+            'statusPendaftaran',
+            'message',
+            'jadwalAktif',
+            'pendaftaran',
+            'jumlahPendaftar',
+            'kategoriPrestasiAktif',
+            'jurusanAktif'
+        ));
     }
     public function store(FormulirPendaftaranStore $request)
     {
@@ -109,7 +118,7 @@ class PendaftaranController extends Controller
             $kk = $request->file('kk')?->store('dokumen', 'public');
             $ijazah = $request->file('ijazah')?->store('dokumen', 'public');
             $piagam = $request->file('piagam')?->store('dokumen', 'public');
-           
+
             $pendaftaran = Pendaftaran::create([
                 'siswa_id' => $siswa->id,
                 'jadwal_id' => $jadwalAktif->id,
@@ -154,7 +163,7 @@ class PendaftaranController extends Controller
         try {
             $pendaftaran = Pendaftaran::with(['siswa.orangTua'])->findOrFail($id);
 
-             $request->validate([
+            $request->validate([
                 'kategori_prestasi_id' => 'nullable|exists:kategori_prestasi,id,is_active,1',
             ]);
 
@@ -257,7 +266,7 @@ class PendaftaranController extends Controller
                 $query->where('user_id', $userId);
             })->findOrFail($id);
 
-         $pendaftaran->load('kategoriPrestasi');
+        $pendaftaran->load('kategoriPrestasi');
 
         $pdf = Pdf::loadView('siswa.cetak-formulir', compact('pendaftaran'));
         $namaFile = 'Formulir Pendaftaran_' . $pendaftaran->siswa->nama . '.pdf';

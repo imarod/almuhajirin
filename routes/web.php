@@ -6,6 +6,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\VerifikasiController;
 use App\Http\Controllers\Admin\DashboardAdmin;
+use App\Http\Controllers\Admin\JurusanController;
 use App\Http\Controllers\Admin\ManajemenJadwalPpdbController;
 use App\Http\Controllers\Admin\ManajemenUser;
 use App\Http\Controllers\Admin\KategoriPrestasiController;
@@ -30,7 +31,7 @@ Route::get('/', function () {
 Auth::routes();
 
 
-// Route::get('/home', [App\Http\Controllers\HomeController::class, 'home'])->name('home');
+// Route::get('/test', [App\Http\Controllers\HomeController::class, 'home'])->name('home');
 // Route::get('test-email', [HomeController::class, 'testEmail'])->name('test.email');
 // Route::get('/test-download-pdf', [HomeController::class, 'downloadPdf'])->name('test.download.pdf');
 
@@ -80,6 +81,8 @@ Route::prefix('admin')->middleware(['auth', 'is_admin'])->group(function () {
         ->name('admin.detail-pendaftar');
     Route::put('/pendaftaran/{id}/update-status', [VerifikasiController::class, 'updateStatus'])
         ->name('admin.update-status');
+    Route::post('/pendaftaran/{id}/perbaikan-status', [VerifikasiController::class, 'updatePerbaikanStatus'])
+        ->name('admin.update-perbaikan-status');
     Route::delete('/data-pendaftar/{id}', [AdminController::class, 'destroy'])
         ->name('admin.data.pendaftar.destroy');
     Route::get('/data-pendaftar/export-csv', [AdminController::class, 'exportPendaftarToCsv'])
@@ -103,6 +106,16 @@ Route::prefix('admin')->middleware(['auth', 'is_admin'])->group(function () {
         ->name('admin.cetak-jadwal.export-csv');
     Route::get('/cetak-jadwal/export-pdf', [ManajemenJadwalPpdbController::class, 'exportJadwalToPdf'])
         ->name('admin.cetak-jadwal.export-pdf');
+
+    Route::get('/manajemen-jurusan', [JurusanController::class, 'index'])
+        ->name('admin.manajemen-jurusan');
+    Route::post('/manajemen-jurusan', [JurusanController::class, 'store'])
+        ->name('admin.manajemen-jurusan.store');
+    Route::put('/manajemen-jurusan/{jurusan}', [JurusanController::class, 'update']) // {jurusan} akan di-resolve ke Model Jurusan
+        ->name('admin.manajemen-jurusan.update');
+    Route::delete('/manajemen-jurusan/{jurusan}', [JurusanController::class, 'destroy']) // {jurusan} akan di-resolve ke Model Jurusan
+        ->name('admin.manajemen-jurusan.destroy');
+
 
     Route::get('/kategori-prestasi', [KategoriPrestasiController::class, 'index'])
         ->name('admin.kategori-prestasi');

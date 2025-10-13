@@ -431,17 +431,18 @@ return [
     */
 
     'plugins' => [
-         'Jquery' => [
+        'Jquery' => [
             'active' => true,
             'files' => [
                 [
                     'type' => 'js',
                     'asset' => true,
-                    'location' => '//cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js', // Cek versi ini
-                    'integrity' => null, // <-- Ganti baris ini menjadi null
+                    'location' => '//cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js',
+                    'integrity' => null,
                 ],
             ],
         ],
+
         'Datatables' => [
             'active' => true,
             'files' => [
@@ -462,7 +463,7 @@ return [
                 ],
             ],
         ],
-       
+
         'Select2' => [
             'active' => true,
             'files' => [
@@ -494,7 +495,7 @@ return [
                 [
                     'type' => 'js',
                     'asset' => false,
-                    'location' => '//cdn.jsdelivr.net/npm/sweetalert2@11', 
+                    'location' => '//cdn.jsdelivr.net/npm/sweetalert2@11',
                 ],
             ],
         ],

@@ -56,12 +56,8 @@ return [
                 'url'  => 'admin/manajemen-jadwal-ppdb',
             ],
             [
-                'text' => 'Info Pembukaan PPDB',
-                'url' => 'menu/child2',
-            ],
-            [
                 'text' => 'Jurusan',
-                'url' => 'menu/child2',
+                'url' => 'admin/manajemen-jurusan',
             ],
             [
                 'text' => 'Jalur Prestasi',

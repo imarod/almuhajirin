@@ -8,8 +8,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\ProcessingMailNotification;
 use App\Models\Pendaftaran;
-use App\Models\ManajemenJadwalPpdb;
+use App\Models\User;
 use App\Traits\LoginTokenGenerator;
+use App\Mail\CorrectionMailNotification;
 
 class VerifikasiController extends Controller
 {
@@ -49,7 +50,7 @@ class VerifikasiController extends Controller
         $pendaftaran->update([
             'status_aktual' => $newStatus,
         ]);
-        $jadwal = $pendaftaran->jadwal; 
+        $jadwal = $pendaftaran->jadwal;
 
         if ($pendaftaran->wasChanged('status_aktual')) {
             Mail::to($pendaftaran->siswa->email_siswa)->queue(new ProcessingMailNotification($pendaftaran, $siswa, $jadwal, $plainToken));
@@ -57,5 +58,37 @@ class VerifikasiController extends Controller
         $lastFilters = $request->session()->get('last_filters');
 
         return redirect()->route('admin.pendaftar', $lastFilters)->with('success', 'Status pendaftaran berhasil diperbarui.');
+    }
+
+    public function updatePerbaikanStatus(Request $request, $id)
+    {
+        $request->validate([
+            'catatan' => 'required|string|max:1000',
+        ]);
+
+        $pendaftaran = Pendaftaran::with('siswa')->findOrFail($id);
+
+        if ($pendaftaran->status_aktual !== null) {
+            $lastFilters = $request->session()->get('last_filters');
+            return redirect()->route('admin.detail-pendaftar', ['id' => $id] + $lastFilters)
+                ->with('error', 'Gagal: Pendaftaran sudah diproses (Diterima/Ditolak) dan tidak dapat diperbaiki.');
+        }
+
+        $pendaftaran->update([
+            'status_verifikasi' => 'Perbaikan',
+            'catatan' => $request->input('catatan'),
+        ]);
+
+        $lastFilters = $request->session()->get('last_filters');
+
+        $siswa = $pendaftaran->siswa;
+        $user = $siswa->user;
+         $plainToken = $this->generateLoginToken($user);
+
+  
+    Mail::to($pendaftaran->siswa->email_siswa)->queue(new CorrectionMailNotification($pendaftaran, $siswa, $plainToken));
+
+        return redirect()->route('admin.pendaftar', $lastFilters)
+            ->with('success', 'Catatan perbaikan berhasil dikirim. Status pendaftaran diubah menjadi "Perbaikan".');
     }
 }

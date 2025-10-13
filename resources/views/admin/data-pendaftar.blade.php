@@ -40,7 +40,7 @@
 
                                 <button id="export-pdf-btn" class="dropdown-item btn-sm text-danger">
                                     <i class="fas fa-file-pdf mr-1"></i>
-                                     PDF
+                                    PDF
                                 </button>
                             </div>
                         </div>
@@ -52,11 +52,11 @@
                 <div class="row align-items-center mb-6">
                     <div class="col-md-4 mb-4 mb-md-0">
                         <div class="input-group input-group-sm">
-                            
+
                             <input type="text" class="form-control" placeholder="Cari pendaftar ..." id="searchUser">
                             <div class="input-group-prepend">
                                 <button class="btn input-group-text px-3" type="button" id="searchBtn">
-                                   <i class="fas fa-search" title="Telusuri"></i>
+                                    <i class="fas fa-search" title="Telusuri"></i>
                                 </button>
                             </div>
 
@@ -86,6 +86,8 @@
                                     </option>
                                     <option value="Ditolak" {{ $defaultStatus == 'Ditolak' ? 'selected' : '' }}>Ditolak
                                     </option>
+                                    <option value="Perbaikan" {{ $defaultStatus == 'Perbaikan' ? 'selected' : '' }}>
+                                        Perbaikan</option>
                                     <option value="Belum diproses"
                                         {{ $defaultStatus == 'Belum diproses' ? 'selected' : '' }}>Belum diproses</option>
                                 </select>
@@ -113,7 +115,7 @@
 
                 <!-- Tabel -->
                 <div class="table-responsive">
-                    <table class="table table-hover " >
+                    <table class="table table-hover ">
                         <thead class="bg-basic">
                             <tr class="">
                                 <th class="border-0 text-white" style="border-top-left-radius: 0.5rem !important">No.</th>
@@ -164,7 +166,7 @@
             let perPage = $('select.form-control-sm').val();
             let searchQuery = $('#searchUser').val();
 
-      
+
 
             $.ajax({
                 url: "{{ route('admin.pendaftar.json') }}",
@@ -216,7 +218,19 @@
                                 <td>${pendaftar.siswa?.jenis_kelamin ?? '-'}</td>
                                 <td>${pendaftar.siswa?.no_hp_siswa ?? '-'}</td>
                                 <td>${jadwalInfo}</td>
-                                <td class="text-center"><span class="${statusClass}">${pendaftar.status_aktual ?? 'Belum Diproses'}</span></td>
+                                <td class="text-center">
+                                    <span class="${statusClass}">
+                                        ${
+                                            pendaftar.status_aktual 
+                                                ? pendaftar.status_aktual 
+                                                : (
+                                                    pendaftar.status_verifikasi === 'Perbaikan' 
+                                                        ? pendaftar.status_verifikasi 
+                                                        : 'Belum Diproses' 
+                                                    )
+                                         }
+                                    </span>
+                                </td>
                                 <td>Terikirim</td>
 
                                 <td class=" text-center action-icons">
@@ -369,7 +383,7 @@
                 window.location.href = exportUrl + '?' + params.toString();
             });
 
-            fetchData(defaultPage); 
+            fetchData(defaultPage);
         });
     </script>
 @stop

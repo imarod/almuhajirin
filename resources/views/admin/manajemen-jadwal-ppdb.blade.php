@@ -44,7 +44,6 @@
                     @method('PUT')
                 @endif
 
-
                 <!-- Main Content Tabs -->
 
                 <div class="card-header  p-0 pt-1">
@@ -193,6 +192,13 @@
                                     @error('tgl_pengumuman')
                                         <div class="text-danger mt-1">{{ $message }}</div>
                                     @enderror
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="custom-control custom-switch">
+                                        <input type="checkbox" class="custom-control-input" id="customSwitch1">
+                                        <label class="custom-control-label" for="customSwitch1">Aktifkan
+                                            Penjurusan</label>
+                                    </div>
                                 </div>
                             </div>
                             {{-- button simpan/update --}}
@@ -354,16 +360,16 @@
 @stop
 @section('css')
     <style>
-
         .nav-tabs {
             border-bottom: none;
         }
+
         .nav-tabs .nav-link.active {
             font-weight: 700;
             box-shadow:
                 inset 0 5px 6px -5px rgba(0, 0, 0, 0.5);
         }
-        
+
         .nav-tabs .nav-link.active.text-dark {
             color: #5E7CE3 !important;
         }

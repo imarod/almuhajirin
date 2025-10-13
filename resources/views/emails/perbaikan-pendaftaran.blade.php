@@ -25,13 +25,15 @@
                     <tr>
                         <td style="padding: 40px 30px;">
                             <h2 style="color: #333333; font-size: 20px; margin-bottom: 20px;">Halo, {{ $pendaftaran->siswa->nama }}!</h2>
-                                                        
+                            
+
                             <p style="color: #666666; font-size: 16px; line-height: 1.6; margin-bottom: 20px;">
-                                Terima kasih telah melakukan pendaftaran. Kami informasikan bahwa terdapat beberapa data atau dokumen yang perlu diperbaiki atau dilengkapi agar proses pendaftaran dapat dilanjutkan.
+                                Terima kasih telah mendaftar. Pendaftaran Anda berhasil "Dikirim". Silakan tunggu proses
+                                verifikasi oleh admin.
                             </p>
 
                             <p style="color: #666666; font-size: 16px; line-height: 1.6; margin-bottom: 20px;">
-                                Silakan segera masuk ke dashboard pendaftaran Anda untuk melihat catatan perbaikan yang diperlukan dan melakukan pembaruan data.
+                                Kami akan memberitahu Anda kembali setelah formulir pendaftaran Anda diverifikasi.
                             </p>
 
                             <table width="100%" cellpadding="0" cellspacing="0" border="0">
@@ -39,7 +41,7 @@
                                     <td align="center" style="padding-top: 20px;">
                                         <a href="{{ route('login.token', ['token' => $token]) }}" target="_blank"
                                             style="display: inline-block; padding: 12px 24px; background-color: #007bff; color: #ffffff; text-decoration: none; border-radius: 5px; font-weight: bold;">
-                                            Dashboard
+                                            Lihat Status Pendaftaran
                                         </a>
                                     </td>
                                 </tr>

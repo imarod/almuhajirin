@@ -24,7 +24,7 @@ return new class extends Migration
             $table->foreignId('kategori_prestasi_id')->nullable()->after('ijazah')->constrained('kategori_prestasi');
         });
 
-          Schema::table('siswa', function (Blueprint $table) {
+        Schema::table('siswa', function (Blueprint $table) {
             $table->dropColumn('kategori_prestasi');
         });
     }
