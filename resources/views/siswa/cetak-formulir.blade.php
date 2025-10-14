@@ -128,11 +128,40 @@
             float: right;
             margin-top: -20px;
         }
+
+        .signature-container {
+            width: 100%;
+            margin-top: 40px;
+        }
+
+        .signature-date {
+            margin-bottom: 5px;
+            /* margin-right: 50px; */
+        }
+
+        .signature-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .signature-table td {
+            width: 50%;
+            padding: 0;
+            vertical-align: top;
+        }
+
+        .signature-label {
+            margin-bottom: 70px;
+        }
+
+        .signature-name {
+            font-weight: bold;
+            margin-top: 1px;
+        }
     </style>
 </head>
 
 <body>
-    <!-- Header Section -->
     <div class="header-container">
         <table class="header-table">
             <tr>
@@ -156,17 +185,13 @@
 
     <div class="separator"></div>
 
-    <!-- Form Title -->
+
     <div class="form-title">
         <strong>BORANG ISIAN DATA POKOK MAHASISWA</strong><br>
-        <strong>TAHUN AKADEMIK 2021/2022</strong>
+        <strong>TAHUN AKADEMIK {{ $pendaftaran->jadwal->thn_ajaran }}</strong>
     </div>
 
-    {{-- <div class="participant-number">
-        <strong>Nomor Peserta : 121171160521</strong>
-    </div> --}}
 
-    <!-- Section I: Student Biodata -->
     <div class="section-title">I. BIODATA CALON MAHASISWA</div>
 
     <table class="data-table">
@@ -208,37 +233,26 @@
             <td class="field-value">{{ $pendaftaran->siswa->no_hp_siswa }}</td>
         </tr>
         <tr>
-            <td class="field-number">6.</td>
+            <td class="field-number">7.</td>
             <td class="field-label">EMAIL SISWA</td>
             <td class="field-colon">:</td>
             <td class="field-value">{{ $pendaftaran->siswa->email_siswa }}</td>
         </tr>
         <tr>
-            <td class="field-number">7.</td>
-            <td class="field-label">KATEGORI PRESTASI</td>
-            <td class="field-colon">:</td>
-            <td class="field-value">{{ $pendaftaran->siswa->kategori_prestasi ?? '-' }}</td>
-        </tr>
-        @php
-            $status = $pendaftaran->showStatusPendaftar();
-        @endphp
-        <tr>
             <td class="field-number">8.</td>
-            <td class="field-label">STATUS PENDAFTARAN</td>
+            <td class="field-label">JURUSAN</td>
             <td class="field-colon">:</td>
-            <td class="field-value">{{ $status }}</td>
+            <td class="field-value">{{ $pendaftaran->jurusan->nama_jurusan ?? '-' }}</td>
         </tr>
         <tr>
             <td class="field-number">9.</td>
-            <td class="field-label">TANGGAL PENDAFTARAN</td>
+            <td class="field-label">KATEGORI PRESTASI</td>
             <td class="field-colon">:</td>
-            <td class="field-value">{{ \Carbon\Carbon::parse($pendaftaran->created_at)->format('d F Y') }}</td>
+            <td class="field-value">{{ $pendaftaran->kategoriPrestasi->nama_prestasi ?? '-' }}</td>
         </tr>
-
     </table>
 
-    <!-- Section II: Family Information -->
-    <div class="section-title">II. DATA ORANG TUA</div>
+    <div class="section-title">II. DATA ORANG TUA/WALI</div>
 
     <table class="data-table">
         <tr>
@@ -259,15 +273,61 @@
             <td class="field-colon">:</td>
             <td class="field-value">{{ $pendaftaran->siswa->orangTua->alamat_ortu }}</td>
         </tr>
-
         <tr>
             <td class="field-number">4.</td>
             <td class="field-label">NOMOR TELEPON AYAH/WALI</td>
             <td class="field-colon">:</td>
             <td class="field-value">{{ $pendaftaran->siswa->orangTua->no_hp_ortu }}</td>
         </tr>
-
     </table>
+    <div class="section-title">III. INFORMASI PENDAFTARAN</div>
+    <table>
+        @php
+            $status = $pendaftaran->showStatusPendaftar();
+        @endphp
+        <tr>
+            <td class="field-number">1.</td>
+            <td class="field-label">STATUS PENDAFTARAN</td>
+            <td class="field-colon">:</td>
+            <td class="field-value">{{ $status }}</td>
+        </tr>
+        <tr>
+            <td class="field-number">2.</td>
+            <td class="field-label">TANGGAL PENDAFTARAN</td>
+            <td class="field-colon">:</td>
+            <td class="field-value">{{ \Carbon\Carbon::parse($pendaftaran->created_at)->format('d F Y') }}</td>
+        </tr>
+    </table>
+
+    <div class="signature-container">
+        @php
+            $tgl_cetak = \Carbon\Carbon::now()->format('d F Y');
+            
+            // $tgl_cetak = \Carbon\Carbon::parse($pendaftaran->created_at)->format('d F Y');
+        @endphp
+
+
+
+        <table class="signature-table">
+            <tr>
+                <td>
+                    <div class="signature-date" style="color: white;">
+                        .
+                    </div>
+                    <div class="signature-label" >Wali Murid</div>
+                    <div class="signature-name"> {{ $pendaftaran->siswa->orangTua->nama_ayah }} </div>
+
+                </td>
+                <td>
+                    <div class="signature-date">
+                        Tugumulyo, {{ $tgl_cetak }}
+                    </div>
+                    <div class="signature-label">Panitia PPDB</div>
+                    <div class="signature-name">( ............................................ )</div>
+                </td>
+            </tr>
+        </table>
+    </div>
 </body>
 
 </html>

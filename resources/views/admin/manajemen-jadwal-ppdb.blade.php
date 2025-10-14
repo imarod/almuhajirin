@@ -16,10 +16,10 @@
 
         <x-jadwal-ppdb-aktif />
         <div class="btn-group dropright mb-3">
-            <button type="button" class="btn btn-sm btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
+            <button type="button" class="btn btn-sm btn-success dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
                 aria-expanded="false">
                 <i class="fas fa-print mr-1" title="Cetak"></i>
-                Cetak
+                Cetak Jadwal
             </button>
             <div class="dropdown-menu">
                 <button id="export-btn" class="dropdown-item btn-sm text-success">
@@ -72,9 +72,8 @@
                             role="tabpanel">
                             @if (isset($jadwal))
                                 <div class="tab-pane fade show active" id="settings" role="tabpanel">
-                                    <p class=" text-danger">Anda sedang berada di form edit
-                                        jadwal.
-                                        Untuk keluar dari mode edit klik tombol "Batal".
+                                    <p class=" text-muted"><i><strong>Anda sedang berada di form edit jadwal.
+                                        Untuk keluar dari mode edit klik tombol "Batal".</strong></i>
                                     </p>
                                 </div>
                             @endif
@@ -196,20 +195,19 @@
                                 <div class="col-md-6">
                                     <div class="custom-control custom-switch">
                                         <input type="checkbox" class="custom-control-input" id="customSwitch1">
-                                        <label class="custom-control-label" for="customSwitch1">Aktifkan
-                                            Penjurusan</label>
+                                      
                                     </div>
                                 </div>
                             </div>
                             {{-- button simpan/update --}}
                             <div class="border-top pt-4 mt-4">
                                 <div class="d-flex flex-column flex-sm-row gap-2">
-                                    <button type="submit" class="btn btn-primary px-4 mr-2 mb-2 mb-sm-0"
+                                    <button type="submit" class="btn btn-success px-4 mr-2 mb-2 mb-sm-0"
                                         href="{{ route('admin.manajemen-jadwal-ppdb') }}#settings">
                                         @if (isset($jadwal))
                                             Perbarui Jadwal
                                         @else
-                                            Simpan Jadwal
+                                            Simpan
                                         @endif
                                     </button>
                                     <a href="{{ route('admin.manajemen-jadwal-ppdb') }}#settings"
@@ -253,85 +251,36 @@
                             </div>
                             <div class="table-responsive">
                                 <table class="table table-hover mb-0">
-                                    <thead class="bg-primary">
+                                    <thead class="" style="background: #166534;">
                                         <tr>
-                                            <th scope="col" class="px-2 py-3 text-whitefw-semibold  ">
+                                            <th scope="col" class="px-2 py-3 text-white fw-semibold  ">
                                                 No.</th>
-                                            <th scope="col" class="px-2 py-3 text-whitefw-semibold  ">
+                                            <th scope="col" class="px-2 py-3 text-white fw-semibold  ">
                                                 Tahun Ajaran</th>
-                                            <th scope="col" class="px-2 py-3 text-whitefw-semibold  ">
+                                            <th scope="col" class="px-2 py-3 text-white fw-semibold  ">
                                                 Gelombang</th>
-                                            <th scope="col" class="px-2 py-3 text-whitefw-semibold  ">
+                                            <th scope="col" class="px-2 py-3 text-white fw-semibold  ">
                                                 Kuota
                                             </th>
-                                            <th scope="col" class="px-2 py-3 text-whitefw-semibold  ">
+                                            <th scope="col" class="px-2 py-3 text-white fw-semibold  ">
                                                 Tanggal Mulai
                                             </th>
-                                            <th scope="col" class="px-2 py-3 text-whitefw-semibold  ">
+                                            <th scope="col" class="px-2 py-3 text-white fw-semibold  ">
                                                 Tanggal Berakhir
                                             </th>
-                                            <th scope="col" class="px-2 py-3 text-whitefw-semibold  ">
+                                            <th scope="col" class="px-2 py-3 text-white  fw-semibold  ">
                                                 Tanggal
                                                 Pengumuman
                                             </th>
-                                            <th scope="col" class="px-2 py-3 text-whitefw-semibold  ">
+                                            <th scope="col" class="px-2 py-3 text-white fw-semibold  ">
                                                 Status</th>
-                                            <th scope="col" class="px-2 py-3 text-whitefw-semibold">Aksi
+                                            <th scope="col" class="px-2 py-3 text-white fw-semibold">Aksi
                                             </th>
                                         </tr>
                                     </thead>
                                     <tbody id="jadwal-table-body">
                                         <tr colspan="9" class="text-center py-5 text-muted">
 
-                                            {{-- @forelse ($jadwals as $jadwal)
-                                            <tr class="border-bottom">
-                                                <td class="px-2 py-2 text-muted">{{ $loop->iteration }}.
-                                                </td>
-                                                <td class="px-2 py-2 fw-medium">{{ $jadwal->thn_ajaran }}
-                                                </td>
-                                                <td class="px-2 py-2">{{ $jadwal->gelombang_pendaftaran }}
-                                                </td>
-                                                <td class="px-2 py-2 fw-semibold">{{ $jadwal->kuota }}
-                                                </td>
-                                                <td class="px-2 py-2 text-muted">
-                                                    {{ $jadwal->tgl_mulai->format('d-m-Y') }}
-                                                </td>
-                                                <td class="px-2 py-2 text-muted">
-                                                    {{ $jadwal->tgl_berakhir->format('d-m-Y') }}</td>
-                                                <td class="px-2 py-2 text-muted">
-                                                    {{ $jadwal->tgl_pengumuman->format('d-m-Y') }}</td>
-                                                <td class="px-2 py-2">
-                                                    <span
-                                                        class="badge bg-success-subtle text-success py-2 rounded-pill fw-medium">
-                                                        {{ $jadwal->status }}
-                                                    </span>
-                                                </td>
-                                                <td class="px-2 py-2">
-                                                    <a href="{{ route('admin.edit-jadwal-ppdb', $jadwal->id) }}"
-                                                        class="btn btn-success btn-sm me-3" title="Edit">
-                                                        <i class="fas fa-edit"></i>
-                                                    </a>
-                                                    <button type="button" class="btn btn-danger btn-sm delete-btn"
-                                                        title="Hapus" data-target="#deleteConfirmationModal"
-                                                        data-id="{{ $jadwal->id }}">
-                                                        <i class="fas fa-trash"></i>
-                                                    </button>
-                                                </td>
-                                            </tr>
-                                        @empty
-                                            <tr class="border-bottom">
-                                                <td colspan="9" class="text-center py-5">
-                                                    <i class="fas fa-history fa-3x text-muted mb-3"></i>
-                                                    <h5 class="text-muted">Belum ada riwayat jadwal
-                                                        PPDB</h5>
-                                                    <button class="btn btn-primary text-white">
-                                                        <a href="#">Buat
-                                                            Jadwal</a>
-                                                    </button>
-
-                                                </td>
-                                            </tr>
-                                        @endforelse --}}
                                     </tbody>
                                 </table>
                             </div>
@@ -371,7 +320,7 @@
         }
 
         .nav-tabs .nav-link.active.text-dark {
-            color: #5E7CE3 !important;
+            color: #198754 !important;
         }
 
         .nav-tabs .nav-link:hover {
@@ -459,11 +408,11 @@
                                     index + 1;
                                 let statusClass = '';
                                 if (jadwal.status === 'Belum Dimulai') {
-                                    statusClass = 'bg-secondary-subtle text-secondary';
+                                    statusClass = 'badge-secondary';
                                 } else if (jadwal.status === 'Aktif') {
-                                    statusClass = 'bg-success-subtle text-success';
+                                    statusClass = 'badge-success';
                                 } else {
-                                    statusClass = 'bg-danger-subtle text-danger';
+                                    statusClass = 'badge-danger';
                                 }
 
                                 html += `
@@ -476,14 +425,14 @@
                                     <td class="px-2 py-2 text-muted">${new Date(jadwal.tgl_berakhir).toLocaleDateString('id-ID')}</td>
                                     <td class="px-2 py-2 text-muted">${new Date(jadwal.tgl_pengumuman).toLocaleDateString('id-ID')}</td>
                                     <td class="px-2 py-2">
-                                        <span class="badge ${statusClass} py-2 rounded-pill fw-medium">${jadwal.status}</span>
+                                        <span class="badge ${statusClass} px-3 py-2 fw-medium">${jadwal.status}</span>
                                     </td>
                                     <td class="px-2 py-2">
-                                        <a href="/admin/manajemen-jadwal-ppdb/${jadwal.id}/edit" class="btn btn-success btn-sm me-3" title="Edit">
-                                            <i class="fas fa-edit"></i>
+                                        <a href="/admin/manajemen-jadwal-ppdb/${jadwal.id}/edit" class="btn  btn-sm me-3" title="Edit">
+                                            <i class="fas fa-edit text-primary"></i>
                                         </a>
-                                        <button type="button" class="btn btn-danger btn-sm delete-btn" title="Hapus" data-id="${jadwal.id}">
-                                            <i class="fas fa-trash"></i>
+                                        <button type="button" class="btn btn-sm delete-btn" title="Hapus" data-id="${jadwal.id}">
+                                            <i class="fas fa-trash text-danger"></i>
                                         </button>
                                     </td>
                                 </tr>

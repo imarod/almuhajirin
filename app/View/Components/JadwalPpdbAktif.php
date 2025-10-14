@@ -41,7 +41,9 @@ class JadwalPpdbAktif extends Component
                         $this->message = "Mohon maaf, pendaftaran Anda Ditolak.";
                     } elseif ($this->status === 'Diproses') {
                         $this->message = "Pendaftaran Anda sedang diproses. Silakan cek status pendaftaran secara berkala.";
-                    }else {
+                    } elseif ($this->status === 'Perbaikan') {
+                        $this->message = "Pendaftaran Anda memerlukan perbaikan. Silakan cek status pendaftaran untuk informasi lebih lanjut.";
+                    } else {
                         $this->status = 'Dikirim';
                         $this->message = "Pendaftaran Siswa Baru Berhasil Dikirim.";
                     }

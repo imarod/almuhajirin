@@ -126,6 +126,7 @@ class PendaftaranController extends Controller
                 'ijazah' => $ijazah,
                 'piagam' => $piagam,
                 'kategori_prestasi_id' => $request->input('kategori_prestasi_id'),
+                'jurusan_id' => $request->input('jurusan_id'),
                 'status_verifikasi' => 'Dikirim',
 
             ]);
@@ -199,6 +200,10 @@ class PendaftaranController extends Controller
                 'kategori_prestasi_id' => $request->input('kategori_prestasi_id'),
             ];
 
+            if ($request->has('jurusan_id')) {
+                $dataPendaftaran['jurusan_id'] = $request->input('jurusan_id');
+            }
+
             if ($request->hasFile('kk')) {
                 $dataPendaftaran['kk'] = $request->file('kk')->store('dokumen', 'public');
             }
@@ -266,7 +271,7 @@ class PendaftaranController extends Controller
                 $query->where('user_id', $userId);
             })->findOrFail($id);
 
-        $pendaftaran->load('kategoriPrestasi');
+        $pendaftaran->load('kategoriPrestasi'); 
 
         $pdf = Pdf::loadView('siswa.cetak-formulir', compact('pendaftaran'));
         $namaFile = 'Formulir Pendaftaran_' . $pendaftaran->siswa->nama . '.pdf';

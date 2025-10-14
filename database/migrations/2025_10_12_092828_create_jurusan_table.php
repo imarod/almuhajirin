@@ -20,7 +20,7 @@ return new class extends Migration
         });
 
         Schema::table('pendaftaran', function (Blueprint $table) {
-            $table->foreignId('jurusan_id')->nullable()->after('jadwal_id')->constrained('kategori_prestasi');
+            $table->foreignId('jurusan_id')->nullable()->after('jadwal_id')->constrained('jurusan');
         });
     }
 

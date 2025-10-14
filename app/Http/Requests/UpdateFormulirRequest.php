@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
-
+use App\Models\Jurusan;
 
 class UpdateFormulirRequest extends FormRequest
 {
@@ -23,6 +23,12 @@ class UpdateFormulirRequest extends FormRequest
     public function rules(): array
     {
         $pendaftaranId = $this->route('id');
+        $jurusanAktifAda = Jurusan::active()->exists();
+
+        $jurusanRule = $jurusanAktifAda
+            ? ['required', 'exists:jurusan,id,is_active,1']
+            : ['nullable', 'exists:jurusan,id,is_active,1'];
+
 
         // Gunakan Pendaftaran::find() untuk mengambil model,
         // lalu ambil relasi 'siswa'
@@ -51,6 +57,7 @@ class UpdateFormulirRequest extends FormRequest
             'piagam' => 'nullable|file|mimes:pdf|max:1024|required_with:kategori_prestasi',
             'kategori_prestasi' => 'nullable|array',
             'kategori_prestasi.*' => 'integer|exists:kategori_prestasi,id',
+            'jurusan_id' => $jurusanRule,
         ];
     }
 
@@ -84,6 +91,8 @@ class UpdateFormulirRequest extends FormRequest
             'piagam.max' => 'Ukuran file piagam tidak boleh melebihi 1 MB',
             'piagam.required_with' => 'Kategori prestasi harus dipilih jika piagam diunggah.',
             'kategori_prestasi.*.exists' => 'Salah satu kategori prestasi yang dipilih tidak ditemukan.',
+            'jurusan_id.required' => 'Silakan pilih jurusan.',
+            'jurusan_id.exists' => 'Pilihan jurusan tidak valid atau sudah tidak aktif.',
         ];
     }
 }

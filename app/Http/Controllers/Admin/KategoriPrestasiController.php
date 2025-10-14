@@ -18,11 +18,27 @@ class KategoriPrestasiController extends Controller
 
     public function store(Request $request)
     {
-        $validated = $request->validate([
-            'nama_prestasi' => 'required|string|max:255|unique:kategori_prestasi,nama_prestasi',
-            'deskripsi' => 'nullable|string',
-            'is_active' => 'nullable|boolean',
-        ]);
+        $validated = $request->validate(
+            [
+                'nama_prestasi' => [
+                    'required',
+                    'string',
+                    'max:255',
+                    Rule::unique('kategori_prestasi', 'nama_prestasi')->whereNull('deleted_at')
+
+                ],
+                'deskripsi' => 'nullable|string',
+                'is_active' => 'nullable|boolean',
+            ],
+            [
+                'nama_prestasi.required' => 'Nama prestasi wajib diisi.',
+                'nama_prestasi.string'   => 'Nama prestasi harus berupa teks.',
+                'nama_prestasi.max'      => 'Nama prestasi tidak boleh lebih dari 255 karakter.',
+                'nama_prestasi.unique'   => 'Nama prestasi ini sudah ada.',
+                'deskripsi.string'       => 'Deskripsi harus berupa teks.',
+                'is_active.boolean'      => 'Status aktif harus berupa true atau false.',
+            ]
+        );
 
         KategoriPrestasi::create($validated);
 
@@ -31,11 +47,27 @@ class KategoriPrestasiController extends Controller
 
     public function update(Request $request, KategoriPrestasi $kategoriPrestasi)
     {
-        $validated = $request->validate([
-            'nama_prestasi' => 'required|string|max:255|unique:kategori_prestasi,nama_prestasi,' . $kategoriPrestasi->id,
-            'deskripsi' => 'nullable|string',
-            'is_active' => 'nullable|boolean',
-        ]);
+        $validated = $request->validate(
+            [
+                'nama_prestasi' => [
+                    'required',
+                    'string',
+                    'max:255',
+                    Rule::unique('kategori_prestasi', 'nama_prestasi')->ignore($kategoriPrestasi->id)->whereNull('deleted_at')
+
+                ],
+                'deskripsi' => 'nullable|string',
+                'is_active' => 'nullable|boolean',
+            ],
+            [
+                'nama_prestasi.required' => 'Nama prestasi wajib diisi.',
+                'nama_prestasi.string'   => 'Nama prestasi harus berupa teks.',
+                'nama_prestasi.max'      => 'Nama prestasi tidak boleh lebih dari 255 karakter.',
+                'nama_prestasi.unique'   => 'Nama prestasi ini sudah digunakan.',
+                'deskripsi.string'       => 'Deskripsi harus berupa teks.',
+                'is_active.boolean'      => 'Status aktif harus berupa true atau false.',
+            ]
+        );
 
         $kategoriPrestasi->update($validated);
 

@@ -43,12 +43,15 @@
                                 <h5 class="mb-0 font-weight-bold text-white">Data Pribadi</h5>
                             </div>
                             <div class="card-body" style="background-color: #ffffff;">
+                                <small> <span class="text-danger font-weight-bold">*</span> Wajib Diisi</small>
 
-
-                                <div class="row">
+                                <div class="row mt-4">
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <label class="font-weight-medium text-dark">NISN</label>
+                                            <label class="d-flex align-items-center gap-1">
+                                                <span class="font-weight-medium text-dark">NISN</span>
+                                                <span class="text-danger">*</span>
+                                            </label>
                                             <input type="text" class="form-control @error('nisn') is-invalid @enderror"
                                                 placeholder="Masukkan NISN" name="nisn" id="nisnInput"
                                                 value="{{ isset($pendaftaran) ? $pendaftaran->siswa->nisn : old('nisn') }}"
@@ -61,7 +64,10 @@
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <label class="font-weight-medium text-dark">Tempat Lahir</label>
+                                            <label class="d-flex align-items-center gap-1">
+                                                <span class="font-weight-medium text-dark">Tempat Lahir</span>
+                                                <span class="text-danger">*</span>
+                                            </label>
                                             <input type="text"
                                                 class="form-control @error('tempat_lahir') is-invalid @enderror"
                                                 placeholder="Masukkan Tempat Lahir" name="tempat_lahir"
@@ -77,7 +83,10 @@
                                 <div class="row">
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <label class="font-weight-medium text-dark">Nama Lengkap</label>
+                                            <label class="d-flex align-items-center gap-1">
+                                                <span class="font-weight-medium text-dark">Nama Lengkap</span>
+                                                <span class="text-danger">*</span>
+                                            </label>
                                             <input type="text" class="form-control @error('nama') is-invalid @enderror"
                                                 placeholder="Masukkan Nama Lengkap" name="nama"
                                                 value="{{ isset($pendaftaran) ? $pendaftaran->siswa->nama : old('nama') }}">
@@ -109,7 +118,10 @@
 
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <label>Tanggal Lahir</label>
+                                            <label class="d-flex align-items-center gap-1">
+                                                <span class="font-weight-medium text-dark">Tanggal Lahir</span>
+                                                <span class="text-danger">*</span>
+                                            </label>
                                             <div class="date-wrapper">
                                                 <input type="date"
                                                     class="form-control @error('tanggal_lahir') is-invalid @enderror"
@@ -127,8 +139,11 @@
                                 <div class="row">
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <label class="font-weight-medium text-dark">Email</label>
-                                            <small class="text-muted d-block invisible">Spacer</small>
+                                            <label class="d-flex align-items-center gap-1">
+                                                <span class="font-weight-medium text-dark">Email</span>
+                                                <span class="text-danger">*</span>                                                
+                                            </label>
+                                            <small class="text-muted d-block invisible mt-md-3">Spacer</small>
                                             <input type="text"
                                                 class="form-control  @error('email_siswa') is-invalid @enderror"
                                                 placeholder="Masukkan Email Aktif" name="email_siswa"
@@ -141,7 +156,10 @@
 
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <label class="font-weight-medium text-dark mb-0">No Telepon</label>
+                                            <label class="d-flex align-items-center gap-1">
+                                                <span class="font-weight-medium text-dark">Nomor WhatsApp</span>
+                                                <span class="text-danger">*</span>
+                                            </label>
                                             <small class="text-muted d-block mb-2">Masukkan nomor telepon diawali angka
                                                 8, tanpa 0 atau +62</small>
                                             <style>
@@ -169,7 +187,10 @@
                                 <div class="row">
                                     <div class="col-md-12">
                                         <div class="form-group ">
-                                            <label>Jenis Kelamin</label><br>
+                                            <label class="d-flex align-items-center gap-1">
+                                                <span class="font-weight-medium text-dark">Jenis Kelamin</span>
+                                                <span class="text-danger">*</span>                                                
+                                            </label>
                                             <div class="form-check form-check-inline">
                                                 <input class="form-check-input @error('jenis_kelamin') is-invalid @enderror"
                                                     type="radio" name="jenis_kelamin" value="Laki-laki"
@@ -195,7 +216,10 @@
                                 <div class="row">
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <label class="font-weight-medium text-dark">Alamat Lengkap</label>
+                                            <label class="d-flex align-items-center gap-1">
+                                                <span class="font-weight-medium text-dark">Alamat Lengkap</span>
+                                                <span class="text-danger">*</span>                                                
+                                            </label>
                                             <input type="text"
                                                 class="form-control  @error('alamat_siswa') is-invalid @enderror"
                                                 placeholder="Masukkan Alamat Lengkap" name="alamat_siswa"
@@ -219,8 +243,11 @@
                                 <div class="row">
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <label class="font-weight-medium text-dark mb-0">Scan Kartu
-                                                Keluarga</label>
+                                            <label class="d-flex align-items-center gap-1">
+                                                <span class="font-weight-medium text-dark">Scan Kartu
+                                                Keluarga</span>
+                                                <span class="text-danger">*</span>                                                
+                                            </label>
                                             <small class="text-muted d-block mb-2">Unggah dalam bentuk format PDf maks
                                                 1 mb</small>
                                             @if (isset($pendaftaran) && $pendaftaran->kk)
@@ -248,7 +275,10 @@
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <label class="font-weight-medium text-dark mb-0">Scan Ijazah</label>
+                                            <label class="d-flex align-items-center gap-1">
+                                                <span class="font-weight-medium text-dark">Scan Ijazah</span>
+                                                <span class="text-danger">*</span>                                                
+                                            </label>
                                             <small class="text-muted d-block mb-2">Unggah dalam bentuk format PDf maks
                                                 1 mb</small>
                                             @if (isset($pendaftaran) && $pendaftaran->ijazah)
@@ -342,7 +372,7 @@
                                     @else
                                         <div class="row">
                                             <div class="col-md-6">
-                                               
+
                                             </div>
                                         </div>
                                     @endif
@@ -394,7 +424,10 @@
                                 <div class="row">
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <label class="font-weight-medium text-dark">Nama Ayah</label>
+                                             <label class="d-flex align-items-center gap-1">
+                                                <span class="font-weight-medium text-dark">Nama Ayah</span>
+                                                <span class="text-danger">*</span>                                                
+                                            </label>
                                             <input type="text"
                                                 class="form-control @error('nama_ayah') is-invalid @enderror"
                                                 placeholder="Masukkan Nama Ayah" name="nama_ayah"
@@ -406,7 +439,10 @@
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <label class="font-weight-medium text-dark">Nama Ibu</label>
+                                             <label class="d-flex align-items-center gap-1">
+                                                <span class="font-weight-medium text-dark">Nama Ibu</span>
+                                                <span class="text-danger">*</span>                                                
+                                            </label>
                                             <input type="text"
                                                 class="form-control @error('nama_ibu') is-invalid @enderror"
                                                 placeholder="Masukkan Nama Ibu" name="nama_ibu"
@@ -422,8 +458,11 @@
                                 <div class="row ">
                                     <div class="col-md-6 ">
                                         <div class="form-group  ">
-                                            <label class="font-weight-medium text-dark ">Alamat Lengkap</label>
-                                            <small class="text-muted d-block invisible">Spacer</small>
+                                             <label class="d-flex align-items-center gap-1">
+                                                <span class="font-weight-medium text-dark">Alamat Lengkap</span>
+                                                <span class="text-danger">*</span>                                                
+                                            </label>
+                                            <small class="text-muted d-block invisible mt-md-3">Spacer</small>
                                             <input type="text"
                                                 class="form-control @error('alamat_ortu') is-invalid @enderror"
                                                 placeholder="Masukkan Alamat" name="alamat_ortu"
@@ -435,7 +474,10 @@
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <label class="font-weight-medium text-dark mb-0">No HP</label>
+                                             <label class="d-flex align-items-center gap-1">
+                                                <span class="font-weight-medium text-dark">No WhatsApp</span>
+                                                <span class="text-danger">*</span>                                                
+                                            </label>
                                             <small class="text-muted d-block mb-2">Masukkan nomor telepon diawali angka
                                                 8, tanpa 0 atau +62</small>
                                             <div class="input-group">
@@ -456,7 +498,7 @@
                                 </div>
 
                                 <div class="text-center mt-4">
-                                    <button type="button" class="btn btn-primary px-5 py-2 bg-basic"
+                                    <button type="button" class="btn btn-primary px-5 py-2 bg-primary"
                                         id="submitButton"><strong>Kirim</strong></button>
                                 </div>
                             </div>
@@ -471,7 +513,7 @@
                                 <h5 class="text-muted">{{ $message }}</h5>
                                 {{-- Pesan di bawah ini bisa disesuaikan atau dihapus jika tidak relevan --}}
                                 <p class="text-muted ">Kembali ke menu Daftar</p>
-                                <a href="{{ route('ajuan.pendaftaran') }}" class="btn bg-basic text-white">Kembali</a>
+                                <a href="{{ route('ajuan.pendaftaran') }}" class="btn bg-primary text-white">Kembali</a>
                             </div>
                         </div>
                     @endif

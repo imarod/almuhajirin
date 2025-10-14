@@ -1,7 +1,7 @@
-@if($isRegistered)
+@if ($isRegistered)
     {{-- Blok untuk status Diterima, Ditolak, atau Diproses --}}
     @php
-        $status; 
+        $status;
         $icon = '';
         $cardClass = '';
         $borderStyle = '';
@@ -11,33 +11,40 @@
 
         if ($status === 'Diterima' || $status === 'Ditolak') {
             $isAccepted = $status === 'Diterima';
-            $icon = $isAccepted ? 'fas fa-check text-success' : 'fas fa-times text-danger';
+            $icon = $isAccepted ? 'fas fa-check-double' : 'fas fa-exclamation text-danger';
             $color = $isAccepted ? '#28a745' : '#dc3545';
             $cardClass = $isAccepted ? 'border-left-success' : 'border-left-danger';
             $borderStyle = 'border-left: 4px solid ' . ($isAccepted ? '#28a745' : '#dc3545') . ' !important;';
-            $bgStyle = 'background: linear-gradient(135deg, ' . ($isAccepted ? '#d4edda' : '#f8d7da') . ' 0%, #e8f5e9 100%);';
+         $bgStyle =
+    'background: ' . ($isAccepted ? '#d4edda' : '#f8d7da') . ';';
             $messageHeader = 'Pengumuman Hasil PPDB';
             $messageBody = $message;
-
         } elseif ($status === 'Diproses') {
-            $icon = 'fas fa-user-clock';
-            $color = '#17a2b8';
+            $icon = 'fas fa-sync-alt';
+            $color = '#5E7CE3';
             $cardClass = 'border-left-info';
-            $borderStyle = 'border-left: 4px solid #17a2b8 !important;';
-            $bgStyle = 'background: linear-gradient(135deg, #d4f0f6 0%, #e8f5e9 100%);';
+            $borderStyle = 'border-left: 4px solid #5E7CE3 !important;';
+            $bgStyle = 'background: rgba(94, 124, 227, 0.25);';
             $messageHeader = 'Pendaftaran Sedang Diproses';
             $messageBody = $message;
-
+        } elseif ($status === 'Perbaikan') {
+            $icon = 'fas fa-pen';
+            $color = '#eda73d';
+            $cardClass = 'border-left-info';
+            $borderStyle = 'border-left: 4px solid #eda73d !important;';
+            $bgStyle = 'background: #fff3cd;';
+            $messageHeader = 'Pendaftaran Perlu Diperbaiki';
+            $messageBody = $message;
         } elseif ($status === 'Dikirim') {
-            $icon = 'fas fa-envelope-open-text';
-            $color = '#28a745';
+            $icon = 'fas fa-check';
+            $color = '#eda73d';
             $cardClass = 'border-left-success';
-            $borderStyle = 'border-left: 4px solid #28a745 !important;';
-            $bgStyle = 'background: linear-gradient(135deg, #d4edda 0%, #e8f5e9 100%);';
+            $borderStyle = 'border-left: 4px solid #eda73d !important;';
+            $bgStyle = 'background: #fff3cd;';
             $messageHeader = 'Pendaftaran Berhasil Dikirim';
             $messageBody = $message;
         }
-        
+
     @endphp
 
     <div class="card mb-4 {{ $cardClass }} shadow-sm" style="{{ $borderStyle }}">
@@ -45,8 +52,8 @@
             <div class="d-flex align-items-center">
                 <div class="flex-shrink-0 mr-3">
                     <div class="rounded-circle d-flex align-items-center justify-content-center"
-                        style="width: 40px; height: 40px; background-color: rgba(249, 250, 250, 0.1) !important;">
-                        <i class="{{ $icon }}" style=" {{ $color }};"></i>
+                        style="width: 40px; height: 40px; background-color: rgb(255, 255, 255) !important;">
+                        <i class="{{ $icon }}" style="color: {{ $color }};"></i>
                     </div>
                 </div>
                 <div>
@@ -83,12 +90,12 @@
 @else
     {{-- Blok untuk pendaftaran tutup/belum dibuka --}}
     <div class="card mb-4 border-left-primary shadow-sm" style="border-left: 4px solid #ff0000 !important;">
-        <div class="card-body" style="background: linear-gradient(135deg, #fde3e3 0%, #f6e8e8 100%);">
+        <div class="card-body" style="background: rgba(255, 0, 0, 0.15);">
             <div class="d-flex align-items-center">
                 <div class="flex-shrink-0 mr-3">
                     <div class="bg-primary rounded-circle d-flex align-items-center justify-content-center"
-                        style="width: 40px; height: 40px; background-color: rgba(255, 25, 0, 0.1) !important;">
-                        <i class="fas fa-exclamation-triangle" style="color: #ff0000;"></i>
+                        style="width: 40px; height: 40px; background-color: rgb(255, 255, 255) !important;">
+                        <i class="fas fa-exclamation" style="color: #ff0000;"></i>
                     </div>
                 </div>
                 <div>

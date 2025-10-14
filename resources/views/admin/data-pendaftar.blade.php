@@ -116,18 +116,17 @@
                 <!-- Tabel -->
                 <div class="table-responsive">
                     <table class="table table-hover ">
-                        <thead class="bg-basic">
+                        <thead class="bg-success">
                             <tr class="">
-                                <th class="border-0 text-white" style="border-top-left-radius: 0.5rem !important">No.</th>
+                                <th class="border-0 text-white" >No.</th>
                                 <th class="border-0 text-white">Nama Lengkap</th>
                                 <th class="border-0 text-white">NISN</th>
                                 <th class="border-0 text-white">Jenis Kelamin</th>
                                 <th class="border-0 text-white">No Handphone</th>
                                 <th class="border-0 text-white">Gelombang</th>
                                 <th class="border-0 text-white text-center">Status</th>
-                                <th class="border-0 text-white text-center">Notifikasi</th>
-                                <th class="border-0 text-white text-center"
-                                    style="border-top-right-radius: 0.5rem !important">Aksi</th>
+                                <th class="border-0 text-white text-center">Pengumuman</th>
+                                <th class="border-0 text-white text-center">Aksi</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -231,7 +230,7 @@
                                          }
                                     </span>
                                 </td>
-                                <td>Terikirim</td>
+                                <td class="text-center">${pendaftar.pesan_email == 1 ? 'Terkirim' : '-'}</td>
 
                                 <td class=" text-center action-icons">
                                     <a href="${detailUrl}?thn_ajaran=${thnAjaran}&gelombang=${gelombang}&status=${status}&page=${pagination.current_page}&per_page=${perPage}&search=${searchQuery}"><i class="fas fa-eye text-secondary" title="Lihat"></i></a>

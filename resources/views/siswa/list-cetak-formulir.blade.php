@@ -13,6 +13,11 @@
 @stop
 
 @section('content')
+<style>
+    /* body{
+         font-family: 'DejaVu Sans', Arial, sans-serif !important;
+    } */
+</style>
     <div class="container-fluid">
         <div class="row">
             @forelse ($daftarPendaftaran as $pendaftaran)
@@ -28,7 +33,7 @@
                         <div class="p-3">
                             <div class="header text-center mb-3">
                                 <div>
-                                    <h5 class="font-weight-bold mb-0">SMA Negeri 10 Surabaya</h5>
+                                    <h5 class="font-weight-bold mb-0">MAS Al Muhajirin Tugumulyo</h5>
                                     <p class="mb-0 text-muted" style="font-size: 0.8rem;">Jalan Raya Candi Lontar No. 10,
                                         Surabaya</p>
                                     <p class="mb-0 text-muted" style="font-size: 0.8rem;">Telepon: (031) 1234567 | Email:
@@ -46,10 +51,10 @@
                             </div>
 
                             {{-- Section: Informasi Pribadi --}}
-                            <h5 class="font-weight-bold text-primary mb-3">Informasi Pribadi</h5>
+                            <h5 class="font-weight-bold text-primary mb-3">I. BIODATA CALON MAHASISWA</h5>
                             <div class="row">
                                 <div class="col-4">
-                                    <p class="mb-2">NAMA LENGKAP</p>
+                                    <p class="font-weight-bold mb-2">Nama Lengkap</p>
                                 </div>
                                 <div class="col-8">
                                     <p class="mb-2 border-bottom border-secondary border-dotted">
@@ -58,7 +63,7 @@
                             </div>
                             <div class="row">
                                 <div class="col-4">
-                                    <p class="mb-2">NISN</p>
+                                    <p class="font-weight-bold mb-2">NISN</p>
                                 </div>
                                 <div class="col-8">
                                     <p class="mb-2 border-bottom border-secondary border-dotted">
@@ -67,7 +72,7 @@
                             </div>
                             <div class="row">
                                 <div class="col-4">
-                                    <p class="mb-2">JENIS KELAMIN</p>
+                                    <p class="font-weight-bold mb-2">Jenis Kelamin</p>
                                 </div>
                                 <div class="col-8">
                                     <p class="mb-2 border-bottom border-secondary border-dotted">
@@ -76,7 +81,7 @@
                             </div>
                             <div class="row">
                                 <div class="col-4">
-                                    <p class="mb-2">TEMPAT, TANGGAL LAHIR</p>
+                                    <p class="font-weight-bold mb-2">Tempat, Tanggal Lahir</p>
                                 </div>
                                 <div class="col-8">
                                     <p class="mb-2 border-bottom border-secondary border-dotted">
@@ -86,7 +91,7 @@
                             </div>
                             <div class="row">
                                 <div class="col-4">
-                                    <p class="mb-2">ALAMAT SISWA</p>
+                                    <p class="font-weight-bold mb-2">Alamat Siswa</p>
                                 </div>
                                 <div class="col-8">
                                     <p class="mb-2 border-bottom border-secondary border-dotted">
@@ -95,7 +100,7 @@
                             </div>
                             <div class="row">
                                 <div class="col-4">
-                                    <p class="mb-2">NOMOR HP SISWA</p>
+                                    <p class="font-weight-bold mb-2">Nomor WhatsApp Siswa</p>
                                 </div>
                                 <div class="col-8">
                                     <p class="mb-2 border-bottom border-secondary border-dotted">
@@ -104,7 +109,7 @@
                             </div>
                             <div class="row">
                                 <div class="col-4">
-                                    <p class="mb-2">EMAIL SISWA</p>
+                                    <p class="font-weight-bold mb-2">Email Siswa</p>
                                 </div>
                                 <div class="col-8">
                                     <p class="mb-2 border-bottom border-secondary border-dotted">
@@ -113,19 +118,28 @@
                             </div>
                             <div class="row">
                                 <div class="col-4">
-                                    <p class="mb-2">KATEGORI PRESTASI</p>
+                                    <p class="font-weight-bold mb-2">Jurusan</p>
                                 </div>
                                 <div class="col-8">
                                     <p class="mb-2 border-bottom border-secondary border-dotted">
-                                        {{ $pendaftaran->siswa->kategori_prestasi ?? '-' }}</p>
+                                        {{ $pendaftaran->jurusan->nama_jurusan ?? '-' }}</p>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-4">
+                                    <p class="font-weight-bold mb-2">Kategori Prestasi</p>
+                                </div>
+                                <div class="col-8">
+                                    <p class="mb-2 border-bottom border-secondary border-dotted">
+                                        {{ $pendaftaran->kategoriPrestasi->nama_prestasi ?? '-' }}</p>
                                 </div>
                             </div>
 
                             {{-- Section: Informasi Orang Tua --}}
-                            <h5 class="font-weight-bold text-primary mt-4 mb-3">Informasi Orang Tua</h5>
+                            <h5 class="font-weight-bold text-primary mt-4 mb-3">II. DATA ORANG TUA/WALI</h5>
                             <div class="row">
                                 <div class="col-4">
-                                    <p class="mb-2">NAMA AYAH</p>
+                                    <p class="font-weight-bold mb-2">Nama Ayah/Wali</p>
                                 </div>
                                 <div class="col-8">
                                     <p class="mb-2 border-bottom border-secondary border-dotted">
@@ -134,7 +148,7 @@
                             </div>
                             <div class="row">
                                 <div class="col-4">
-                                    <p class="mb-2">NAMA IBU</p>
+                                    <p class="font-weight-bold mb-2">Nama Ibu</p>
                                 </div>
                                 <div class="col-8">
                                     <p class="mb-2 border-bottom border-secondary border-dotted">
@@ -143,7 +157,7 @@
                             </div>
                             <div class="row">
                                 <div class="col-4">
-                                    <p class="mb-2">ALAMAT ORANG TUA</p>
+                                    <p class="font-weight-bold mb-2">Alamat Orang Tua/Wali</p>
                                 </div>
                                 <div class="col-8">
                                     <p class="mb-2 border-bottom border-secondary border-dotted">
@@ -152,7 +166,7 @@
                             </div>
                             <div class="row">
                                 <div class="col-4">
-                                    <p class="mb-2">NOMOR HP ORANG TUA</p>
+                                    <p class="font-weight-bold mb-2">Nomor WhatsApp Orang Tua/Wali</p>
                                 </div>
                                 <div class="col-8">
                                     <p class="mb-2 border-bottom border-secondary border-dotted">
@@ -161,14 +175,14 @@
                             </div>
 
                             {{-- Section: Informasi Tambahan --}}
-                            <h5 class="font-weight-bold text-primary mt-4 mb-3">Informasi Tambahan</h5>
+                            <h5 class="font-weight-bold text-primary mt-4 mb-3">III. INFORMASI PENDAFTARAN</h5>
 
                             @php
                                 $status = $pendaftaran->showStatusPendaftar();                               
                             @endphp
                             <div class="row">
                                 <div class="col-4">
-                                    <p class="mb-2">STATUS VERIFIKASI</p>
+                                    <p class="font-weight-bold mb-2">Status Verifikasi</p>
                                 </div>
                                 <div class="col-8">
                                     <p class="mb-2 border-bottom border-secondary border-dotted">
@@ -178,7 +192,7 @@
                             </div>
                             <div class="row">
                                 <div class="col-4">
-                                    <p class="mb-2">TANGGAL PENDAFTARAN</p>
+                                    <p class="font-weight-bold mb-2">Tanggal Pendaftaran</p>
                                 </div>
                                 <div class="col-8">
                                     <p class="mb-2 border-bottom border-secondary border-dotted">
@@ -188,8 +202,8 @@
                         </div>
                         {{-- Footer Formulir --}}
                         <div class="card-footer text-muted d-flex justify-content-between">
-                            <span>Dokumen ID:
-                                FP-{{ $pendaftaran->created_at->format('Y') }}-{{ str_pad($pendaftaran->id, 3, '0', STR_PAD_LEFT) }}</span>
+                            {{-- <span>Dokumen ID:
+                                FP-{{ $pendaftaran->created_at->format('Y') }}-{{ str_pad($pendaftaran->id, 3, '0', STR_PAD_LEFT) }}</span> --}}
                             <span>Dicetak pada: {{ \Carbon\Carbon::now()->format('d F Y') }} pukul
                                 {{ \Carbon\Carbon::now()->format('H.i') }}</span>
                         </div>

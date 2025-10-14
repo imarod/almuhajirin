@@ -21,7 +21,7 @@ class DashboardAdmin extends Controller
         $totalDitolak = Pendaftaran::where('status_aktual', 'Ditolak')->count();
         $belumDiperiksa = Pendaftaran::whereNull('status_aktual')->count();
 
-        return response()->json([ 
+        return response()->json([
             'totalPendaftar' => $totalPendaftar,
             'totalDiterima' => $totalDiterima,
             'totalDitolak' => $totalDitolak,
@@ -39,27 +39,50 @@ class DashboardAdmin extends Controller
     }
     public function getPendaftarByPrestasi()
     {
-        $prestasi = Siswa::select('kategori_prestasi')
-            ->distinct()
-            ->pluck('kategori_prestasi');
-        if ($prestasi->isEmpty()) {
+        $dataPrestasi = Pendaftaran::select('kategori_prestasi_id')
+            ->whereNotNull('kategori_prestasi_id')
+            ->with('kategoriPrestasi')
+            ->get()
+            ->groupBy('kategoriPrestasi.nama_prestasi')
+            ->map(function ($items, $key) {
+                return $items->count();
+            });
+        if ($dataPrestasi->isEmpty()) {
             return response()->json([
                 'labels' => [],
                 'data' => []
             ]);
         }
 
-        $prestasiData = [];
-        foreach ($prestasi as $label) {
-            $count = Siswa::where('kategori_prestasi', $label)->count();
-            $prestasiData[] = $count;
+        return response()->json([
+            'labels' => $dataPrestasi->keys()->toArray(),
+            'data' => $dataPrestasi->values()->toArray()
+        ]);
+    }
+
+    public function getPendaftarByJurusan()
+    {
+        $dataJurusan = Pendaftaran::select('jurusan_id')
+            ->whereNotNull('jurusan_id')
+            ->with('jurusan')
+            ->get()
+            ->groupBy('jurusan.nama_jurusan')
+            ->map(function ($items, $key) {
+                return $items->count();
+            });
+        if ($dataJurusan->isEmpty()) {
+            return response()->json([
+                'labels' => [],
+                'data' => []
+            ]);
         }
 
         return response()->json([
-            'labels' => $prestasi,
-            'data' => $prestasiData
+            'labels' => $dataJurusan->keys()->toArray(),
+            'data' => $dataJurusan->values()->toArray()
         ]);
     }
+
     public function getPendaftarByYearAndWave()
     {
         $data = Pendaftaran::selectRaw('

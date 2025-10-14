@@ -5,6 +5,7 @@ namespace App\Http\Requests;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule;
+use App\Models\Jurusan;
 
 class FormulirPendaftaranStore extends FormRequest
 {
@@ -24,6 +25,11 @@ class FormulirPendaftaranStore extends FormRequest
     public function rules(): array
     {
 
+        $jurusanAktifAda = Jurusan::active()->exists();
+
+        $jurusanRule = $jurusanAktifAda
+            ? ['required', 'exists:jurusan,id,is_active,1']
+            : ['nullable', 'exists:jurusan,id,is_active,1'];
         $siswaId = Auth::id();
         return [
             'nama' => 'required',
@@ -45,6 +51,7 @@ class FormulirPendaftaranStore extends FormRequest
             'kk' => 'required|file|mimes:pdf|max:1024',
             'ijazah' => 'required|file|mimes:pdf|max:1024',
             'piagam' => 'nullable|file|mimes:pdf|max:1024|required_with:kategori_prestasi',
+            'jurusan_id' => $jurusanRule,
             //tabmbahkan required kalau wajib ada piagam
             'kategori_prestasi' => 'nullable|array',
             'kategori_prestasi.*' => 'integer|exists:kategori_prestasi,id',
@@ -84,6 +91,8 @@ class FormulirPendaftaranStore extends FormRequest
             'piagam.max' => 'Ukuran file piagam tidak boleh melebihi 1 MB',
             'piagam.required_with' => 'Kategori prestasi harus dipilih jika piagam diunggah.',
             'kategori_prestasi.*.exists' => 'Salah satu kategori prestasi yang dipilih tidak ditemukan.',
+            'jurusan_id.required' => 'Silakan pilih jurusan.',
+            'jurusan_id.exists' => 'Pilihan jurusan tidak valid atau sudah tidak aktif.',
         ];
     }
 }

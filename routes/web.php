@@ -68,6 +68,8 @@ Route::prefix('admin')->middleware(['auth', 'is_admin'])->group(function () {
         ->name('admin.dashboard.data-gender');
     Route::get('/dashboard/data-prestasi', [DashboardAdmin::class, 'getPendaftarByPrestasi'])
         ->name('admin.dashboard.data-prestasi');
+    Route::get('/dashboard/data-jurusan', [DashboardAdmin::class, 'getPendaftarByJurusan'])
+        ->name('admin.dashboard.data-jurusan');
     Route::get('/dashboard/data-pendaftar-gelombang', [DashboardAdmin::class, 'getPendaftarByYearAndWave'])
         ->name('admin.dashboard.data-pendaftar-gelombang');
 

@@ -39,7 +39,7 @@
                                 <td>{{ $kategori->deskripsi ?? '-' }}</td>
                                 <td>
                                     @if ($kategori->is_active)
-                                        <span class="badge badge-success px-3 py-2 ">Aktif</span>
+                                        <span class="badge badge-success px-3 py-2 ">Aktif</span> 
                                     @else
                                         <span class="badge badge-danger px-3 py-2">Tidak Aktif</span>
                                     @endif
@@ -109,7 +109,7 @@
                                         </div>
                                         <div class="modal-footer d-flex justify-content-end">
                                             <button type="submit" form="formEditKategori{{ $kategori->id }}"
-                                                class="btn btn-success">Simpan Perubahan</button>
+                                                class="btn btn-success">Simpan</button>
                                             <button type="button" class="btn btn-default mr-2"
                                                 data-dismiss="modal">Batal</button>
                                             

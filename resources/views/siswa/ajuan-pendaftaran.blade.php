@@ -94,20 +94,20 @@
 
                         </div>
                         <div class="table-responsive">
-                            <table id="pendaftaranTable" class="table table-striped table-hover">
-                                <thead class="bg-basic">
+                            <table id="pendaftaranTable" class="table table-striped table-bordered table-hover">
+                                <thead class="bg-success">
                                     <tr>
-                                        <th class="border-0 text-white" style=" border-top-left-radius: 0.5rem !important">
+                                        <th class="border-0 text-white" >
                                             No
                                         </th>
                                         <th class="border-0 text-white">Nama Lengkap</th>
                                         <th class="border-0 text-white">NISN</th>
                                         <th class="border-0 text-white">Jenis Kelamin</th>
                                         <th class="border-0 text-white">Tgl Daftar</th>
-                                        <th class="border-0 text-white">Status</th>
+                                        <th class="border-0 text-white text-center">Status</th>
                                         <th class="border-0 text-white text-center">Catatan</th>
 
-                                        <th class="border-0 text-white" style="border-top-right-radius: 0.5rem !important">
+                                        <th class="border-0 text-white text-center">
                                             Aksi</th>
                                     </tr>
                                 </thead>
@@ -122,7 +122,7 @@
                                                     <p class="text-muted ">Buat pendaftaran baru</p>
 
                                                     <a href="{{ route('formulir-siswa') }}"
-                                                        class="btn bg-basic text-white px-4">Daftar</a>
+                                                        class="btn bg-primary text-white px-4">Daftar</a>
                                                 </div>
                                             </td>
                                         </tr>
@@ -140,17 +140,12 @@
                                                 <td>{{ $pendaftaran->siswa->nisn }}</td>
                                                 <td>{{ $pendaftaran->siswa->jenis_kelamin }}</td>
                                                 <td class="text-muted">{{ $pendaftaran->created_at->format('d-m-Y') }}</td>
-                                                <td><span class="{{ $statusClass }}">
+                                                <td class="text-center"><span class="{{ $statusClass }}">
                                                         {{ $status }}
                                                     </span></td>
-                                                <td
-                                                    style="
- 
-    color: #000000;
-    font-size: 0.8rem;
-">
+                                                <td class="text-center">
                                                     {{ $pendaftaran->catatan }}</td>
-                                                <td class="action-icons">
+                                                <td class="action-icons text-center">
                                                     @php
                                                         $jadwalSelesai =
                                                             $pendaftaran->jadwal &&

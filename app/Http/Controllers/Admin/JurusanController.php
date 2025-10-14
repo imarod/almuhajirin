@@ -17,15 +17,24 @@ class JurusanController extends Controller
 
     public function store(Request $request)
     {
-        $validated = $request->validate([
-            'nama_jurusan' => [
-                'required',
-                'string',
-                'max:255',
-                Rule::unique('jurusan', 'nama_jurusan')->whereNull('deleted_at')
+        $validated = $request->validate(
+            [
+                'nama_jurusan' => [
+                    'required',
+                    'string',
+                    'max:255',
+                    Rule::unique('jurusan', 'nama_jurusan')->whereNull('deleted_at')
+                ],
+                'is_active' => 'nullable|boolean',
             ],
-            'is_active' => 'nullable|boolean',
-        ]);
+            [
+                'nama_jurusan.required' => 'Nama jurusan wajib diisi.',
+                'nama_jurusan.string'   => 'Nama jurusan harus berupa teks.',
+                'nama_jurusan.max'      => 'Nama jurusan tidak boleh lebih dari 255 karakter.',
+                'nama_jurusan.unique'   => 'Nama jurusan ini sudah ada.',
+                'is_active.boolean'     => 'Status aktif harus berupa true atau false.',
+            ]
+        );
 
         Jurusan::create($validated);
 
@@ -34,15 +43,24 @@ class JurusanController extends Controller
 
     public function update(Request $request, Jurusan $jurusan)
     {
-        $validated = $request->validate([
-            'nama_jurusan' => [
-                'required',
-                'string',
-                'max:255',
-                Rule::unique('jurusan', 'nama_jurusan')->ignore($jurusan->id)->whereNull('deleted_at') // <--- BARIS PERBAIKAN
+        $validated = $request->validate(
+            [
+                'nama_jurusan' => [
+                    'required',
+                    'string',
+                    'max:255',
+                    Rule::unique('jurusan', 'nama_jurusan')->ignore($jurusan->id)->whereNull('deleted_at')
+                ],
+                'is_active' => 'nullable|boolean',
             ],
-            'is_active' => 'nullable|boolean',
-        ]);
+            [
+                'nama_jurusan.required' => 'Nama jurusan wajib diisi.',
+                'nama_jurusan.string'   => 'Nama jurusan harus berupa teks.',
+                'nama_jurusan.max'      => 'Nama jurusan tidak boleh lebih dari 255 karakter.',
+                'nama_jurusan.unique'   => 'Nama jurusan ini sudah digunakan.',
+                'is_active.boolean'     => 'Status aktif harus berupa true atau false.',
+            ]
+        );
 
         $jurusan->update($validated);
 
@@ -52,7 +70,7 @@ class JurusanController extends Controller
     public function destroy(Jurusan $jurusan)
     {
         try {
-            // Pengecekan relasi: Jika jurusan ini sudah digunakan oleh pendaftaran, jangan dihapus.
+            // Jika jurusan ini sudah digunakan oleh pendaftaran, jangan dihapus.
             if ($jurusan->pendaftarans()->exists()) {
                 return redirect()->route('admin.manajemen-jurusan')->with('error', 'Gagal menghapus! Jurusan ini sedang digunakan oleh data pendaftar.');
             }

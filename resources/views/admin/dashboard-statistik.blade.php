@@ -115,29 +115,32 @@
                     </select>
                 </div>
 
+                {{-- Prestasi Siswa --}}
+                <div class="row mb-4">
+                    <div class="col-12">
+                        <div class="card h-100">
+                            <div class="card-body">                                
+                                <div id="highchart2" style=""></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                
                 <div class="row gx-4">
-                    <div class="col-lg-4 col-md-6 col-sm-6 mb-4">
+                    {{-- jenis_kelamin --}}
+                    <div class="col-lg-6 col-md-6 col-sm-6 mb-4">
                         <div class="card h-100">
-                            <div class="card-body">
-                                <h5 class="card-title text-center">Perbandingan jumlah pendaftar laki laki dan perempuan
-                                    secara keseluruhan</h5>
-                                <canvas id="doughnutChart1"></canvas>
+                            <div class="card-body">                                
+                                <div id="highchart1" style="min-width: 250px; height: 300px; margin: 0 auto"></div>
                             </div>
                         </div>
                     </div>
-                    <div class="col-lg-4 col-md-6 col-sm-6 mb-4">
+                    {{-- jurusan --}}
+                    <div class="col-lg-6 col-md-6 col-sm-6 mb-4">
                         <div class="card h-100">
                             <div class="card-body">
-                                <h5 class="card-title text-center">Perbandingan Kategori Prestasi Siswa</h5>
-                                <canvas id="doughnutChart2"></canvas>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-4 col-md-6 col-sm-6 mb-4">
-                        <div class="card h-100">
-                            <div class="card-body">
-                                <h5 class="card-title text-center">Judul Chart 3</h5>
-                                <canvas id="doughnutChart3"></canvas>
+                                <div id="highchart3" style="min-width: 250px; height: 300px; margin: 0 auto"></div>
                             </div>
                         </div>
                     </div>
@@ -165,55 +168,104 @@
 @endsection
 
 @push('js')
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+    <script src="https://code.highcharts.com/modules/exporting.js"></script>
+    <script src="https://code.highcharts.com/modules/export-data.js"></script>
+    <script src="https://code.highcharts.com/modules/offline-exporting.js"></script>
+    <script src="https://code.highcharts.com/modules/accessibility.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     {{-- chart donut --}}
     <script>
-        const data3 = {
-            labels: ['Gray', 'Black', 'White'],
-            datasets: [{
-                label: 'My Third Dataset',
-                data: [120, 180, 250],
-                backgroundColor: ['#C9CBCE', '#444444', '#DDDDDD'],
-                hoverOffset: 4
-            }]
-        };
+        function createHighchartsPie(containerId, chartTitle, seriesName, seriesData) {
+            const total = seriesData.reduce((sum, point) => sum + point.y, 0);
 
-        // Fungsi untuk membuat chart dengan konfigurasi kustom
-        function createDoughnutChart(canvasId, chartData) {
-            new Chart(
-                document.getElementById(canvasId), {
-                    type: 'doughnut',
-                    data: chartData,
-                    options: {
-                        responsive: true,
-                        plugins: {
-                            legend: {
-                                position: 'bottom',
-                                usePointStyle: true,
+            Highcharts.chart(containerId, {
+                chart: {
+                    type: 'pie',
+                    custom: {},
+                    events: {
+                        render() {
+                            const chart = this,
+                                series = chart.series[0];
+                            let customLabel = chart.options.chart.custom.label;
+
+                            if (!customLabel) {
+                                customLabel = chart.options.chart.custom.label =
+                                    chart.renderer.label(
+                                        'Total<br/>' +
+                                        '<strong>' + total.toLocaleString() + '</strong>'
+                                    )
+                                    .css({
+                                        color: 'var(--highcharts-neutral-color-100, #000)',
+                                        textAnchor: 'middle'
+                                    })
+                                    .add();
                             }
-                        },
-                        tooltip: {
-                            callbacks: {
-                                label: function(context) {
-                                    let label = context.label || '';
-                                    if (label) {
-                                        label += ': ';
-                                    }
-                                    if (context.parsed !== null) {
-                                        label += context.parsed;
-                                    }
-                                    return label;
+
+                            const x = series.center[0] + chart.plotLeft,
+                                y = series.center[1] + chart.plotTop -
+                                (customLabel.attr('height') / 2);
+
+                            customLabel.attr({
+                                x,
+                                y
+                            });
+                            customLabel.css({
+                                fontSize: `${series.center[2] / 12}px`
+                            });
+                        }
+                    }
+                },
+                title: {
+                    text: chartTitle
+                },
+                tooltip: {
+                    pointFormat: '{series.name}: <b>{point.y} ({point.percentage:.1f}%)</b>'
+                },
+                legend: {
+                    enabled: true,
+                    align: 'center',
+                    verticalAlign: 'bottom',
+                    layout: 'horizontal'
+                },
+                plotOptions: {
+                    pie: {
+                        allowPointSelect: true,
+                        cursor: 'pointer',
+                        innerSize: '50%',
+                        dataLabels: [{
+                            enabled: true,
+                            distance: 15,
+                            format: '{point.name}'
+                        }, {
+                            enabled: true,
+                            distance: -30,
+                            format: '{point.percentage:.0f}%',
+                            style: {
+                                fontSize: '0.9em'
+                            }
+                        }],
+                        showInLegend: true
+                    },
+                    series: {
+                        point: {
+                            events: {
+                                legendItemClick: function() {
+                                    return true;
                                 }
                             }
                         }
                     }
-                }
-            )
+                },
+                series: [{
+                    name: seriesName,
+                    colorByPoint: true,
+                    data: seriesData
+                }]
+            });
         }
 
-
-        // Panggil data statistik menggunakan AJAX
         fetch('{{ route('admin.dashboard.data-counts') }}')
             .then(response => response.json())
             .then(data => {
@@ -225,43 +277,73 @@
             .catch(error => console.error('Error fetching dashboard counts:', error));
 
 
-        // Ambil data untuk Chart 1 (Gender)
         fetch('{{ route('admin.dashboard.data-gender') }}')
             .then(response => response.json())
             .then(data => {
-                const chartData = {
-                    labels: data.labels,
-                    datasets: [{
-                        label: 'Jumlah Pendaftar',
-                        data: data.data,
-                        backgroundColor: ['#36A2EB', '#FF6384'],
-                        hoverOffset: 4
-                    }]
-                };
-                createDoughnutChart('doughnutChart1', chartData);
+                const seriesData = data.labels.map((label, index) => ({
+                    name: label,
+                    y: data.data[index],
+                    color: index === 0 ? '#36A2EB' : '#FF6384'
+                }));
+
+                createHighchartsPie('highchart1',
+                    'Perbandingan jumlah pendaftar laki laki dan perempuan secara keseluruhan',
+                    'Jumlah Pendaftar', seriesData);
             })
             .catch(error => console.error('Error fetching gender data:', error));
 
-        // Ambil data untuk Chart 2 (Prestasi)
+
+
         fetch('{{ route('admin.dashboard.data-prestasi') }}')
             .then(response => response.json())
             .then(data => {
                 const backgroundColors = ['#4BC0C0', '#9966FF', '#FF9F40', '#dshgdhsgsdhdgsh', '#FFCE56', '#C9CBCE'];
-                const chartData = {
-                    labels: data.labels,
-                    datasets: [{
-                        label: 'Kategori Prestasi',
-                        data: data.data,
-                        backgroundColor: backgroundColors.slice(0, data.labels.length),
-                        hoverOffset: 4
-                    }]
-                };
-                createDoughnutChart('doughnutChart2', chartData);
+
+                if (data.labels && data.data && data.labels.length > 0) {
+                    const seriesData = data.labels.map((label, index) => ({
+                        name: label,
+                        y: data.data[index],
+                        color: backgroundColors[index % backgroundColors.length]
+                    }));
+
+                    createHighchartsPie(
+                        'highchart2',
+                        'Perbandingan Kategori Prestasi Siswa',
+                        'Kategori Prestasi',
+                        seriesData
+                    );
+                } else {
+                    console.log('Tidak ada data prestasi yang ditemukan.');
+                    document.getElementById('highchart2').innerHTML =
+                        '<div class="text-center p-5 text-muted">Tidak ada data prestasi yang tercatat.</div>';
+                }
             })
             .catch(error => console.error('Error fetching prestasi data:', error));
 
+        fetch('{{ route('admin.dashboard.data-jurusan') }}')
+            .then(response => response.json())
+            .then(data => {
+                const backgroundColors = ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF', '#FF9F40'];
+                if (data.labels && data.data && data.labels.length > 0) {
+                    const seriesData = data.labels.map((label, index) => ({
+                        name: label,
+                        y: data.data[index],
+                        color: backgroundColors[index % backgroundColors.length]
+                    }));
 
-        createDoughnutChart('doughnutChart3', data3);
+                    createHighchartsPie(
+                        'highchart3',
+                        'Perbandingan Jumlah Pendaftar Berdasarkan Jurusan',
+                        'Jurusan',
+                        seriesData
+                    );
+                } else {
+                    console.log('Tidak ada data jurusan yang ditemukan.');
+                    document.getElementById('highchart3').innerHTML =
+                        '<div class="text-center p-5 text-muted">Tidak ada data jurusan yang tercatat.</div>';
+                }
+            })
+            .catch(error => console.error('Error fetching jurusan data:', error));
     </script>
 
 
@@ -297,7 +379,4 @@
             })
             .catch(error => console.error('Error fetching pendaftar data:', error));
     </script>
-
-
-   
 @endpush

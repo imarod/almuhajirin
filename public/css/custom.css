@@ -22,6 +22,8 @@
   box-shadow: none;
 }
 
+
+
 /* status */
 .status-badge {
   padding: 4px 8px;
@@ -46,7 +48,7 @@
   color: #ffffff;
 }
 .status-perbaikan {
-  background-color: #2454f4;
+  background-color: #eda73d;
   color: #ffffff;
 }
 
