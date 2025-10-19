@@ -67,7 +67,7 @@ class PendaftaranController extends Controller
                 // Cek kuota pendaftar                
                 $jumlahPendaftar = Pendaftaran::where('jadwal_id', $jadwalAktif->id)->count();
                 if ($jadwalAktif->kuota <= $jumlahPendaftar) {
-                    $message = "Pendaftaran telah DITUTUP. Kuota pendaftar sudah penuh.";
+                    $message = "Pendaftaran telah ditutup. Kuota pendaftar sudah penuh.";
                 } else {
                     //pendaftaran baru
                     $statusPendaftaran = 'open';
@@ -197,6 +197,7 @@ class PendaftaranController extends Controller
 
             $dataPendaftaran = [
                 'status_verifikasi' => 'Dikirim',
+                'catatan' => null,
                 'kategori_prestasi_id' => $request->input('kategori_prestasi_id'),
             ];
 

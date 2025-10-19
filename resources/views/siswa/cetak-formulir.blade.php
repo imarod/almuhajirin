@@ -7,7 +7,7 @@
     <title></title>
     <style>
         @page {
-            margin: 20mm;
+            margin: 15mm;
             size: A4;
         }
 

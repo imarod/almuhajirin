@@ -42,7 +42,7 @@ class JadwalPpdbAktif extends Component
                     } elseif ($this->status === 'Diproses') {
                         $this->message = "Pendaftaran Anda sedang diproses. Silakan cek status pendaftaran secara berkala.";
                     } elseif ($this->status === 'Perbaikan') {
-                        $this->message = "Pendaftaran Anda memerlukan perbaikan. Silakan cek status pendaftaran untuk informasi lebih lanjut.";
+                        $this->message = "Harap perbaiki formulir sesuai catatan dan segera kirim kembali sebelum batas waktu penutupan " . \Carbon\Carbon::parse($pendaftaran->jadwal->tgl_berakhir)->format('d F Y') . ".";
                     } else {
                         $this->status = 'Dikirim';
                         $this->message = "Pendaftaran Siswa Baru Berhasil Dikirim.";
@@ -59,7 +59,7 @@ class JadwalPpdbAktif extends Component
                 $jumlahPendaftar = Pendaftaran::where('jadwal_id', $this->jadwalAktif->id)->count();
 
                 if ($jumlahPendaftar >= $this->jadwalAktif->kuota) {
-                    $this->message = "Pendaftaran telah DITUTUP. Kuota pendaftar sudah penuh.";
+                    $this->message = "Pendaftaran telah ditutup. Kuota pendaftar sudah penuh.";
                     $this->jadwalAktif = null;
                 } else {
                     $this->message = "Pendaftaran Tahun Ajaran " . $this->jadwalAktif->thn_ajaran . " Gelombang " . $this->jadwalAktif->gelombang_pendaftaran . " Telah Dibuka";

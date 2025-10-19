@@ -4,7 +4,7 @@
     <div class="container-fluid mb-3">
         <div class="d-flex justify-content-between align-items-center">
             <div>
-                <h1 class="h3 mb-0 font-weight-bold">Manajemen Jalur Prestasi</h1>
+                <h1 class="h3 mb-0 font-weight-bold" style="color:#333333">Manajemen Jalur Prestasi</h1>
                 <p>Kelola kategori prestasi untuk pendaftaran siswa baru.</p>
             </div>
            
@@ -18,17 +18,17 @@
         <div class="card">
             <div class="card-body">
                  {{-- Tombol Tambah --}}
-            <button class="btn btn-success mb-4" data-toggle="modal" data-target="#modalTambahKategori">
+            <button class="btn btn-sm mb-4" style="background-color:  #31708F; color:white;" data-toggle="modal" data-target="#modalTambahKategori">
                Tambah Kategori
             </button>
                 <table id="dataTable" class="table table-bordered table-striped">
-                    <thead>
+                    <thead class="bg-basic text-white">
                         <tr>
                             <th>No</th>
                             <th>Nama Prestasi</th>
                             <th>Deskripsi</th>
-                            <th>Status</th>
-                            <th>Aksi</th>
+                            <th class="text-center">Status</th>
+                            <th class="text-center">Aksi</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -37,14 +37,14 @@
                                 <td>{{ $loop->iteration }}</td>
                                 <td>{{ $kategori->nama_prestasi }}</td>
                                 <td>{{ $kategori->deskripsi ?? '-' }}</td>
-                                <td>
+                                <td class="text-center">
                                     @if ($kategori->is_active)
-                                        <span class="badge badge-success px-3 py-2 ">Aktif</span> 
+                                        <span class="badge px-3 py-2 " style="background-color: #21ca5f; color: white;">Aktif</span> 
                                     @else
                                         <span class="badge badge-danger px-3 py-2">Tidak Aktif</span>
                                     @endif
                                 </td>
-                                <td>
+                                <td class="text-center">
                                     <button class="btn btn-sm " data-toggle="modal"
                                         data-target="#modalEditKategori{{ $kategori->id }}">
                                         <i class="fas fa-edit text-primary"></i>
@@ -109,7 +109,7 @@
                                         </div>
                                         <div class="modal-footer d-flex justify-content-end">
                                             <button type="submit" form="formEditKategori{{ $kategori->id }}"
-                                                class="btn btn-success">Simpan</button>
+                                                class="btn" style="background-color:  #31708F; color:white;">Simpan</button>
                                             <button type="button" class="btn btn-default mr-2"
                                                 data-dismiss="modal">Batal</button>
                                             
@@ -165,7 +165,7 @@
                     </form>
                 </div>
                 <div class="modal-footer d-flex justify-content-end">
-                    <button type="submit" form="formTambahKategori" class="btn btn-success">Simpan</button>
+                    <button type="submit" form="formTambahKategori" class="btn" style="background-color:  #31708F; color:white;">Simpan</button>
                     <button type="button" class="btn btn-default mr-2" data-dismiss="modal">Batal</button>
                     
                 </div>
@@ -239,11 +239,11 @@
                 if (typeof Swal !== 'undefined') {
                     Swal.fire({
                         title: 'Apakah Anda yakin?',
-                        text: "Kategori yang dihapus tidak dapat dikembalikan!",
+                        text: "Kategori prestasi yang dihapus tidak dapat dikembalikan!",
                         icon: 'warning',
                         showCancelButton: true,
-                        confirmButtonColor: '#3085d6',
-                        cancelButtonColor: '#d33',
+                        confirmButtonColor: '#d33',
+                        cancelButtonColor: '#3085d6',
                         confirmButtonText: 'Ya, Hapus!',
                         cancelButtonText: 'Batal'
                     }).then((result) => {

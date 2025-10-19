@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <meta charset="UTF-8">
     <title>Data Pendaftar</title>
@@ -39,17 +40,17 @@
             color: #64748b;
         }
 
-       .info-section {
+        .info-section {
             padding: 8px;
             margin: 10px 0;
         }
-        
+
         .info-row {
             display: table;
             width: 100%;
             margin: 3px 0;
         }
-        
+
         .info-label {
             display: table-cell;
             width: 120px;
@@ -57,7 +58,7 @@
             font-size: 12px;
             padding-right: 10px;
         }
-        
+
         .info-value {
             display: table-cell;
             font-size: 12px;
@@ -97,17 +98,41 @@
             font-weight: bold;
         }
 
-        .stat-card.accepted { background-color: #dcfce7; border-color: #16a34a; }
-        .stat-card.accepted .stat-number { color: #16a34a; }
+        .stat-card.accepted {
+            background-color: #dcfce7;
+            border-color: #16a34a;
+        }
 
-        .stat-card.pending { background-color: #fef3c7; border-color: #d97706; }
-        .stat-card.pending .stat-number { color: #d97706; }
+        .stat-card.accepted .stat-number {
+            color: #16a34a;
+        }
 
-        .stat-card.rejected { background-color: #fee2e2; border-color: #dc2626; }
-        .stat-card.rejected .stat-number { color: #dc2626; }
+        .stat-card.pending {
+            background-color: #fef3c7;
+            border-color: #d97706;
+        }
 
-        .stat-card.unprocessed { background-color: #f1f5f9; border-color: #64748b; }
-        .stat-card.unprocessed .stat-number { color: #64748b; }
+        .stat-card.pending .stat-number {
+            color: #d97706;
+        }
+
+        .stat-card.rejected {
+            background-color: #fee2e2;
+            border-color: #dc2626;
+        }
+
+        .stat-card.rejected .stat-number {
+            color: #dc2626;
+        }
+
+        .stat-card.unprocessed {
+            background-color: #f1f5f9;
+            border-color: #64748b;
+        }
+
+        .stat-card.unprocessed .stat-number {
+            color: #64748b;
+        }
 
         .table-section {
             margin-bottom: 20px;
@@ -176,9 +201,12 @@
             text-align: right;
         }
 
-        .text-center { text-align: center; }
+        .text-center {
+            text-align: center;
+        }
     </style>
 </head>
+
 <body>
     <div class="header">
         <div class="school-name">MAS AL MUHAJIRIN TUGUMULYO</div>
@@ -186,18 +214,9 @@
         {{-- <div class="academic-year">Tahun Ajaran 2024/2025</div> --}}
     </div>
 
-   <div class="info-section">       
-        <div class="info-row">
-            <div class="info-label">Total Pendaftar</div>
-            <div class="info-value">:</div>
-        </div>
-        <div class="info-row">
-            <div class="info-label">Tanggal Cetak</div>
-            <div class="info-value">: </div>
-        </div>   
-    </div>
-    
-{{-- 
+
+
+    {{-- 
     <div class="stats-container">
         <div class="stats-grid">
             <div class="stat-card accepted">
@@ -234,20 +253,20 @@
                 </tr>
             </thead>
             <tbody>
-                
-                @foreach($jadwals as $jadwal)
-                <tr>
-                    <td>{{ $loop->iteration }}</td>
-                    <td>{{$jadwal->thn_ajaran}}</td>
-                    <td>{{$jadwal->gelombang_pendaftaran}}</td>
-                    <td>{{$jadwal->kuota}}</td>
-                    <td>{{$jadwal->tgl_mulai->format('d-m-Y')}}</td>
-                    <td>{{$jadwal->tgl_berakhir->format('d-m-Y')}}</td>
-                    <td>{{$jadwal->tgl_pengumuman->format('d-m-Y')}}</td>
-                    <td>{{$jadwal->status}}</td>
-                </tr>
+
+                @foreach ($jadwals as $jadwal)
+                    <tr>
+                        <td>{{ $loop->iteration }}</td>
+                        <td>{{ $jadwal->thn_ajaran }}</td>
+                        <td>{{ $jadwal->gelombang_pendaftaran }}</td>
+                        <td>{{ $jadwal->kuota }}</td>
+                        <td>{{ $jadwal->tgl_mulai->format('d F Y') }}</td>
+                        <td>{{ $jadwal->tgl_berakhir->format('d F Y') }}</td>
+                        <td>{{ $jadwal->tgl_pengumuman->format('d F Y') }}</td>
+                        <td>{{ $jadwal->status }}</td>
+                    </tr>
                 @endforeach
-               
+
             </tbody>
         </table>
     </div>
@@ -264,4 +283,5 @@
         </div>
     </div>
 </body>
+
 </html>

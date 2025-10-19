@@ -4,7 +4,7 @@
     <div class="container-fluid">
         <div class="d-flex justify-content-between align-items-center">
             <div>
-                <h1 class="h3 mb-0 font-weight-bold text-dark">Manajemen Jadwal PPDB</h1>
+                <h1 class="h3 mb-0 font-weight-bold text-dark" style="color:#333333">Manajemen Jadwal PPDB</h1>
             </div>
 
         </div>
@@ -16,9 +16,9 @@
 
         <x-jadwal-ppdb-aktif />
         <div class="btn-group dropright mb-3">
-            <button type="button" class="btn btn-sm btn-success dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
-                aria-expanded="false">
-                <i class="fas fa-print mr-1" title="Cetak"></i>
+            <button type="button" class="btn btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
+                aria-expanded="false" style="background-color:#31708F; color: white;">
+                <i class="fas fa-print mr-1 text-white" title="Cetak"></i>
                 Cetak Jadwal
             </button>
             <div class="dropdown-menu">
@@ -49,15 +49,15 @@
                 <div class="card-header  p-0 pt-1">
                     <ul class="nav nav-tabs" id="ppdbTabs" role="tablist">
                         <li class="nav-item">
-                            <a class="nav-link d-flex align-items-center text-dark {{ !isset($jadwal) ? 'active' : '' }} "
+                            <a class="nav-link d-flex align-items-center text-dark font-weight-bold {{ !isset($jadwal) ? 'active' : '' }}"
                                 id="settings-tab" data-toggle="tab" href="#settings" role="tab">
                                 {{-- <i class="fas fa-cog mr-2"></i> --}}
                                 Pengaturan Jadwal
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link d-flex align-items-center text-dark" id="history-tab" data-toggle="tab"
-                                href="#history" role="tab">
+                            <a class="nav-link d-flex align-items-center text-dark font-weight-bold" id="history-tab"
+                                data-toggle="tab" href="#history" role="tab">
                                 {{-- <i class="fas fa-history mr-2"></i> --}}
                                 Riwayat Jadwal PPDB
                             </a>
@@ -73,7 +73,7 @@
                             @if (isset($jadwal))
                                 <div class="tab-pane fade show active" id="settings" role="tabpanel">
                                     <p class=" text-muted"><i><strong>Anda sedang berada di form edit jadwal.
-                                        Untuk keluar dari mode edit klik tombol "Batal".</strong></i>
+                                                Untuk keluar dari mode edit klik tombol "Batal".</strong></i>
                                     </p>
                                 </div>
                             @endif
@@ -107,13 +107,8 @@
                                     <label for="tgl_mulai" class="form-label font-weight-medium text-dark">Tanggal
                                         Mulai</label>
                                     <div class="input-group">
-                                        <div class="input-group-prepend">
-                                            <span class="input-group-text bg-light border-right-0">
-                                                <i class="fas fa-calendar text-muted"></i>
-                                            </span>
-                                        </div>
-                                        <input type="date" class="form-control border-left-0" id="tgl_mulai"
-                                            name="tgl_mulai"
+
+                                        <input type="date" class="form-control " id="tgl_mulai" name="tgl_mulai"
                                             value="{{ old('tgl_mulai', isset($jadwal) ? $jadwal->tgl_mulai->format('Y-m-d') : '') }}">
                                     </div>
                                     @error('tgl_mulai')
@@ -124,8 +119,8 @@
                                     <label for="gelombang_pendaftaran"
                                         class="form-label font-weight-medium text-dark">Gelombang
                                         Pendaftaran</label>
-                                    <select class="form-control" id="gelombang_pendaftaran" name="gelombang_pendaftaran">
-                                        <option value="">Pilih gelombang</option>
+                                    <select class="form-control" id="gelombang_pendaftaran" name="gelombang_pendaftaran"
+                                        pladeholder="Pilih Gelombang">
                                         @php
                                             $selectedGelombang = old(
                                                 'gelombang_pendaftaran',
@@ -145,13 +140,7 @@
                                     <label for="tgl_berakhir" class="form-label font-weight-medium text-dark">Tanggal
                                         Berakhir</label>
                                     <div class="input-group">
-                                        <div class="input-group-prepend">
-                                            <span class="input-group-text bg-light border-right-0">
-                                                <i class="fas fa-calendar text-muted"></i>
-                                            </span>
-                                        </div>
-                                        <input type="date" class="form-control border-left-0" id="tgl_berakhir"
-                                            name="tgl_berakhir"
+                                        <input type="date" class="form-control " id="tgl_berakhir" name="tgl_berakhir"
                                             value="{{ old('tgl_berakhir', isset($jadwal) ? $jadwal->tgl_berakhir->format('Y-m-d') : '') }}">
                                     </div>
                                     @error('tgl_berakhir')
@@ -162,13 +151,8 @@
                                     <label for="kuota" class="form-label font-weight-medium text-dark">Kuota
                                         Pendaftaran</label>
                                     <div class="input-group">
-                                        <div class="input-group-prepend">
-                                            <span class="input-group-text bg-light border-right-0">
-                                                <i class="fas fa-users text-muted"></i>
-                                            </span>
-                                        </div>
-                                        <input type="number" class="form-control border-left-0" id="kuota"
-                                            name="kuota" placeholder="Masukkan kuota"
+                                        <input type="number" class="form-control" id="kuota" name="kuota"
+                                            placeholder="Masukkan kuota"
                                             value="{{ old('kuota', $jadwal->kuota ?? '') }}">
                                     </div>
                                     @error('kuota')
@@ -179,12 +163,8 @@
                                     <label for="tgl_pengumuman" class="form-label font-weight-medium text-dark">Tanggal
                                         Pengumuman</label>
                                     <div class="input-group">
-                                        <div class="input-group-prepend">
-                                            <span class="input-group-text bg-light border-right-0">
-                                                <i class="fas fa-clock text-muted"></i>
-                                            </span>
-                                        </div>
-                                        <input type="date" name="tgl_pengumuman" class="form-control border-left-0"
+
+                                        <input type="date" name="tgl_pengumuman" class="form-control "
                                             id="tgl_pengumuman"
                                             value="{{ old('tgl_pengumuman', isset($jadwal) ? $jadwal->tgl_pengumuman->format('Y-m-d') : '') }}">
                                     </div>
@@ -195,25 +175,25 @@
                                 <div class="col-md-6">
                                     <div class="custom-control custom-switch">
                                         <input type="checkbox" class="custom-control-input" id="customSwitch1">
-                                      
+
                                     </div>
                                 </div>
                             </div>
                             {{-- button simpan/update --}}
-                            <div class="border-top pt-4 mt-4">
-                                <div class="d-flex flex-column flex-sm-row gap-2">
-                                    <button type="submit" class="btn btn-success px-4 mr-2 mb-2 mb-sm-0"
-                                        href="{{ route('admin.manajemen-jadwal-ppdb') }}#settings">
-                                        @if (isset($jadwal))
-                                            Perbarui Jadwal
-                                        @else
-                                            Simpan
-                                        @endif
-                                    </button>
-                                    <a href="{{ route('admin.manajemen-jadwal-ppdb') }}#settings"
-                                        class="btn btn-danger px-4">Batal</a>
 
-                                </div>
+                            <div class="d-flex flex-column flex-sm-row gap-2">
+                                <button type="submit" style="background-color: #31708F; color: white;"
+                                    class="btn px-4 mr-2 mb-2 mb-sm-0"
+                                    href="{{ route('admin.manajemen-jadwal-ppdb') }}#settings">
+                                    @if (isset($jadwal))
+                                        Perbarui Jadwal
+                                    @else
+                                        Simpan
+                                    @endif
+                                </button>
+                                <a href="{{ route('admin.manajemen-jadwal-ppdb') }}#settings"
+                                    class="btn btn-danger px-4">Batal</a>
+
                             </div>
                         </div>
 
@@ -224,7 +204,7 @@
                                     <div class="col-md-8">
                                         <div class="d-flex align-items-center flex-wrap">
                                             <div class="d-flex align-items-center mr-3">
-                                                <span class="text-muted small">Show</span>
+                                                <span class="text-muted">Tampilkan</span>
                                                 <select id="show-entries" class="form-control form-control-sm mx-2"
                                                     style="width: auto;">
                                                     <option value="10">10 Baris</option>
@@ -233,10 +213,7 @@
                                                     <option value="100">100 Baris</option>
                                                     <option value="0">Semua Baris</option>
                                                 </select>
-                                                <span class="text-muted small">entries</span>
                                             </div>
-
-
                                         </div>
                                     </div>
                                     {{-- <div class="col-md-4">
@@ -250,31 +227,28 @@
                                 </div>
                             </div>
                             <div class="table-responsive">
-                                <table class="table table-hover mb-0">
-                                    <thead class="" style="background: #166534;">
+                                <table class="table table-bordered table-striped table-hover mb-0">
+                                    <thead style="background-color: #2E8B57;">
                                         <tr>
-                                            <th scope="col" class="px-2 py-3 text-white fw-semibold  ">
-                                                No.</th>
-                                            <th scope="col" class="px-2 py-3 text-white fw-semibold  ">
-                                                Tahun Ajaran</th>
-                                            <th scope="col" class="px-2 py-3 text-white fw-semibold  ">
+                                            <th scope="col" class="px-2 py-3 text-white text-center fw-semibold">No.
+                                            </th>
+                                            <th scope="col" class="px-2 py-3 text-white text-center fw-semibold">Tahun
+                                                Ajaran</th>
+                                            <th scope="col" class="px-2 py-3 text-white text-center fw-semibold">
                                                 Gelombang</th>
-                                            <th scope="col" class="px-2 py-3 text-white fw-semibold  ">
-                                                Kuota
+                                            <th scope="col" class="px-2 py-3 text-white text-center fw-semibold">Kuota
                                             </th>
-                                            <th scope="col" class="px-2 py-3 text-white fw-semibold  ">
-                                                Tanggal Mulai
-                                            </th>
-                                            <th scope="col" class="px-2 py-3 text-white fw-semibold  ">
+                                            <th scope="col" class="px-2 py-3 text-white text-center fw-semibold">
+                                                Tanggal Mulai</th>
+                                            <th scope="col" class="px-2 py-3 text-white text-center fw-semibold ">
                                                 Tanggal Berakhir
                                             </th>
-                                            <th scope="col" class="px-2 py-3 text-white  fw-semibold  ">
-                                                Tanggal
-                                                Pengumuman
+                                            <th scope="col" class="px-2 py-3 text-white text-center  fw-semibold">
+                                                Tanggal Pengumuman
                                             </th>
-                                            <th scope="col" class="px-2 py-3 text-white fw-semibold  ">
-                                                Status</th>
-                                            <th scope="col" class="px-2 py-3 text-white fw-semibold">Aksi
+                                            <th scope="col" class="px-2 py-3 text-white text-center fw-semibold">Status
+                                            </th>
+                                            <th scope="col" class="px-2 py-3 text-white text-center fw-semibold">Aksi
                                             </th>
                                         </tr>
                                     </thead>
@@ -301,8 +275,7 @@
                         </div>
                     </div>
                 </div>
-
-        </div>
+            </div>
     </div>
 
 
@@ -316,11 +289,11 @@
         .nav-tabs .nav-link.active {
             font-weight: 700;
             box-shadow:
-                inset 0 5px 6px -5px rgba(0, 0, 0, 0.5);
+                inset 0 5px 7px -5px rgba(0, 0, 0, 0.7);
         }
 
         .nav-tabs .nav-link.active.text-dark {
-            color: #198754 !important;
+            color: #31708F !important;
         }
 
         .nav-tabs .nav-link:hover {
@@ -332,10 +305,87 @@
             border-color: #dee2e6;
         }
 
+        .dropdown-item:hover,
+        .dropdown-item:focus {
+            background-color: #e9e9e9 !important;
+        }
 
-        .btn-primary:hover {
-            background-color: #0056b3;
-            border-color: #0056b3;
+        .dropdown-item:active {
+            background-color: #dddcdc !important;
+        }
+
+        .form-control:focus {
+            border-color: #2E8B57;
+            box-shadow: none;
+        }
+
+        select {
+            min-inline-size: 14ch;
+            justify-content: space-between;
+
+            &,
+            &::picker(select) {
+                appearance: base-select;
+                padding: .5rem;
+                border: solid 1px #28a745;
+                line-height: 2.5;
+            }
+
+            &::picker(select) {
+                margin-block-start: 0.5rem;
+            }
+
+            &::picker-icon {
+                display: none;
+            }
+        }
+
+        .picker {
+            transition: rotate 0.3s ease;
+
+            .open & {
+                rotate: 90deg;
+            }
+        }
+
+        /* paginasi custom */
+        /* paginasi custom */
+        .pagination {
+            --pagination-main-color: #31708F;
+            --pagination-dark-color: #2A647B;
+            --pagination-text-color: #FFFFFF;
+        }
+
+        .pagination .page-link {
+            color: var(--pagination-main-color);
+            border-color: #ced4da;
+        }
+
+        .pagination .page-item:not(.active) .page-link:hover {
+            color: #FFFFFF;
+            background-color: var(--pagination-dark-color);
+            border-color: var(--pagination-dark-color);
+        }
+
+        .pagination .page-item.active .page-link {
+            z-index: 3;
+            color: var(--pagination-text-color);
+            background-color: var(--pagination-main-color);
+            border-color: var(--pagination-main-color);
+        }
+
+        .pagination .page-item.disabled .page-link {
+            color: #a0a0a0;
+            pointer-events: none;
+            background-color: #f8f9fa;
+            border-color: #dee2e6;
+        }
+
+        .pagination .page-item.disabled .page-link {
+            color: #6c757d;
+            pointer-events: none;
+            background-color: #fff;
+            border-color: #dee2e6;
         }
     </style>
 @stop
@@ -417,17 +467,35 @@
 
                                 html += `
                                 <tr class="border-bottom">
-                                    <td class="px-2 py-2 text-muted">${no}.</td>
-                                    <td class="px-2 py-2 fw-medium">${jadwal.thn_ajaran}</td>
-                                    <td class="px-2 py-2">${jadwal.gelombang_pendaftaran}</td>
-                                    <td class="px-2 py-2 fw-semibold">${jadwal.kuota}</td>
-                                    <td class="px-2 py-2 text-muted">${new Date(jadwal.tgl_mulai).toLocaleDateString('id-ID')}</td>
-                                    <td class="px-2 py-2 text-muted">${new Date(jadwal.tgl_berakhir).toLocaleDateString('id-ID')}</td>
-                                    <td class="px-2 py-2 text-muted">${new Date(jadwal.tgl_pengumuman).toLocaleDateString('id-ID')}</td>
-                                    <td class="px-2 py-2">
-                                        <span class="badge ${statusClass} px-3 py-2 fw-medium">${jadwal.status}</span>
+                                    <td class="px-2 py-2 text-center text-muted">${no}.</td>
+                                    <td class="px-2 py-2 text-center fw-medium">${jadwal.thn_ajaran}</td>
+                                    <td class="px-2 py-2 text-center">${jadwal.gelombang_pendaftaran}</td>
+                                    <td class="px-2 py-2 text-center fw-semibold">${jadwal.kuota}</td>
+                                    <td class="px-2 py-2 text-center text-muted">${new Date(jadwal.tgl_mulai).toLocaleDateString('id-ID', 
+                                        {
+                                            day: 'numeric',
+                                            month: 'long',
+                                            year: 'numeric'
+                                        })}
                                     </td>
-                                    <td class="px-2 py-2">
+                                    <td class="px-2 py-2 text-center text-muted">${new Date(jadwal.tgl_berakhir).toLocaleDateString('id-ID', 
+                                        {
+                                            day: 'numeric',
+                                            month: 'long',
+                                            year: 'numeric'
+                                        })}
+                                    </td>
+                                    <td class="px-2 py-2 text-center text-muted">${new Date(jadwal.tgl_pengumuman).toLocaleDateString('id-ID',
+                                        {
+                                            day: 'numeric',
+                                            month: 'long',
+                                            year: 'numeric'
+                                        })}
+                                    </td>
+                                    <td class="px-2 py-2 text-center">
+                                        <span class="badge ${statusClass} px-3 py-2 text-center fw-medium">${jadwal.status}</span>
+                                    </td>
+                                    <td class="px-2 py-2 text-center">
                                         <a href="/admin/manajemen-jadwal-ppdb/${jadwal.id}/edit" class="btn  btn-sm me-3" title="Edit">
                                             <i class="fas fa-edit text-primary"></i>
                                         </a>
@@ -444,7 +512,7 @@
                                 <td colspan="9" class="text-center py-5">
                                     <i class="fas fa-history fa-3x text-muted mb-3"></i>
                                     <h5 class="text-muted">Belum ada riwayat jadwal PPDB</h5>
-                                    <a href="#settings" class="btn btn-primary text-white">Buat Jadwal</a>
+                                    <a href="#settings" class="btn text-white" style="background-color: #31708F">Buat Jadwal</a>
                                 </td>
                             </tr>
                         `;
@@ -495,7 +563,7 @@
                                 icon: 'warning',
                                 showCancelButton: true,
                                 confirmButtonColor: '#d33',
-                                cancelButtonColor: '#6c757d',
+                                cancelButtonColor: '#3085d6',
                                 confirmButtonText: 'Ya, hapus!',
                                 cancelButtonText: 'Batal'
                             }).then((result) => {

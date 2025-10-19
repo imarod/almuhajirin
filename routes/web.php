@@ -31,6 +31,8 @@ Route::get('/', function () {
 Auth::routes();
 
 
+// Route::get('/home', [App\Http\Controllers\HomeController::class, 'home'])->name('home');
+
 // Route::get('/test', [App\Http\Controllers\HomeController::class, 'home'])->name('home');
 // Route::get('test-email', [HomeController::class, 'testEmail'])->name('test.email');
 // Route::get('/test-download-pdf', [HomeController::class, 'downloadPdf'])->name('test.download.pdf');

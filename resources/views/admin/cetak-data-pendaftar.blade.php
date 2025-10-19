@@ -10,7 +10,10 @@
             font-family: 'DejaVu Sans', Arial, sans-serif;
             font-size: 10px;
             margin: 0;
-            padding: 20px;
+            padding-top: 20px;
+            padding-bottom: 20px;
+            padding-left: 0px;
+            padding-right: 0px;
             color: #333;
             line-height: 1.4;
         }
@@ -27,12 +30,13 @@
             font-weight: bold;
             color: #1e293b;
             margin-bottom: 5px;
+            text-align: center;
         }
 
         .report-title {
-            font-size: 20px;
+            font-size: 16px;
             font-weight: bold;
-            margin: 10px 0;
+            text-align: center;
         }
 
         .academic-year {
@@ -91,7 +95,7 @@
             display: block;
             margin-bottom: 4px;
         }
-
+/* 
         .stat-label {
             font-size: 8px;
             color: #64748b;
@@ -123,7 +127,7 @@
 
         .stat-card.rejected .stat-number {
             color: #dc2626;
-        }
+        } */
 
         .stat-card.unprocessed {
             background-color: #f1f5f9;
@@ -210,9 +214,11 @@
 <body>
     <div class="header">
         <div class="school-name">MAS AL MUHAJIRIN TUGUMULYO</div>
-        <div class="report-title">Laporan Data Pendaftar Peserta Didik Baru</div>
+        
         {{-- <div class="academic-year">Tahun Ajaran 2024/2025</div> --}}
     </div>
+
+    <div class="report-title">Laporan Data Pendaftar Peserta Didik Baru</div>
 
     <div class="info-section">
         <div class="info-row">
@@ -252,14 +258,14 @@
             <thead>
                 <tr>
                     <th style="width: 5%;">NO.</th>
-                    <th style="width: 25%;">NAMA LENGKAP</th>
-                    <th style="width: 15%;">NISN</th>
+                    <th style="width: 15%;">NAMA LENGKAP</th>
+                    <th style="width: 12%;">NISN</th>
                     <th style="width: 8%;">L/P</th>
                     <th style="width: 15%;">NO. HP</th>
-                    <th style="width: 15%;">ALAMAT</th>
+                    <th style="width: 28%;">ALAMAT</th>
 
-                    <th style="width: 17%;">GELOMBANG</th>
-                    <th style="width: 15%;">STATUS</th>
+                    <th style="width: 15%;">GELOMBANG</th>
+                    <th style="width: 17%;">STATUS</th>
                 </tr>
             </thead>
             <tbody>

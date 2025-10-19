@@ -13,11 +13,11 @@
 @stop
 
 @section('content')
-<style>
-    /* body{
-         font-family: 'DejaVu Sans', Arial, sans-serif !important;
-    } */
-</style>
+    <style>
+        /* body{
+                 font-family: 'DejaVu Sans', Arial, sans-serif !important;
+            } */
+    </style>
     <div class="container-fluid">
         <div class="row">
             @forelse ($daftarPendaftaran as $pendaftaran)
@@ -178,7 +178,7 @@
                             <h5 class="font-weight-bold text-primary mt-4 mb-3">III. INFORMASI PENDAFTARAN</h5>
 
                             @php
-                                $status = $pendaftaran->showStatusPendaftar();                               
+                                $status = $pendaftaran->showStatusPendaftar();
                             @endphp
                             <div class="row">
                                 <div class="col-4">
@@ -211,7 +211,25 @@
                 </div>
             @empty
                 <div class="container-fluid">
-                    <p class="text-center">Tidak ada formulir pendaftaran yang tersedia.</p>
+                    <div class="card mb-4 border-left-primary shadow-sm"
+                        style="border-left: 4px solid #eda73d !important;">
+                        <div class="card-body" style="background: #fff3cd;">
+                            <div class="d-flex align-items-center">
+                                <div class="flex-shrink-0 mr-3">
+                                    <div class="bg-primary rounded-circle d-flex align-items-center justify-content-center"
+                                        style="width: 40px; height: 40px; background-color: rgb(255, 255, 255) !important;">
+                                        <i class="fas fa-file-alt" style="color: #eda73d;"></i>
+                                    </div>
+                                </div>
+                                <div>
+                                    <h5 class="font-weight-bold text-dark mb-1">Tidak Ada Formulir Pendaftaran </h5>
+                                    {{-- <p class="text-muted mb-0 small">
+                       Silakan cek kembali jadwal pendaftaran.
+                    </p> --}}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             @endforelse
         </div>

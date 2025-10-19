@@ -3,7 +3,7 @@
     <div class="container-fluid mb-3">
         <div class="d-flex justify-content-between align-items-center">
             <div>
-                <h1 class="h3 mb-0 font-weight-bold">Data Seluruh Pendaftar</h1>
+                <h1 class="h3 mb-0 font-weight-bold" style="color:#333333">Data Seluruh Pendaftar</h1>
             </div>
 
         </div>
@@ -19,15 +19,15 @@
                         <div class="d-flex align-items-center mr-3 mb-2 mb-lg-0">
                             <span class="text-dark">Tampilan</span>
                             <select id="show-entries" class="form-control form-control-sm mx-2" style="width: auto;">
-                                <option value="10" {{ $defaultPerPage == 10 ? 'selected' : '' }}>10 Baris</option>
-                                <option value="25" {{ $defaultPerPage == 25 ? 'selected' : '' }}>25 Baris</option>
-                                <option value="50" {{ $defaultPerPage == 50 ? 'selected' : '' }}>50 Baris</option>
-                                <option value="100" {{ $defaultPerPage == 100 ? 'selected' : '' }}>100 Baris</option>
-                                <option value="0" {{ $defaultPerPage == 0 ? 'selected' : '' }}>Semua Baris</option>
+                                <option class="custom-option" value="10" {{ $defaultPerPage == 10 ? 'selected' : '' }}>10 Baris</option>
+                                <option class="custom-option" value="25" {{ $defaultPerPage == 25 ? 'selected' : '' }}>25 Baris</option>
+                                <option class="custom-option" value="50" {{ $defaultPerPage == 50 ? 'selected' : '' }}>50 Baris</option>
+                                <option class="custom-option" value="100" {{ $defaultPerPage == 100 ? 'selected' : '' }}>100 Baris</option>
+                                <option class="custom-option" value="0" {{ $defaultPerPage == 0 ? 'selected' : '' }}>Semua Baris</option>
                             </select>
                         </div>
                         <div class="btn-group dropright">
-                            <button type="button" class="btn btn-sm btn-primary dropdown-toggle" data-toggle="dropdown"
+                            <button type="button" style="background-color:  #31708F" class="btn btn-sm dropdown-toggle text-white" data-toggle="dropdown"
                                 aria-haspopup="true" aria-expanded="false">
                                 <i class="fas fa-print mr-1" title="Cetak"></i>
                                 Cetak
@@ -95,7 +95,7 @@
 
                             {{-- filter gelombang --}}
                             <div class="form-inline">
-                                <label for="filter-gelombang" class="mr-2">Gelombang</label>
+                                <label for="filter-gelombang" class="mr-2 ">Gelombang</label>
                                 <select name="gelombang_pendaftaran" id="filter-gelombang"
                                     class="form-control form-control-sm">
                                     <option value="Semua" {{ $defaultGelombang == 'Semua' ? 'selected' : '' }}>Semua
@@ -114,19 +114,19 @@
                 </div>
 
                 <!-- Tabel -->
-                <div class="table-responsive">
-                    <table class="table table-hover ">
-                        <thead class="bg-success">
-                            <tr class="">
-                                <th class="border-0 text-white" >No.</th>
-                                <th class="border-0 text-white">Nama Lengkap</th>
-                                <th class="border-0 text-white">NISN</th>
-                                <th class="border-0 text-white">Jenis Kelamin</th>
-                                <th class="border-0 text-white">No Handphone</th>
-                                <th class="border-0 text-white">Gelombang</th>
-                                <th class="border-0 text-white text-center">Status</th>
-                                <th class="border-0 text-white text-center">Pengumuman</th>
-                                <th class="border-0 text-white text-center">Aksi</th>
+                <div class="table-responsive ">
+                    <table class="table table-bordered table-striped table-hover mb-0 ">
+                        <thead class="bg-basic text-white">
+                            <tr>
+                                <th scope="col" class="px-2 py-3">No.</th>
+                                <th scope="col" class="px-2 py-3 text-center">Nama Lengkap</th>
+                                <th scope="col" class="px-2 py-3 text-center">NISN</th>
+                                <th scope="col" class="px-2 py-3 text-center">Jenis Kelamin</th>
+                                <th scope="col" class="px-2 py-3 text-center">No Handphone</th>
+                                <th scope="col" class="px-2 py-3 text-center">Gelombang/ Tahun Ajaran</th>
+                                <th scope="col" class="px-2 py-3  text-center">Status</th>
+                                <th scope="col" class="px-2 py-3  text-center">Pengumuman</th>
+                                <th scope="col" class="px-2 py-3  text-center">Aksi</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -143,7 +143,7 @@
                     <div class="col-sm-12 col-md-7">
                         <nav aria-label="Page navigation" class="float-right">
                             <ul class="pagination pagination-sm mb-0">
-                                {{-- Tautan paginasi akan dimuat di sini oleh JS --}}
+                                {{-- Tautan paginasi  JS --}}
                             </ul>
                         </nav>
                     </div>
@@ -153,8 +153,8 @@
     </div>
 @endsection
 
-@section('js')
-    <script>
+@push('js')
+  <script>
         const defaultPage = "{{ $defaultPage }}";
         const defaultPerPage = "{{ $defaultPerPage }}";
         // Fungsi untuk melakukan request AJAX dengan paginasi
@@ -164,8 +164,6 @@
             let status = $('#filter-status').val();
             let perPage = $('select.form-control-sm').val();
             let searchQuery = $('#searchUser').val();
-
-
 
             $.ajax({
                 url: "{{ route('admin.pendaftar.json') }}",
@@ -198,7 +196,7 @@
 
                             if (pendaftar.jadwal) {
                                 jadwalInfo =
-                                    `Gelombang ${pendaftar.jadwal.gelombang_pendaftaran} (${pendaftar.jadwal.thn_ajaran})`;
+                                    `Gelombang ${pendaftar.jadwal.gelombang_pendaftaran}/ (${pendaftar.jadwal.thn_ajaran})`;
                             }
 
                             if (pendaftar.status_aktual) {
@@ -233,16 +231,15 @@
                                 <td class="text-center">${pendaftar.pesan_email == 1 ? 'Terkirim' : '-'}</td>
 
                                 <td class=" text-center action-icons">
-                                    <a href="${detailUrl}?thn_ajaran=${thnAjaran}&gelombang=${gelombang}&status=${status}&page=${pagination.current_page}&per_page=${perPage}&search=${searchQuery}"><i class="fas fa-eye text-secondary" title="Lihat"></i></a>
+                                    <a href="${detailUrl}?thn_ajaran=${thnAjaran}&gelombang=${gelombang}&status=${status}&page=${pagination.current_page}&per_page=${perPage}&search=${searchQuery}"><i class="fas fa-eye" style="color: #2E8B57;" title="Lihat"></i></a>
                                     <i class="fas fa-trash text-danger delete-btn" data-id="${pendaftar.id}" title="Hapus"></i>
-                                    <i class="fas fa-edit text-primary" title="Edit"></i>
                                 </td>
                             </tr>
                         `;
                         });
                     } else {
                         html =
-                            '<tr><td colspan="8" class="text-center">Belum ada pendaftar pada filter yang dipilih.</td></tr>';
+                            '<tr><td colspan="9" class="text-center">Belum ada pendaftar pada filter yang dipilih.</td></tr>';
                     }
                     $('table tbody').html(html);
 
@@ -385,4 +382,4 @@
             fetchData(defaultPage);
         });
     </script>
-@stop
+@endpush

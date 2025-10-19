@@ -23,24 +23,29 @@
                     </tr>
 
                     <tr>
-                        <td style="padding: 40px 30px;">
+                        <td style="padding: 20px 30px;">
                             <h2 style="color: #333333; font-size: 20px; margin-bottom: 20px;">Halo,
                                 {{ $pendaftaran->siswa->nama }}!</h2>
 
                             @if ($pendaftaran->status_aktual == 'Diterima')
-                                <p style="color: #666666; font-size: 16px; line-height: 1.6; margin-bottom: 20px;">Selamat! Anda dinyatakan Diterima dalam pendaftaran PPDB. Silakan cek dashboard
-                                    pendaftaran untuk melihat
-                                    status pendaftaran.</p>
+                                <p style="color: #666666; font-size: 16px; line-height: 1.6; margin-bottom: 20px;">
+                                    Selamat! Anda telah dinyatakan DITERIMA dalam proses Penerimaan Peserta Didik Baru
+                                    (PPDB) MAS Al Muhajirin.
+                                    Silakan cek dashboard pendaftaran Anda untuk melihat informasi status pendaftaran
+                                </p>
                             @else
-                                <p style="color: #666666; font-size: 16px; line-height: 1.6; margin-bottom: 20px;">Mohon maaf, Anda dinyatakan Tidak Diterima dalam pendaftaran PPDB. Tetap
-                                    semangat!</p>
-                            @endif                            
+                                <p style="color: #666666; font-size: 16px; line-height: 1.6; margin-bottom: 20px;">Mohon
+                                    Mohon maaf, Anda belum dinyatakan diterima dalam proses PPDB MAS Al Muhajirin tahun
+                                    ini.
+                                    Tetap semangat dan terima kasih telah
+                                    berpartisipasi dalam proses seleksi.</p>
+                            @endif
 
                             <table width="100%" cellpadding="0" cellspacing="0" border="0">
                                 <tr>
                                     <td align="center" style="padding-top: 20px;">
                                         <a href="{{ route('login.token', ['token' => $token]) }}" target="_blank"
-                                            style="display: inline-block; padding: 12px 24px; background-color: #007bff; color: #ffffff; text-decoration: none; border-radius: 5px; font-weight: bold;">
+                                            style="display: inline-block; padding: 12px 24px; background-color: #2E8B57; color: #ffffff; text-decoration: none; border-radius: 5px; font-weight: bold;">
                                             Lihat Status Pendaftaran
                                         </a>
                                     </td>
@@ -49,14 +54,22 @@
                         </td>
                     </tr>
 
-                    <tr>
+                    <br>
+
+                    <p style="color: #666666; font-size: 16px; line-height: 1.6; margin-bottom: 20px;">
+                        Terima Kasih
+                        <br>
+                        Panitia PPDB MAS Al Muhajirin
+                    </p>
+
+                    {{-- <tr>
                         <td align="center"
                             style="background-color: #f0f0f0; padding: 20px 30px; border-bottom-left-radius: 8px; border-bottom-right-radius: 8px;">
                             <p style="font-size: 12px; color: #999999; margin: 0;">
                                 &copy; {{ date('Y') }} MAS Al Muhajirin. Semua Hak Cipta Dilindungi.
                             </p>
                         </td>
-                    </tr>
+                    </tr> --}}
 
                 </table>
             </td>
@@ -65,4 +78,3 @@
 </body>
 
 </html>
-

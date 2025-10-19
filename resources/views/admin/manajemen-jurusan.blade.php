@@ -4,7 +4,7 @@
     <div class="container-fluid mb-3">
         <div class="d-flex justify-content-between align-items-center">
             <div>
-                <h1 class="h3 mb-0 font-weight-bold">Manajemen Jurusan </h1>
+                <h1 class="h3 mb-0 font-weight-bold" style="color:#333333">Manajemen Jurusan </h1>
             </div>
 
         </div>
@@ -15,31 +15,31 @@
     <div class="container-fluid">
         <div class="card">
             <div class="card-body">
-                <button class="btn btn-success mb-4" data-toggle="modal" data-target="#modalTambahJurusan">Tambah
+                <button class="btn btn-sm mb-4" style="background-color:  #31708F; color:white;" data-toggle="modal" data-target="#modalTambahJurusan">Tambah
                     Jurusan</button>
 
                 <table id="dataTableJurusan" class="table table-bordered table-striped">
-                    <thead>
+                    <thead class="bg-basic text-white text-center">
                         <tr>
-                            <th>No</th>
-                            <th>Nama Jurusan</th>
+                            <th class="text-left">No</th>
+                            <th class="text-left">Nama Jurusan</th>
                             <th>Status</th>
                             <th>Aksi</th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody class="text-center">
                         @foreach ($jurusan as $jrs)
                             <tr>
-                                <td>{{ $loop->iteration }}</td>
-                                <td>{{ $jrs->nama_jurusan }}</td>
+                                <td class="text-left">{{ $loop->iteration }}</td>
+                                <td class="text-left">{{ $jrs->nama_jurusan }}</td>
                                 <td>
                                     @if ($jrs->is_active)
-                                        <span class="badge badge-success px-3 py-2 ">Aktif</span>
+                                        <span class="badge px-3 py-2 " style="background-color: #21ca5f; color: white;">Aktif</span>
                                     @else
                                         <span class="badge badge-danger px-3 py-2">Tidak Aktif</span>
                                     @endif
                                 </td>
-                                <td>
+                                <td class="text-center">
                                     <button class="btn btn-sm " data-toggle="modal"
                                         data-target="#modalEditJurusan{{ $jrs->id }}">
                                         <i class="fas fa-edit text-primary"></i>
@@ -98,7 +98,7 @@
                                         </div>
                                         <div class="modal-footer d-flex justify-content-end">
                                             <button type="submit" form="formEditJurusan{{ $jrs->id }}"
-                                                class="btn btn-success">Simpan
+                                                class="btn " style="background-color:  #31708F; color:white;">Simpan
                                                 Perubahan</button>
                                             <button type="button" class="btn btn-default mr-2"
                                                 data-dismiss="modal">Batal</button>
@@ -148,8 +148,7 @@
                     </form>
                 </div>
                 <div class="modal-footer d-flex justify-content-end">
-                    <button type="submit" form="formTambahJurusan" class="btn btn-success">Simpan
-                        Perubahan</button>
+                    <button type="submit" form="formTambahJurusan" class="btn" style="background-color:  #31708F; color:white;">Simpan</button>
                     <button type="button" class="btn btn-default mr-2" data-dismiss="modal">Batal</button>
 
                 </div>

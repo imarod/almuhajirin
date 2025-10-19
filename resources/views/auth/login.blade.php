@@ -1,9 +1,7 @@
 @extends('layouts.auth')
 
 @section('content')
-    <h2 class="font-weight-bold h2 mb-4">Masuk Akun</h2>
-    {{-- <h1 class="font-weight-bold h2 mb-4">Selamat Datang Di </h1>
-    <p class="text-muted mb-4 small">Hey, welcome back to your special place</p> --}}
+    <h6 class="font-weight-bold mb-3">Masuk Akun</h6>
 
     <form action="{{ route('login') }}" method="post">
         @csrf
@@ -35,24 +33,15 @@
         </div>
 
         <button type="submit" class="btn btn-primary btn-block mb-4 w-100"
-            style="background-color: #5E7CE3; border-color: #5E7CE3;"> Masuk
+            style="background-color: #2E8B57; border-color: #2E8B57;"> Masuk
         </button>
     </form>
     <footer class="d-flex justify-content-center">
         @if (Route::has('register'))
             <small class="text-muted ">
                 Belum punya akun? <a href="{{ route('register') }}" class="font-weight-bold"
-                    style="color: #5E7CE3;">Daftar</a>
+                    style="color: #2E8B57;">Daftar</a>
             </small>
         @endif
     </footer>
-    {{-- 
-    <p class="mb-1">
-        <a href="{{ route('password.request') }}">Saya lupa kata sandi saya</a>
-    </p>
-    @if (Route::has('register'))
-        <p class="mb-0">
-            <a href="{{ route('register') }}" class="text-center">Daftar anggota baru</a>
-        </p>
-    @endif --}}
 @endsection

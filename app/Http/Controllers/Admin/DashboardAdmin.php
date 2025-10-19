@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-
+use App\Models\ManajemenJadwalPpdb;
 use Illuminate\Http\Request;
 use App\Models\Siswa;
 use App\Models\Pendaftaran;
@@ -12,41 +12,80 @@ class DashboardAdmin extends Controller
 {
     public function index()
     {
-        return view('admin.dashboard-statistik');
+        $tahunAjaran = ManajemenJadwalPpdb::select('thn_ajaran')
+            ->distinct()
+            ->pluck('thn_ajaran')
+            ->sortDesc();
+
+        $tahunAll = collect(['' => 'Semua Tahun'])->union($tahunAjaran->mapWithKeys(function ($item) {
+            return [$item => $item];
+        }));
+
+        $tahunDefault = $tahunAjaran->first() ?? '';
+
+        return view('admin.dashboard-statistik', [
+            'tahunAjaran' => $tahunAll,
+            'tahunDefault' => $tahunDefault
+        ]);
     }
     public function getTotalPendaftar()
     {
         $totalPendaftar = Pendaftaran::count();
         $totalDiterima = Pendaftaran::where('status_aktual', 'Diterima')->count();
         $totalDitolak = Pendaftaran::where('status_aktual', 'Ditolak')->count();
+        $totalPerbaikan = Pendaftaran::where('status_verifikasi', 'Perbaikan')->count();
         $belumDiperiksa = Pendaftaran::whereNull('status_aktual')->count();
 
         return response()->json([
             'totalPendaftar' => $totalPendaftar,
             'totalDiterima' => $totalDiterima,
             'totalDitolak' => $totalDitolak,
+            'totalPerbaikan' => $totalPerbaikan,
             'belumDiperiksa' => $belumDiperiksa
         ]);
     }
-    public function getPendaftarByGender()
+    public function getPendaftarByGender(Request $request)
     {
-        $maleCount = Siswa::where('jenis_kelamin', 'Laki-laki')->count();
-        $femaleCount =  Siswa::where('jenis_kelamin', 'Perempuan')->count();
+        $tahun = $request->input('tahun');
+        $query = Siswa::query();
+
+        if ($tahun) {
+            $query->whereHas('pendaftaran', function ($q) use ($tahun) {
+                $q->whereHas('jadwal', function ($q2) use ($tahun) {
+                    $q2->where('thn_ajaran', $tahun);
+                });
+            });
+        }
+
+        $maleCount = (clone $query)->where('jenis_kelamin', 'Laki-laki')->count();
+        $femaleCount =  (clone $query)->where('jenis_kelamin', 'Perempuan')->count();
+
         return response()->json([
             'labels' => ['Laki-laki', 'Perempuan'],
             'data' => [$maleCount, $femaleCount]
         ]);
     }
-    public function getPendaftarByPrestasi()
+
+    public function getPendaftarByPrestasi(Request $request)
     {
-        $dataPrestasi = Pendaftaran::select('kategori_prestasi_id')
+        $tahun = $request->input('tahun');
+
+        $query = Pendaftaran::select('kategori_prestasi_id')
             ->whereNotNull('kategori_prestasi_id')
-            ->with('kategoriPrestasi')
-            ->get()
+            ->with('kategoriPrestasi');
+
+        if ($tahun) {
+            $query->whereHas('jadwal', function ($q) use ($tahun) {
+                $q->where('thn_ajaran', $tahun);
+            });
+        }
+
+        $dataPrestasi = $query->get()
             ->groupBy('kategoriPrestasi.nama_prestasi')
             ->map(function ($items, $key) {
                 return $items->count();
             });
+
         if ($dataPrestasi->isEmpty()) {
             return response()->json([
                 'labels' => [],
@@ -60,16 +99,26 @@ class DashboardAdmin extends Controller
         ]);
     }
 
-    public function getPendaftarByJurusan()
+    public function getPendaftarByJurusan(Request $request)
     {
-        $dataJurusan = Pendaftaran::select('jurusan_id')
+        $tahun = $request->input('tahun');
+        $query = Pendaftaran::select('jurusan_id')
             ->whereNotNull('jurusan_id')
-            ->with('jurusan')
-            ->get()
+            ->with('jurusan');
+
+        if ($tahun) {
+            $query->whereHas('jadwal', function ($q) use ($tahun) {
+                $q->where('thn_ajaran', $tahun);
+            });
+        }
+
+        $dataJurusan = $query->get()
             ->groupBy('jurusan.nama_jurusan')
             ->map(function ($items, $key) {
                 return $items->count();
             });
+
+
         if ($dataJurusan->isEmpty()) {
             return response()->json([
                 'labels' => [],
@@ -104,19 +153,29 @@ class DashboardAdmin extends Controller
             return $record ? $record->total : 0;
         });
 
+        $totalPerTahun = $labels->map(function ($tahun, $index) use ($gelombang1, $gelombang2) {
+            return $gelombang1[$index] + $gelombang2[$index];
+        });
+
+
         return response()->json([
             'labels' => $labels,
             'datasets' => [
                 [
                     'label' => 'Gelombang 1',
                     'data' => $gelombang1,
-                    'backgroundColor' => 'rgba(54, 162, 235, 0.6)',
+                    'backgroundColor' => '#36A2EB',
                 ],
                 [
                     'label' => 'Gelombang 2',
                     'data' => $gelombang2,
-                    'backgroundColor' => 'rgba(255, 0, 0, 1)',
-                ]
+                    'backgroundColor' => '#9966FF ',
+                ],
+                [
+                    'label' => 'Total Pendaftar',
+                    'data' => $totalPerTahun,
+                    'backgroundColor' => '#3F51B5', // hijau
+                ],
             ]
         ]);
     }

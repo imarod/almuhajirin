@@ -135,7 +135,16 @@ class ManajemenJadwalPpdbController extends Controller
         $jadwals = $query->get();
         $fileName = 'jadwal_ppdb_' . now()->format('Ymd_His') . '.csv';
         $writer = SimpleExcelWriter::create($fileName)->addHeader([
-            'ID', 'Tahun Ajaran', 'Gelombang Pendaftaran', 'Kuota', 'Tanggal Mulai', 'Tanggal Berakhir', 'Tanggal Pengumuman', 'Status', 'Dibuat Pada', 'Diperbarui Pada'
+            'ID',
+            'Tahun Ajaran',
+            'Gelombang Pendaftaran',
+            'Kuota',
+            'Tanggal Mulai',
+            'Tanggal Berakhir',
+            'Tanggal Pengumuman',
+            'Status',
+            'Dibuat Pada',
+            'Diperbarui Pada'
         ]);
 
         foreach ($jadwals as $jadwal) {
@@ -144,9 +153,9 @@ class ManajemenJadwalPpdbController extends Controller
                 $jadwal->thn_ajaran,
                 $jadwal->gelombang_pendaftaran,
                 $jadwal->kuota,
-                $jadwal->tgl_mulai->format('d-m-Y'),
-                $jadwal->tgl_berakhir->format('d-m-Y'),
-                $jadwal->tgl_pengumuman->format('d-m-Y'),
+                $jadwal->tgl_mulai->format('d F Y'),
+                $jadwal->tgl_berakhir->format('d F Y'),
+                $jadwal->tgl_pengumuman->format('d F Y'),
                 $jadwal->status,
                 // $jadwal->created_at,
                 // $jadwal->updated_at,

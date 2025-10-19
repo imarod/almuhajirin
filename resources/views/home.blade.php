@@ -1,66 +1,69 @@
-@extends('layouts.adminlte-custom')
+<!DOCTYPE html>
+<html>
 
-@section('content')
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notifikasi Pendaftaran</title>
+</head>
 
-{{-- Tombol untuk menampilkan modal --}}
-<button class="btn btn-primary" data-toggle="modal" data-target="#riwayatModal">Tampilkan Riwayat Proses Pengajuan</button>
+<body style="font-family: Arial, sans-serif; background-color: #f4f4f4; margin: 0; padding: 0;">
 
-{{-- Modal Sederhana --}}
-<div class="modal fade" id="riwayatModal" tabindex="-1" role="dialog" aria-labelledby="riwayatModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="riwayatModalLabel">Riwayat Proses Pengajuan</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                {{-- Tabel Riwayat Proses Pengajuan --}}
-                <div class="table-responsive">
-                    <table class="table table-bordered table-striped">
-                        <thead>
-                            <tr>
-                                <th style="width: 15%">Status</th>
-                                <th style="width: 25%">Uraian</th>
-                                <th style="width: 20%">Waktu</th>
-                                <th style="width: 40%">Catatan</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>**Submit**</td>
-                                <td>Mahasiswa $\rightarrow$ Dekanat</td>
-                                <td>23 Jul 2023 -<br>20:56 WIB</td>
-                                <td>-</td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <span class="text-danger">
-                                        **Tolak<br>Dekanat**
-                                    </span>
-                                </td>
-                                <td>Dekanat $\rightarrow$ Mahasiswa</td>
-                                <td>4 Aug 2023 -<br>10:49 WIB</td>
-                                <td>
-                                    <span class="text-danger">
-                                        Tidak memenuhi syarat pada SK Rektor nomor 2935
-                                    </span>
-                                </td>
-                            </tr>
-                            {{-- Anda bisa menambahkan baris lain di sini --}}
-                        </tbody>
-                    </table>
-                </div>
-                {{-- Akhir Tabel --}}
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
-                {{-- Anda bisa menambahkan tombol aksi lain di sini jika diperlukan --}}
-            </div>
-        </div>
-    </div>
-</div>
-{{-- Akhir Modal Sederhana --}}
+    <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color: #f4f4f4;">
+        <tr>
+            <td align="center" style="padding: 20px;">
+                <table width="600" cellpadding="0" cellspacing="0" border="0"
+                    style="background-color: #ffffff; border-radius: 8px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
+                    <tr>
+                        <td align="center"
+                            style="padding: 20px 0; border-top-left-radius: 8px; border-top-right-radius: 8px;">
+                            <h1 style=" font-size: 24px; margin: 10px 0 0 0;">PPDB AL Muhajirin</h1>
+                        </td>
+                    </tr>
 
-@endsection
+                    <tr>
+                        <td style="padding: 20px 30px;">
+                            <h2 style="color: #333333; font-size: 20px; margin-bottom: 20px;">Halo,
+                                DIKTI!</h2>
+
+                            <p style="color: #666666; font-size: 16px; line-height: 1.6; margin-bottom: 20px;">
+                                Terima kasih telah melakukan pendaftaran. Kami informasikan bahwa terdapat beberapa data
+                                atau dokumen yang perlu diperbaiki atau dilengkapi agar proses pendaftaran dapat
+                                dilanjutkan.
+                            </p>
+
+                            <p style="color: #666666; font-size: 16px; line-height: 1.6; margin-bottom: 20px;">
+                               Harap perbaiki formulir sesuai catatan dan segera kirim kembali sebelum batas waktu penutupan
+                            </p>
+
+                            <table width="100%" cellpadding="0" cellspacing="0" border="0">
+                                <tr>
+                                    <td align="center" style="padding-top: 20px;">
+                                        <a href="#" target="_blank"
+                                            style="display: inline-block; padding: 12px 24px; background-color: #2E8B57; color: #ffffff; text-decoration: none; border-radius: 5px; font-weight: bold;">
+                                            Lihat Catatan Perbaikan
+                                        </a>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td align="center"
+                            style="background-color: #f0f0f0; padding: 20px 30px; border-bottom-left-radius: 8px; border-bottom-right-radius: 8px;">
+                            <p style="font-size: 12px; color: #999999; margin: 0;">
+                                &copy; {{ date('Y') }} MAS Al Muhajirin. Semua Hak Cipta Dilindungi.
+                            </p>
+                        </td>
+                    </tr>
+
+                </table>
+            </td>
+        </tr>
+    </table>
+
+</body>
+
+</html>

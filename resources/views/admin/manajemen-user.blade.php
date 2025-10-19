@@ -4,12 +4,7 @@
     <div class="container-fluid mb-3">
         <div class="d-flex justify-content-between align-items-center">
             <div>
-                <h1 class="h3 mb-0 font-weight-bold">Manajemen User</h1>
-            </div>
-            <div>
-                <a href="#" class="btn btn-success" data-toggle="modal" data-target="#tambahUserModal">
-                    <i class="fas fa-plus mr-1"></i> Tambah User
-                </a>
+                <h1 class="h3 mb-0 font-weight-bold" style="color:#333333">Manajemen User</h1>
             </div>
         </div>
     </div>
@@ -22,14 +17,14 @@
                 <div class="card p-0 h-100">
                     <div class="card-body d-flex flex-column justify-content-center">
                         <div class="d-flex align-items-center mb-2">
-                            <h3 class="font-weight-bold mb-0 total-users-count" style="color: #5E7CE3"></h3>
-                            <div class="ml-auto" style="color: #5E7CE3">
+                            <h3 class="font-weight-bold mb-0 total-users-count" style="color: #3F51B5"></h3>
+                            <div class="ml-auto" style="color: #3F51B5">
                                 <i class="fas fa-user-plus fa-2x"></i>
                             </div>
                         </div>
                         <p class="mb-0 text-muted">Total User</p>
                     </div>
-                    <div class="card-footer p-2 text-white bg-basic">
+                    <div class="card-footer p-2 text-white " style="background: #3F51B5;">
                         <div class="d-flex align-items-center py-2">
 
                         </div>
@@ -41,14 +36,14 @@
                 <div class="card p-0 h-100">
                     <div class="card-body d-flex flex-column justify-content-center">
                         <div class="d-flex align-items-center mb-2">
-                            <h3 class="font-weight-bold mb-0 admin-count" style="color: #10B981;"></h3>
-                            <div class="ml-auto " style="color: #10B981;">
+                            <h3 class="font-weight-bold mb-0 admin-count" style="color: #5E7CE3;"></h3>
+                            <div class="ml-auto " style="color: #5E7CE3;">
                                 <i class="fas fa-check-circle fa-2x"></i>
                             </div>
                         </div>
                         <p class="mb-0 text-muted">Total User Admin</p>
                     </div>
-                    <div class="card-footer p-2 text-white " style="background: #10B981;">
+                    <div class="card-footer p-2 text-white " style="background: #5E7CE3;">
                         <div class="d-flex align-items-center">
                             <p class="mb-0 small text-white">% change</p>
                             <div class="ml-auto">
@@ -63,14 +58,14 @@
                 <div class="card p-0 h-100">
                     <div class="card-body d-flex flex-column justify-content-center">
                         <div class="d-flex align-items-center mb-2">
-                            <h3 class="font-weight-bold mb-0 siswa-count" style="color: #FF7A30;"></h3>
-                            <div class="ml-auto " style="color: #FF7A30;">
+                            <h3 class="font-weight-bold mb-0 siswa-count" style="color: #21ca5f;"></h3>
+                            <div class="ml-auto " style="color: #21ca5f;">
                                 <i class="fas fa-check-circle fa-2x"></i>
                             </div>
                         </div>
                         <p class="mb-0 text-muted">Total User Siswa</p>
                     </div>
-                    <div class="card-footer p-2 text-white " style="background: #FF7A30;">
+                    <div class="card-footer p-2 text-white " style="background: #21ca5f;">
                         <div class="d-flex align-items-center">
                             <p class="mb-0 small text-white">% change</p>
                             <div class="ml-auto">
@@ -102,7 +97,7 @@
                     }
 
                     .nav-tabs .nav-link.active.text-dark {
-                        color: #5E7CE3 !important;
+                        color: #31708F !important;
                     }
 
                     .nav-tabs .nav-link:hover {
@@ -112,6 +107,9 @@
             </div>
             <div class="card-body">
                 <div class="tab-content" id="custom-tabs-one-tabContent">
+                    <a href="#" class="btn btn-sm mb-4" data-toggle="modal" data-target="#tambahUserModal" style="background-color: #31708F; color: white;">
+                      Tambah User
+                    </a>
                     <div class="tab-pane fade show active" id="daftar-user" role="tabpanel"
                         aria-labelledby="daftar-user-tab">
                         <div class="row align-items-center mb-6">
@@ -154,8 +152,8 @@
 
 
                         <div class="table-responsive">
-                            <table class="table table-hover table-bordered">
-                                <thead>
+                            <table class="table  table-hover table-bordered">
+                                <thead class="bg-basic text-white">
                                     <tr>
                                         <th>No</th>
                                         <th>Nama</th>
@@ -229,8 +227,9 @@
                         </div>
                     </div>
                     <div class="modal-footer">
+                        <button type="submit" class="btn" style="background-color:  #31708F; color: white;">Simpan</button>
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
-                        <button type="submit" class="btn btn-primary">Simpan</button>
+                        
                     </div>
                 </form>
             </div>

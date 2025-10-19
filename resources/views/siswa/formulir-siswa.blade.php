@@ -23,10 +23,14 @@
 
 @section('content')
     <div class="container-fluid">
-        <div class="row justify-content-start">
-            <a href="/siswa/pendaftaran" class="btn  rounded-circle mb-4 border">
-                <i class="fas fa-arrow-left text-black"></i>
-            </a>
+        <div class="row justify-content-start ">
+            <div class="d-flex align-items-center mb-3">
+                <a href="/siswa/pendaftaran" class="btn rounded-circle border mr-2">
+                    <i class="fas fa-arrow-left text-black"></i>
+                </a>
+                <a href="/siswa/pendaftaran" style="text-decoration: none; color: black;">Kembali</a>
+            </div>
+
             <div class="col-md-12">
                 @if ($statusPendaftaran == 'open')
                     <form
@@ -95,34 +99,13 @@
                                             @enderror
                                         </div>
                                     </div>
-
-                                    <style>
-                                        .date-wrapper {
-                                            position: relative;
-                                            display: inline-block;
-                                            width: 100%;
-                                        }
-
-                                        .date-wrapper input[type="date"] {
-                                            padding-left: 35px;
-                                        }
-
-                                        .date-wrapper input[type="date"]::-webkit-calendar-picker-indicator {
-                                            position: absolute;
-                                            left: 8px;
-                                            top: 50%;
-                                            transform: translateY(-50%);
-                                            cursor: pointer;
-                                        }
-                                    </style>
-
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <label class="d-flex align-items-center gap-1">
                                                 <span class="font-weight-medium text-dark">Tanggal Lahir</span>
                                                 <span class="text-danger">*</span>
                                             </label>
-                                            <div class="date-wrapper">
+                                            <div class="input-group">
                                                 <input type="date"
                                                     class="form-control @error('tanggal_lahir') is-invalid @enderror"
                                                     name="tanggal_lahir"
@@ -141,7 +124,7 @@
                                         <div class="form-group">
                                             <label class="d-flex align-items-center gap-1">
                                                 <span class="font-weight-medium text-dark">Email</span>
-                                                <span class="text-danger">*</span>                                                
+                                                <span class="text-danger">*</span>
                                             </label>
                                             <small class="text-muted d-block invisible mt-md-3">Spacer</small>
                                             <input type="text"
@@ -189,10 +172,11 @@
                                         <div class="form-group ">
                                             <label class="d-flex align-items-center gap-1">
                                                 <span class="font-weight-medium text-dark">Jenis Kelamin</span>
-                                                <span class="text-danger">*</span>                                                
+                                                <span class="text-danger">*</span>
                                             </label>
                                             <div class="form-check form-check-inline">
-                                                <input class="form-check-input @error('jenis_kelamin') is-invalid @enderror"
+                                                <input
+                                                    class="form-check-input @error('jenis_kelamin') is-invalid @enderror"
                                                     type="radio" name="jenis_kelamin" value="Laki-laki"
                                                     {{ isset($pendaftaran) && $pendaftaran->siswa->jenis_kelamin == 'Laki-laki' ? 'checked' : (old('jenis_kelamin') == 'Laki-laki' ? 'checked' : '') }}>
                                                 <label class="form-check-label">Laki-laki</label>
@@ -218,7 +202,7 @@
                                         <div class="form-group">
                                             <label class="d-flex align-items-center gap-1">
                                                 <span class="font-weight-medium text-dark">Alamat Lengkap</span>
-                                                <span class="text-danger">*</span>                                                
+                                                <span class="text-danger">*</span>
                                             </label>
                                             <input type="text"
                                                 class="form-control  @error('alamat_siswa') is-invalid @enderror"
@@ -245,8 +229,8 @@
                                         <div class="form-group">
                                             <label class="d-flex align-items-center gap-1">
                                                 <span class="font-weight-medium text-dark">Scan Kartu
-                                                Keluarga</span>
-                                                <span class="text-danger">*</span>                                                
+                                                    Keluarga</span>
+                                                <span class="text-danger">*</span>
                                             </label>
                                             <small class="text-muted d-block mb-2">Unggah dalam bentuk format PDf maks
                                                 1 mb</small>
@@ -277,7 +261,7 @@
                                         <div class="form-group">
                                             <label class="d-flex align-items-center gap-1">
                                                 <span class="font-weight-medium text-dark">Scan Ijazah</span>
-                                                <span class="text-danger">*</span>                                                
+                                                <span class="text-danger">*</span>
                                             </label>
                                             <small class="text-muted d-block mb-2">Unggah dalam bentuk format PDf maks
                                                 1 mb</small>
@@ -346,15 +330,15 @@
                                     @if ($jurusanAktif->count() > 0)
                                         <div class="col-md-6">
                                             <div class="form-group">
-                                                <label class="font-weight-medium text-dark">Jurusan</label>
-                                                <br>
-
+                                                <label class="d-flex align-items-center gap-1">
+                                                    <span class="font-weight-medium text-dark">Jurusan</span>
+                                                    <span class="text-danger">*</span>
+                                                </label>
                                                 @foreach ($jurusanAktif as $jrs)
                                                     <div class="form-check">
                                                         <input class="form-check-input" type="radio" name="jurusan_id"
                                                             id="jurusan-{{ $jrs->id }}" value="{{ $jrs->id }}"
-                                                            {{ old('jurusan_id', $pendaftaran->jurusan_id ?? '') == $jrs->id ? 'checked' : '' }}
-                                                            required>
+                                                            {{ old('jurusan_id', $pendaftaran->jurusan_id ?? '') == $jrs->id ? 'checked' : '' }}>
                                                         <label class="form-check-label"
                                                             for="jurusan-{{ $jrs->id }}">
                                                             {{ $jrs->nama_jurusan }}
@@ -364,7 +348,7 @@
 
                                                 @error('jurusan_id')
                                                     <div class="text-danger mt-2">
-                                                        <strong>{{ $message }}</strong>
+                                                        {{ $message }}
                                                     </div>
                                                 @enderror
                                             </div>
@@ -424,9 +408,9 @@
                                 <div class="row">
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                             <label class="d-flex align-items-center gap-1">
+                                            <label class="d-flex align-items-center gap-1">
                                                 <span class="font-weight-medium text-dark">Nama Ayah</span>
-                                                <span class="text-danger">*</span>                                                
+                                                <span class="text-danger">*</span>
                                             </label>
                                             <input type="text"
                                                 class="form-control @error('nama_ayah') is-invalid @enderror"
@@ -439,9 +423,9 @@
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                             <label class="d-flex align-items-center gap-1">
+                                            <label class="d-flex align-items-center gap-1">
                                                 <span class="font-weight-medium text-dark">Nama Ibu</span>
-                                                <span class="text-danger">*</span>                                                
+                                                <span class="text-danger">*</span>
                                             </label>
                                             <input type="text"
                                                 class="form-control @error('nama_ibu') is-invalid @enderror"
@@ -458,9 +442,9 @@
                                 <div class="row ">
                                     <div class="col-md-6 ">
                                         <div class="form-group  ">
-                                             <label class="d-flex align-items-center gap-1">
+                                            <label class="d-flex align-items-center gap-1">
                                                 <span class="font-weight-medium text-dark">Alamat Lengkap</span>
-                                                <span class="text-danger">*</span>                                                
+                                                <span class="text-danger">*</span>
                                             </label>
                                             <small class="text-muted d-block invisible mt-md-3">Spacer</small>
                                             <input type="text"
@@ -474,9 +458,9 @@
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                             <label class="d-flex align-items-center gap-1">
-                                                <span class="font-weight-medium text-dark">No WhatsApp</span>
-                                                <span class="text-danger">*</span>                                                
+                                            <label class="d-flex align-items-center gap-1">
+                                                <span class="font-weight-medium text-dark">Nomor WhatsApp</span>
+                                                <span class="text-danger">*</span>
                                             </label>
                                             <small class="text-muted d-block mb-2">Masukkan nomor telepon diawali angka
                                                 8, tanpa 0 atau +62</small>
@@ -498,7 +482,8 @@
                                 </div>
 
                                 <div class="text-center mt-4">
-                                    <button type="button" class="btn btn-primary px-5 py-2 bg-primary"
+                                    <button type="button" style="background-color: #31708F"
+                                        class="btn text-white px-5 py-2 "
                                         id="submitButton"><strong>Kirim</strong></button>
                                 </div>
                             </div>
@@ -513,7 +498,8 @@
                                 <h5 class="text-muted">{{ $message }}</h5>
                                 {{-- Pesan di bawah ini bisa disesuaikan atau dihapus jika tidak relevan --}}
                                 <p class="text-muted ">Kembali ke menu Daftar</p>
-                                <a href="{{ route('ajuan.pendaftaran') }}" class="btn bg-primary text-white">Kembali</a>
+                                <a href="{{ route('ajuan.pendaftaran') }}" class="btn  text-white"
+                                    style="background-color: #31708F">Kembali</a>
                             </div>
                         </div>
                     @endif
@@ -676,7 +662,8 @@
                 Swal.fire({
                     icon: 'error',
                     title: 'Gagal Mengirimkan Formulir!',
-                    confirmButtonText: 'Tutup'
+                    confirmButtonText: 'Tutup',
+                    confirmButtonColor: '#2E8B57'
                 });
             @endif
 

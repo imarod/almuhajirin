@@ -76,21 +76,21 @@ class ManajemenUser extends Controller
             $query->where('is_admin', $role);
         }
 
-          $query->orderByDesc('is_admin')
-              ->orderByDesc('created_at');
+        $query->orderByDesc('is_admin')
+            ->orderByDesc('created_at');
 
         $perPage = $request->input('per_page', 10);
         if ($perPage > 0) {
             $users = $query->paginate($perPage);
             $users->getCollection()->transform(function ($user) {
-                $user->created_at_formatted = $user->created_at->format('d-m-Y');
+                $user->created_at_formatted = $user->created_at->format('d F Y');
                 return $user;
             });
             return response()->json($users);
         } else {
             $users = $query->get();
             $users->transform(function ($user) {
-                $user->created_at_formatted = $user->created_at->format('d-m-Y');
+                $user->created_at_formatted = $user->created_at->format('d F Y');
                 return $user;
             });
             return response()->json([
@@ -130,7 +130,7 @@ class ManajemenUser extends Controller
                 $siswa->delete();
 
                 if ($ortu) {
-                    $ortu->delete(); 
+                    $ortu->delete();
                 }
             }
             $user->delete();

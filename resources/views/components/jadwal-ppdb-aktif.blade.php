@@ -15,8 +15,7 @@
             $color = $isAccepted ? '#28a745' : '#dc3545';
             $cardClass = $isAccepted ? 'border-left-success' : 'border-left-danger';
             $borderStyle = 'border-left: 4px solid ' . ($isAccepted ? '#28a745' : '#dc3545') . ' !important;';
-         $bgStyle =
-    'background: ' . ($isAccepted ? '#d4edda' : '#f8d7da') . ';';
+            $bgStyle = 'background: ' . ($isAccepted ? '#d4edda' : '#f8d7da') . ';';
             $messageHeader = 'Pengumuman Hasil PPDB';
             $messageBody = $message;
         } elseif ($status === 'Diproses') {
@@ -33,7 +32,7 @@
             $cardClass = 'border-left-info';
             $borderStyle = 'border-left: 4px solid #eda73d !important;';
             $bgStyle = 'background: #fff3cd;';
-            $messageHeader = 'Pendaftaran Perlu Diperbaiki';
+            $messageHeader = 'Formulir Perlu Diperbaiki';
             $messageBody = $message;
         } elseif ($status === 'Dikirim') {
             $icon = 'fas fa-check';
@@ -81,7 +80,7 @@
                     </h5>
                     <p class="text-muted mb-0 small">
                         Periode pendaftaran berlangsung hingga tanggal
-                        {{ \Carbon\Carbon::parse($jadwalAktif->tgl_berakhir)->format('d-m-Y') }}
+                        {{ \Carbon\Carbon::parse($jadwalAktif->tgl_berakhir)->format('d F Y') }}
                     </p>
                 </div>
             </div>

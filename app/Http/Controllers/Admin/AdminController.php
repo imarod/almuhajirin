@@ -179,7 +179,7 @@ class AdminController extends Controller
                 'Nama Lengkap' => $siswa->nama ?? 'Tidak ada data',
                 'NISN' => $siswa->nisn ?? 'Tidak ada data',
                 'Tempat Lahir' => $siswa->tempat_lahir ?? 'Tidak ada data',
-                'Tanggal Lahir' => $siswa->tanggal_lahir->format('d-m-Y') ?? 'Tidak ada data',
+                'Tanggal Lahir' => $siswa->tanggal_lahir->format('d F Y') ?? 'Tidak ada data',
                 'Jenis Kelamin' => $siswa->jenis_kelamin ?? 'Tidak ada data',
                 'Kategori Prestasi' => $siswa->kategori_prestasi ?? 'Tidak Ada',
                 'No. HP Siswa' => "'" . $siswa->no_hp_siswa ?? 'Tidak ada data',

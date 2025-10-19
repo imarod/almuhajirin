@@ -25,7 +25,7 @@ class AnnouncePendaftaran extends Command
         foreach ($jadwals as $jadwal) {
             $pendaftarToAnnounce = Pendaftaran::with('siswa.orangTua')
                 ->where('jadwal_id', $jadwal->id)
-                ->where('is_announced', false)
+                ->where('pesan_whatsapp', false)
                 ->get();
 
             if ($pendaftarToAnnounce->isEmpty()) {

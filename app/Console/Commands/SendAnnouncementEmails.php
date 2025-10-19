@@ -31,7 +31,7 @@ class SendAnnouncementEmails extends Command
 
         foreach ($jadwals as $jadwal) {
             $pendaftarToAnnounce = Pendaftaran::where('jadwal_id', $jadwal->id)
-                ->where('is_announced', false)
+                ->where('pesan_email', false)
                 ->get();
 
             if ($pendaftarToAnnounce->isEmpty()) {
