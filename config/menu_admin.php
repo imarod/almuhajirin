@@ -2,7 +2,7 @@
 
 return [
 
-    
+
     [
         'text' => 'Dashboard',
         'url'  => 'admin/dashboard-statistik',
@@ -68,12 +68,14 @@ return [
         ],
     ],
 
+
     [
         'text' => 'Manajemen User',
         'url'  => 'admin/manajemen-user',
         'icon' => 'fas fa-cog',
     ],
+   
 
-    
+
 
 ];

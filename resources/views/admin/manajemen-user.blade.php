@@ -417,9 +417,9 @@
                                         response.message,
                                         'success'
                                     );
-                                    // Hapus baris dari tabel
                                     userRow.remove();
                                     fetchUsers();
+                                    fetchUserCounts();
                                 } else {
                                     Swal.fire(
                                         'Gagal!',
@@ -467,6 +467,7 @@
                 });
             });
 
+            // Form tambah user - DIPERBAIKI
             $('#tambahUserModal form').on('submit', function(e) {
                 e.preventDefault();
                 const formData = $(this).serialize();
@@ -477,39 +478,39 @@
                     data: formData,
                     success: function(response) {
                         $('#tambahUserModal').modal('hide');
-                        $('#tambahUserModal').on('hidden.bs.modal', function() {
-                            $('.modal-backdrop').remove();
-                            $('body').removeClass('modal-open').css('padding-right',
-                            '');
 
-                            Swal.fire(
-                                'Berhasil!',
-                                response.message,
-                                'success'
-                            );
+                        setTimeout(function() {
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Berhasil!',
+                                text: response.message,
+                                showConfirmButton: true,
+                                timer: 3000
+                            });
 
                             $('#tambahUserModal form')[0].reset();
                             fetchUsers();
                             fetchUserCounts();
-
-                            $(this).off('hidden.bs.modal');
-                        });
+                        }, 300);
                     },
                     error: function(xhr) {
-                        const errors = xhr.responseJSON.errors;
+                        // PERBAIKAN: Hapus duplikasi
+                        const errors = xhr.responseJSON?.errors || {};
                         let errorHtml = '';
                         $.each(errors, function(key, value) {
                             errorHtml += `<li>${value}</li>`;
                         });
-                        Swal.fire(
-                            'Gagal!',
-                            `Terjadi kesalahan validasi:<ul>${errorHtml}</ul>`,
-                            'error'
-                        );
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Gagal!',
+                            html: `Terjadi kesalahan validasi:<ul>${errorHtml}</ul>`,
+                            showConfirmButton: true
+                        });
                     }
                 });
             });
 
+            // Form edit user
             $('#editUserForm').on('submit', function(e) {
                 e.preventDefault();
 
@@ -521,29 +522,36 @@
                     method: 'PUT',
                     data: formData,
                     success: function(response) {
-                        Swal.fire(
-                            'Berhasil!',
-                            response.message,
-                            'success'
-                        );
                         $('#editUserModal').modal('hide');
-                        fetchUsers();
+
+                        setTimeout(function() {
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Berhasil!',
+                                text: response.message,
+                                showConfirmButton: true,
+                                timer: 3000
+                            });
+                            fetchUsers();
+                            fetchUserCounts();
+                        }, 300);
                     },
                     error: function(xhr, status, error) {
-                        const errors = xhr.responseJSON.errors;
+                        const errors = xhr.responseJSON?.errors || {};
                         let errorHtml = '';
                         $.each(errors, function(key, value) {
                             errorHtml += `<li>${value}</li>`;
                         });
-                        Swal.fire(
-                            'Gagal!',
-                            `Terjadi kesalahan saat mengupdate user:<ul>${errorHtml}</ul>`,
-                            'error'
-                        );
-                        console.log('AJAX Error: ', status, error, xhr.responseJSON.errors);
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Gagal!',
+                            html: `Terjadi kesalahan saat mengupdate user:<ul>${errorHtml}</ul>`,
+                            showConfirmButton: true
+                        });
+                        console.log('AJAX Error: ', status, error);
                     }
                 });
             });
-        })
+        });
     </script>
 @endpush

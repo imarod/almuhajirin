@@ -133,7 +133,7 @@ return [
     |
     */
 
-    'usermenu_enabled' => true,
+    'usermenu_enabled' => false,
     'usermenu_header' => false,
     'usermenu_header_class' => 'bg-primary',
     'usermenu_image' => false,
@@ -311,6 +311,13 @@ return [
             'type' => 'fullscreen-widget',
             'topnav_right' => true,
         ],
+        [
+            'type' => 'logout', // Menggunakan tipe logout untuk method POST
+            'text' => 'Keluar', // Teks yang akan muncul di navlink
+            'icon' => 'fas fa-sign-out-alt', // Ikon yang diinginkan
+            'topnav_right' => true, // Harus true agar muncul di kanan atas
+            'id' => 'directLogoutLink', // ID opsional
+        ],
 
         // Sidebar items:
         [
@@ -394,13 +401,6 @@ return [
             'icon_color' => 'cyan',
             'url' => '#',
         ],
-          [
-        'text' => 'Logout',
-        'url'  => 'logout',
-        'icon' => 'fas fa-sign-out-alt',
-        'method' => 'post', // Penting untuk Laravel logout
-        'topnav_user' => true, // Menampilkan di user dropdown
-    ],
     ],
 
     /*

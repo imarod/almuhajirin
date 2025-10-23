@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="icon" href="{{ asset('images/tutwuri.png') }}" type="image/x-icon">
+    <link rel="icon" href="{{ asset('images/tutwuri.png') }}" type="image/x-icon" loading="lazy">
 
     <title>PPDB | Al Muhajirin</title>
 
@@ -127,6 +127,46 @@
                 font-weight: bold;
                 text-align: left;
             }
+
+            .navbar-collapse.show,
+            .navbar-collapse {
+                background-color: #393939 !important;
+                padding: 2rem;
+            }
+
+            /*Memastikan link di dalamnya tetap terlihat (teks putih)*/
+            /* .navbar-collapse.show .nav-link, */
+            .navbar-collapse .nav-link {
+                color: #f8f9fa !important;
+            }
+
+
+            .main-header .navbar-toggler {
+                color: #f8f9fa !important;
+            }
+        }
+
+        @media screen and (max-width: 991px) {
+            /* ... semua aturan CSS Anda sebelumnya ... */
+
+            .responsive-stack thead {
+                display: none;
+            }
+
+        
+            .navbar-collapse.show,
+            .navbar-collapse {
+                background-color: #393939 !important;
+                padding: 2rem;
+            }
+
+            .navbar-collapse .nav-link {
+                color: #f8f9fa !important;
+            }
+
+            .main-header .navbar-toggler {
+                color: #f8f9fa !important;
+            }
         }
     </style>
 </head>
@@ -137,7 +177,7 @@
             <div class="container">
                 <a class="navbar-brand d-flex align-items-center" href="{{ url('/') }}">
                     <img src="{{ asset('images/tutwuri.png') }}" style="width: 50px; height: 50px;" alt="Logo"
-                        class="d-inline-block align-text-top me-3">
+                        class="d-inline-block align-text-top me-3" loading="lazy">
                     <div class="d-flex flex-column lh-sm">
                         <span class="fw-bold">Penerimaan Peserta Didik Baru</span>
                         <span class="small">MAS Al-Muhajirin Tugumulyo</span>
@@ -559,22 +599,22 @@
                             <div class="d-md-none">
                                 <div class="col-12">
                                     <img src="{{ asset('images/edit1.JPG') }}" class="d-block w-100 rounded shadow"
-                                        alt="Foto 1">
+                                        alt="Foto 1" loading="lazy">
                                 </div>
                             </div>
 
                             <div class="d-none d-md-flex row justify-content-center g-3">
                                 <div class="col-md-4">
                                     <img src="{{ asset('images/edit1.JPG') }}" class="d-block w-100 rounded shadow"
-                                        alt="Foto 1">
+                                        alt="Foto 1" loading="lazy">
                                 </div>
                                 <div class="col-md-4">
                                     <img src="{{ asset('images/edit2.jpeg') }}" class="d-block w-100 rounded shadow"
-                                        alt="Foto 2">
+                                        alt="Foto 2" loading="lazy">
                                 </div>
                                 <div class="col-md-4">
                                     <img src="{{ asset('images/edit6.JPG') }}" class="d-block w-100 rounded shadow"
-                                        alt="Foto 6">
+                                        alt="Foto 6" loading="lazy">
                                 </div>
                             </div>
                         </div>
@@ -584,21 +624,21 @@
                             <div class="d-md-none">
                                 <div class="col-12">
                                     <img src="{{ asset('images/edit4.JPG') }}" class="d-block w-100 rounded shadow"
-                                        alt="Foto 4">
+                                        alt="Foto 4" loading="lazy">
                                 </div>
                             </div>
                             <div class="d-none d-md-flex row justify-content-center g-3">
                                 <div class="col-md-4">
                                     <img src="{{ asset('images/edit4.JPG') }}" class="d-block w-100 rounded shadow"
-                                        alt="Foto 4">
+                                        alt="Foto 4" loading="lazy">
                                 </div>
                                 <div class="col-md-4">
                                     <img src="{{ asset('images/edit5.JPG') }}" class="d-block w-100 rounded shadow"
-                                        alt="Foto 5">
+                                        alt="Foto 5" loading="lazy">
                                 </div>
                                 <div class="col-md-4">
                                     <img src="{{ asset('images/edit3.jpeg') }}" class="d-block w-100 rounded shadow"
-                                        alt="Foto 3">
+                                        alt="Foto 3" loading="lazy">
                                 </div>
                             </div>
                         </div>
@@ -608,21 +648,21 @@
                             <div class="d-md-none">
                                 <div class="col-12">
                                     <img src="{{ asset('images/bg-base.png') }}" class="d-block w-100 rounded shadow"
-                                        alt="Foto 4">
+                                        alt="Foto 4" loading="lazy">
                                 </div>
                             </div>
                             <div class="d-none d-md-flex row justify-content-center g-3">
                                 <div class="col-md-4">
                                     <img src="{{ asset('images/bg-base.png') }}" class="d-block w-100 rounded shadow"
-                                        alt="Foto 4">
+                                        alt="Foto 4" loading="lazy">
                                 </div>
                                 <div class="col-md-4">
                                     <img src="{{ asset('images/edit7.png') }}" class="d-block w-100 rounded shadow"
-                                        alt="Foto 5">
+                                        alt="Foto 5" loading="lazy">
                                 </div>
                                 <div class="col-md-4">
                                     <img src="{{ asset('images/edit8.png') }}" class="d-block w-100 rounded shadow"
-                                        alt="Foto 6">
+                                        alt="Foto 6" loading="lazy">
                                 </div>
                             </div>
                         </div>
