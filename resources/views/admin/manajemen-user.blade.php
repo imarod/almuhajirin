@@ -107,8 +107,9 @@
             </div>
             <div class="card-body">
                 <div class="tab-content" id="custom-tabs-one-tabContent">
-                    <a href="#" class="btn btn-sm mb-4" data-toggle="modal" data-target="#tambahUserModal" style="background-color: #31708F; color: white;">
-                      Tambah User
+                    <a href="#" class="btn btn-sm mb-4" data-toggle="modal" data-target="#tambahUserModal"
+                        style="background-color: #31708F; color: white;">
+                        Tambah User
                     </a>
                     <div class="tab-pane fade show active" id="daftar-user" role="tabpanel"
                         aria-labelledby="daftar-user-tab">
@@ -223,9 +224,10 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="submit" class="btn" style="background-color:  #31708F; color: white;">Simpan</button>
+                        <button type="submit" class="btn"
+                            style="background-color:  #31708F; color: white;">Simpan</button>
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
-                        
+
                     </div>
                 </form>
             </div>
@@ -277,7 +279,6 @@
     </div>
 @endsection
 @push('js')
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script>
         function fetchUsers(page = 1) {
             const searchQuery = $('#searchUser').val();
@@ -444,7 +445,6 @@
             $(document).on('click', '.edit-btn', function() {
                 const userId = $(this).data('id');
 
-                // Ambil data user dari server
                 $.ajax({
                     url: `{{ url('admin/manajemen-user') }}/${userId}/edit`,
                     method: 'GET',
@@ -468,24 +468,32 @@
             });
 
             $('#tambahUserModal form').on('submit', function(e) {
-                // Baris ini yang paling penting! Mencegah submit form biasa
                 e.preventDefault();
                 const formData = $(this).serialize();
 
                 $.ajax({
-                    url: $(this).attr('action'),
+                    url: '{{ route('admin.manajemen.user.store') }}',
                     method: 'POST',
                     data: formData,
                     success: function(response) {
-                        Swal.fire(
-                            'Berhasil!',
-                            response.message,
-                            'success'
-                        );
                         $('#tambahUserModal').modal('hide');
-                        $('#tambahUserModal form')[0].reset();
-                        fetchUsers();
-                        fetchUserCounts();
+                        $('#tambahUserModal').on('hidden.bs.modal', function() {
+                            $('.modal-backdrop').remove();
+                            $('body').removeClass('modal-open').css('padding-right',
+                            '');
+
+                            Swal.fire(
+                                'Berhasil!',
+                                response.message,
+                                'success'
+                            );
+
+                            $('#tambahUserModal form')[0].reset();
+                            fetchUsers();
+                            fetchUserCounts();
+
+                            $(this).off('hidden.bs.modal');
+                        });
                     },
                     error: function(xhr) {
                         const errors = xhr.responseJSON.errors;

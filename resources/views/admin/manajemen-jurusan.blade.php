@@ -15,7 +15,8 @@
     <div class="container-fluid">
         <div class="card">
             <div class="card-body">
-                <button class="btn btn-sm mb-4" style="background-color:  #31708F; color:white;" data-toggle="modal" data-target="#modalTambahJurusan">Tambah
+                <button class="btn btn-sm mb-4" style="background-color:  #31708F; color:white;" data-toggle="modal"
+                    data-target="#modalTambahJurusan">Tambah
                     Jurusan</button>
 
                 <table id="dataTableJurusan" class="table table-bordered table-striped">
@@ -34,7 +35,8 @@
                                 <td class="text-left">{{ $jrs->nama_jurusan }}</td>
                                 <td>
                                     @if ($jrs->is_active)
-                                        <span class="badge px-3 py-2 " style="background-color: #21ca5f; color: white;">Aktif</span>
+                                        <span class="badge px-3 py-2 "
+                                            style="background-color: #21ca5f; color: white;">Aktif</span>
                                     @else
                                         <span class="badge badge-danger px-3 py-2">Tidak Aktif</span>
                                     @endif
@@ -73,32 +75,37 @@
                                                 @csrf
                                                 @method('PUT')
 
+                                                <input type="hidden" name="edit_id" value="{{ $jrs->id }}">
                                                 <div class="form-group">
                                                     <label for="nama_jurusan">Nama Jurusan</label>
                                                     <input type="text"
-                                                        class="form-control @error('nama_jurusan') is-invalid @enderror"
-                                                        id="nama_jurusan" name="nama_jurusan"
+                                                        class="form-control @error('nama_jurusan') @if (old('edit_id') == $jrs->id) is-invalid @endif @enderror"
+                                                        id="nama_jurusan_{{ $jrs->id }}" name="nama_jurusan"
                                                         placeholder="Contoh: Juara Olimpiade Sains"
-                                                        value="{{ old('nama_jurusan', $jrs->nama_jurusan) }}" required>
+                                                        value="{{ old('edit_id') == $jrs->id ? old('nama_jurusan') : $jrs->nama_jurusan }}"
+                                                        required>
                                                     @error('nama_jurusan')
-                                                        <span class="invalid-feedback" role="alert">
-                                                            <strong>{{ $message }}</strong>
-                                                        </span>
+                                                        @if (old('edit_id') == $jrs->id)
+                                                            <span class="invalid-feedback" role="alert">
+                                                                <strong>{{ $message }}</strong>
+                                                            </span>
+                                                        @endif
                                                     @enderror
                                                 </div>
-
                                                 <div class="form-group form-check">
                                                     <input type="hidden" name="is_active" value="0">
-                                                    <input type="checkbox" class="form-check-input" id="status_aktif"
-                                                        name="is_active" value="1"
+                                                    <input type="checkbox" class="form-check-input"
+                                                        id="status_aktif_{{ $jrs->id }}" name="is_active"
+                                                        value="1"
                                                         {{ old('is_active', $jrs->is_active) ? 'checked' : '' }}>
-                                                    <label class="form-check-label" for="status_aktif">Aktif</label>
+                                                    <label class="form-check-label"
+                                                        for="status_aktif_{{ $jrs->id }}">Aktif</label>
                                                 </div>
                                             </form>
                                         </div>
                                         <div class="modal-footer d-flex justify-content-end">
-                                            <button type="submit" form="formEditJurusan{{ $jrs->id }}"
-                                                class="btn " style="background-color:  #31708F; color:white;">Simpan
+                                            <button type="submit" form="formEditJurusan{{ $jrs->id }}" class="btn "
+                                                style="background-color:  #31708F; color:white;">Simpan
                                                 Perubahan</button>
                                             <button type="button" class="btn btn-default mr-2"
                                                 data-dismiss="modal">Batal</button>
@@ -129,16 +136,18 @@
                         @csrf
                         <div class="form-group">
                             <label for="nama_jurusan">Nama Jurusan</label>
-                            <input type="text" class="form-control  @error('nama_jurusan') is-invalid @enderror"
+                            <input type="text"
+                                class="form-control @error('nama_jurusan') @if (!old('edit_id')) is-invalid @endif @enderror"
                                 id="nama_jurusan" name="nama_jurusan" placeholder="Contoh: IPS"
-                                value="{{ old('nama_jurusan') }}" required>
+                                value="{{ !old('edit_id') ? old('nama_jurusan') : '' }}" required>
                             @error('nama_jurusan')
-                                <span class="invalid-feedback" role="alert">
-                                    <strong>{{ $message }}</strong>
-                                </span>
+                                @if (!old('edit_id'))
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @endif
                             @enderror
                         </div>
-
                         <div class="form-group form-check">
                             <input type="hidden" name="is_active" value="0">
                             <input type="checkbox" class="form-check-input" id="status_aktif" name="is_active"
@@ -148,7 +157,8 @@
                     </form>
                 </div>
                 <div class="modal-footer d-flex justify-content-end">
-                    <button type="submit" form="formTambahJurusan" class="btn" style="background-color:  #31708F; color:white;">Simpan</button>
+                    <button type="submit" form="formTambahJurusan" class="btn"
+                        style="background-color:  #31708F; color:white;">Simpan</button>
                     <button type="button" class="btn btn-default mr-2" data-dismiss="modal">Batal</button>
 
                 </div>
@@ -158,7 +168,6 @@
 @endsection
 
 @push('js')
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script>
         $(function() {
             try {
@@ -177,44 +186,44 @@
                 );
             }
 
-            const Toast = Swal.mixin({
-                toast: true,
-                position: 'top-end',
-                showConfirmButton: false,
-                timer: 4000,
-                timerProgressBar: true,
-                didOpen: (toast) => {
-                    toast.addEventListener('mouseenter', Swal.stopTimer)
-                    toast.addEventListener('mouseleave', Swal.resumeTimer)
-                }
+            document.querySelectorAll('.modal').forEach(modal => {
+                modal.addEventListener('hidden.bs.modal', function() {
+                    this.querySelectorAll('.is-invalid').forEach(el => el.classList.remove(
+                        'is-invalid'));
+                    this.querySelectorAll('.invalid-feedback').forEach(el => el.remove());
+                });
             });
 
-            @if (Session::has('success'))
-                Toast.fire({
+
+            @if (session('success'))
+                Swal.fire({
                     icon: 'success',
-                    title: '{{ Session::get('success') }}'
-                })
+                    title: 'Berhasil!',
+                    text: '{{ session('success') }}',
+                    showConfirmButton: true,
+                    confirmButtonColor: '#3085d6',
+                    timer: 3000
+                });
             @endif
 
-            @if (Session::has('error') || $errors->any())
-                @if (Session::has('error'))
-                    Toast.fire({
-                        icon: 'error',
-                        title: 'Gagal! {{ Session::get('error') }}'
-                    })
-                @else
-                    Toast.fire({
-                        icon: 'error',
-                        title: 'Gagal! Silakan cek kembali input Anda.'
-                    })
-                @endif
+            @if (session('error'))
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Gagal!',
+                    text: '{{ session('error') }}',
+                    showConfirmButton: true,
+                    confirmButtonColor: '#d33'
+                });
             @endif
 
-            @if (Session::has('warning'))
-                Toast.fire({
+            @if ($errors->any())
+                Swal.fire({
                     icon: 'warning',
-                    title: '{{ Session::get('warning') }}'
-                })
+                    title: 'Gagal Menambahkan Jurusan!',
+                    html: `{!! implode('<br>', $errors->all()) !!}`,
+                    showConfirmButton: true,
+                    confirmButtonColor: '#d33'
+                });
             @endif
 
             $(document).on('submit', '.form-delete-jurusan', function(e) {
@@ -241,20 +250,15 @@
                     form.submit();
                 }
             });
-
             @if ($errors->any())
-                if ($('#formTambahJurusan .is-invalid').length > 0) {
-                    $('#modalTambahJurusan').modal('show');
-                }
-
-                @foreach ($jurusan as $jrs)
-                    @if (Session::get('edit_id') == $jrs->id || ($errors->has('nama_jurusan') && old('_method') === 'PUT'))
-                        $('#modalEditJurusan{{ $jrs->id }}').modal('show');
+                document.addEventListener('DOMContentLoaded', function() {
+                    @if (old('edit_id'))
+                        $('#modalEditJurusan{{ old('edit_id') }}').modal('show');
+                    @else
+                        $('#modalTambahJurusan').modal('show');
                     @endif
-                @endforeach
+                });
             @endif
-
-
         })
     </script>
 @endpush

@@ -1,4 +1,3 @@
-
 @extends('layouts.adminlte-custom')
 @section('content_header')
     <div class="container-fluid mb-3">
@@ -7,20 +6,21 @@
                 <h1 class="h3 mb-0 font-weight-bold" style="color:#333333">Manajemen Jalur Prestasi</h1>
                 <p>Kelola kategori prestasi untuk pendaftaran siswa baru.</p>
             </div>
-           
+
         </div>
     </div>
 @stop
 
-@section('content') 
+@section('content')
     <div class="container-fluid">
-        
+
         <div class="card">
             <div class="card-body">
-                 {{-- Tombol Tambah --}}
-            <button class="btn btn-sm mb-4" style="background-color:  #31708F; color:white;" data-toggle="modal" data-target="#modalTambahKategori">
-               Tambah Kategori
-            </button>
+                {{-- Tombol Tambah --}}
+                <button class="btn btn-sm mb-4" style="background-color:  #31708F; color:white;" data-toggle="modal"
+                    data-target="#modalTambahKategori">
+                    Tambah Kategori
+                </button>
                 <table id="dataTable" class="table table-bordered table-striped">
                     <thead class="bg-basic text-white">
                         <tr>
@@ -39,7 +39,8 @@
                                 <td>{{ $kategori->deskripsi ?? '-' }}</td>
                                 <td class="text-center">
                                     @if ($kategori->is_active)
-                                        <span class="badge px-3 py-2 " style="background-color: #21ca5f; color: white;">Aktif</span> 
+                                        <span class="badge px-3 py-2 "
+                                            style="background-color: #21ca5f; color: white;">Aktif</span>
                                     @else
                                         <span class="badge badge-danger px-3 py-2">Tidak Aktif</span>
                                     @endif
@@ -62,8 +63,8 @@
                             </tr>
 
                             {{-- Modal Edit Kategori (Per Loop) --}}
-                            <div class="modal fade" id="modalEditKategori{{ $kategori->id }}" tabindex="-1"
-                                role="dialog" aria-labelledby="modalEditKategoriLabel" aria-hidden="true">
+                            <div class="modal fade" id="modalEditKategori{{ $kategori->id }}" tabindex="-1" role="dialog"
+                                aria-labelledby="modalEditKategoriLabel" aria-hidden="true">
                                 <div class="modal-dialog" role="document">
                                     <div class="modal-content">
                                         <div class="modal-header">
@@ -78,25 +79,43 @@
                                                 method="POST">
                                                 @csrf
                                                 @method('PUT')
+
+                                                <input type="hidden" name="edit_id" value="{{ $kategori->id }}">
+
                                                 <div class="form-group">
                                                     <label for="nama_prestasi">Nama Prestasi</label>
                                                     <input type="text"
-                                                        class="form-control @error('nama_prestasi') is-invalid @enderror"
-                                                        id="nama_prestasi" name="nama_prestasi"
+                                                        class="form-control @error('nama_prestasi') @if (old('edit_id') == $kategori->id) is-invalid @endif @enderror"
+                                                        id="nama_prestasi_{{ $kategori->id }}" name="nama_prestasi"
                                                         placeholder="Contoh: Juara Olimpiade Sains"
-                                                        value="{{ old('nama_prestasi', $kategori->nama_prestasi) }}" required>
+                                                        value="{{ old('edit_id') == $kategori->id ? old('nama_prestasi') : $kategori->nama_prestasi }}"
+                                                        required>
                                                     @error('nama_prestasi')
-                                                        <span class="invalid-feedback" role="alert">
-                                                            <strong>{{ $message }}</strong>
-                                                        </span>
+                                                        @if (old('edit_id') == $kategori->id)
+                                                            <span class="invalid-feedback" role="alert">
+                                                                <strong>{{ $message }}</strong>
+                                                            </span>
+                                                        @endif
                                                     @enderror
                                                 </div>
+
                                                 <div class="form-group">
                                                     <label for="deskripsi">Reward Prestasi (Wajib Isi)</label>
-                                                    <input type="text" class="form-control" id="deskripsi"
-                                                        name="deskripsi" placeholder="Deskripsi singkat"
-                                                        value="{{ old('deskripsi', $kategori->deskripsi) }}" required>
+                                                    <input type="text"
+                                                        class="form-control @error('deskripsi') @if (old('edit_id') == $kategori->id) is-invalid @endif @enderror"
+                                                        id="deskripsi_{{ $kategori->id }}" name="deskripsi"
+                                                        placeholder="Deskripsi singkat"
+                                                        value="{{ old('edit_id') == $kategori->id ? old('deskripsi') : $kategori->deskripsi }}"
+                                                        required>
+                                                    @error('deskripsi')
+                                                        @if (old('edit_id') == $kategori->id)
+                                                            <span class="invalid-feedback" role="alert">
+                                                                <strong>{{ $message }}</strong>
+                                                            </span>
+                                                        @endif
+                                                    @enderror
                                                 </div>
+
                                                 <div class="form-group form-check">
                                                     <input type="hidden" name="is_active" value="0">
 
@@ -109,10 +128,11 @@
                                         </div>
                                         <div class="modal-footer d-flex justify-content-end">
                                             <button type="submit" form="formEditKategori{{ $kategori->id }}"
-                                                class="btn" style="background-color:  #31708F; color:white;">Simpan</button>
+                                                class="btn"
+                                                style="background-color:  #31708F; color:white;">Simpan</button>
                                             <button type="button" class="btn btn-default mr-2"
                                                 data-dismiss="modal">Batal</button>
-                                            
+
                                         </div>
                                     </div>
                                 </div>
@@ -141,19 +161,31 @@
                         @csrf
                         <div class="form-group">
                             <label for="nama_prestasi">Nama Prestasi</label>
-                            <input type="text" class="form-control @error('nama_prestasi') is-invalid @enderror"
+                            <input type="text"
+                                class="form-control @error('nama_prestasi') @if (!old('edit_id')) is-invalid @endif @enderror"
                                 id="nama_prestasi" name="nama_prestasi" placeholder="Contoh: Juara Olimpiade Sains"
-                                value="{{ old('nama_prestasi') }}" required>
+                                value="{{ !old('edit_id') ? old('nama_prestasi') : '' }}" required>
                             @error('nama_prestasi')
-                                <span class="invalid-feedback" role="alert">
-                                    <strong>{{ $message }}</strong>
-                                </span>
+                                @if (!old('edit_id'))
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @endif
                             @enderror
                         </div>
                         <div class="form-group">
                             <label for="deskripsi">Reward Prestasi (Wajib Isi)</label>
-                            <input type="text" class="form-control" id="deskripsi" name="deskripsi"
-                                placeholder="Deskripsi singkat" value="{{ old('deskripsi') }}" required>
+                            <input type="text"
+                                class="form-control @error('deskripsi') @if (!old('edit_id')) is-invalid @endif @enderror"
+                                id="deskripsi" name="deskripsi" placeholder="Deskripsi singkat"
+                                value="{{ !old('edit_id') ? old('deskripsi') : '' }}" required>
+                            @error('deskripsi')
+                                @if (!old('edit_id'))
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @endif
+                            @enderror
                         </div>
                         <div class="form-group form-check">
                             <input type="hidden" name="is_active" value="0">
@@ -165,9 +197,10 @@
                     </form>
                 </div>
                 <div class="modal-footer d-flex justify-content-end">
-                    <button type="submit" form="formTambahKategori" class="btn" style="background-color:  #31708F; color:white;">Simpan</button>
+                    <button type="submit" form="formTambahKategori" class="btn"
+                        style="background-color:  #31708F; color:white;">Simpan</button>
                     <button type="button" class="btn btn-default mr-2" data-dismiss="modal">Batal</button>
-                    
+
                 </div>
             </div>
         </div>
@@ -176,7 +209,7 @@
 
 @push('js')
     <script>
-        $(function () {
+        $(function() {
             try {
                 $('#dataTable').DataTable({
                     "paging": true,
@@ -188,7 +221,9 @@
                     "responsive": true,
                 });
             } catch (error) {
-                console.error("Error DataTable: Pastikan plugin Datatables di adminlte.php sudah aktif dan library ter-load.");
+                console.error(
+                    "Error DataTable: Pastikan plugin Datatables di adminlte.php sudah aktif dan library ter-load."
+                );
             }
 
             const Toast = Swal.mixin({
@@ -203,37 +238,41 @@
                 }
             });
 
-            @if (Session::has('success'))
-                Toast.fire({
+            @if (session('success'))
+                Swal.fire({
                     icon: 'success',
-                    title: '{{ Session::get('success') }}'
-                })
+                    title: 'Berhasil!',
+                    text: '{{ session('success') }}',
+                    showConfirmButton: true,
+                    confirmButtonColor: '#3085d6',
+                    timer: 3000
+                });
             @endif
 
-            @if (Session::has('error') || $errors->any())
-                @if (Session::has('error'))
-                    Toast.fire({
-                        icon: 'error',
-                        title: 'Gagal! {{ Session::get('error') }}'
-                    })
-                @else
-                    Toast.fire({
-                        icon: 'error',
-                        title: 'Gagal! Silakan cek kembali input Anda.'
-                    })
-                @endif
+            @if (session('error'))
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Gagal!',
+                    text: '{{ session('error') }}',
+                    showConfirmButton: true,
+                    confirmButtonColor: '#d33'
+                });
             @endif
 
-            @if (Session::has('warning'))
-                Toast.fire({
+            @if ($errors->any())
+                Swal.fire({
                     icon: 'warning',
-                    title: '{{ Session::get('warning') }}'
-                })
+                    title: 'Gagal Menambahkan Jurusan!',
+                    html: `{!! implode('<br>', $errors->all()) !!}`,
+                    showConfirmButton: true,
+                    confirmButtonColor: '#d33'
+                });
             @endif
+
 
             // 2. SweetAlert untuk Konfirmasi Hapus
             $(document).on('submit', '.form-delete-prestasi', function(e) {
-                e.preventDefault(); 
+                e.preventDefault();
                 const form = this;
 
                 if (typeof Swal !== 'undefined') {
@@ -258,15 +297,15 @@
             });
 
             @if ($errors->any())
-                const isEditing = $('input[name="_method"]').val() === 'PUT';
-
-                if (!isEditing) {
-                    $('#modalTambahKategori').modal('show');
-                } else {
-                    @if (Session::has('edit_id'))
-                        $('#modalEditKategori{{ Session::get('edit_id') }}').modal('show');
+                document.addEventListener('DOMContentLoaded', function() {
+                    // Cek apakah ada old('edit_id') - artinya dari form EDIT
+                    @if (old('edit_id'))
+                        $('#modalEditKategori{{ old('edit_id') }}').modal('show');
+                    @else
+                        // Jika tidak ada old('edit_id'), berarti dari form TAMBAH
+                        $('#modalTambahKategori').modal('show');
                     @endif
-                }
+                });
             @endif
         });
     </script>

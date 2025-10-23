@@ -394,6 +394,13 @@ return [
             'icon_color' => 'cyan',
             'url' => '#',
         ],
+          [
+        'text' => 'Logout',
+        'url'  => 'logout',
+        'icon' => 'fas fa-sign-out-alt',
+        'method' => 'post', // Penting untuk Laravel logout
+        'topnav_user' => true, // Menampilkan di user dropdown
+    ],
     ],
 
     /*
@@ -439,6 +446,17 @@ return [
                     'asset' => true,
                     'location' => '//cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js',
                     'integrity' => null,
+                ],
+            ],
+        ],
+
+        'Bootstrap' => [
+            'active' => true,
+            'files' => [
+                [
+                    'type' => 'js',
+                    'asset' => true,
+                    'location' => '//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.6.0/js/bootstrap.bundle.min.js',
                 ],
             ],
         ],

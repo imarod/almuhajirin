@@ -127,7 +127,7 @@ Route::prefix('admin')->middleware(['auth', 'is_admin'])->group(function () {
         ->name('admin.manajemen-user');
     Route::get('/manajemen-user/counts', [ManajemenUser::class, 'getTotalUser'])
         ->name('admin.manajemen.user.counts');
-    Route::post('/manajemen-user-store', [ManajemenUser::class, 'store'])
+    Route::post('/manajemen-user', [ManajemenUser::class, 'store'])
         ->name(('admin.manajemen.user.store'));
     Route::get('/manajemen-user/json', [ManajemenUser::class, 'getDataUser'])
         ->name('admin.manajemen.user.json');
