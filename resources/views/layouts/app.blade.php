@@ -74,7 +74,26 @@
             </div>
         </nav>
 
+
         <main class="py-2">
+
+            
+    <table class="table table-striped table-hover mt-4">
+        <thead class="text-center bg-primary text-white">
+            <tr>
+                <th class="p-3">Tahun Ajaran</th>
+                <th class="p-3">Gelombang</th>
+                <th class="p-3">Tanggal Pendaftaran</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr class="text-center">
+                <td>2025/2026</td>
+                <td>1</td>
+                <td>1 Januari 2025 - 31 Maret 2025</td>
+            </tr>
+        </tbody>
+    </table>
             @yield('content')
         </main>
     </div>

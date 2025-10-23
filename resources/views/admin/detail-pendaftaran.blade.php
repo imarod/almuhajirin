@@ -20,9 +20,9 @@
                     class="btn rounded-circle  border">
                     <i class="fas fa-arrow-left text-black"></i>
                 </a>
-                <div class="d-flex ms-auto gap-2">
-
-                    <form id="form-terima" action="{{ route('admin.update-status', $pendaftars->id) }}" method="POST">
+                <div class="row d-flex ml-auto">
+                    <form id="form-terima" class="mr-2" action="{{ route('admin.update-status', $pendaftars->id) }}"
+                        method="POST">
                         @csrf
                         @method('PUT')
                         <input type="hidden" name="status_aktual" value="Diterima">
@@ -36,7 +36,7 @@
                             <i class="fas fa-check"></i> Terima
                         </button>
                     </form>
-                    <form action="">
+                    <form action="" class="mr-2">
                         <div>
                             <button type="button" class="btn btn-warning" data-toggle="modal"
                                 data-target="#modalPerbaikan">Perbaikan</button>
@@ -215,7 +215,7 @@
                         <div class="d-flex align-items-center">
                             @if ($pendaftars->piagam)
                                 <button type="button" class="btn btn-outline-success btn-sm"
-                                    onclick="showPdfModal('{{ asset('storage/' . $pendaftars->piagam) }}'">
+                                    onclick="showPdfModal('{{ asset('storage/' . $pendaftars->piagam) }}','Piagam Penghargaan - {{ $pendaftars->siswa->nama }}')">
                                     <i class="fas fa-eye"></i> Lihat
                                     </a>
                                 @else

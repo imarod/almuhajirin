@@ -35,7 +35,7 @@
                 @if ($statusPendaftaran == 'open')
                     <form
                         action="{{ isset($pendaftaran) ? route('formulir.update', $pendaftaran->id) : route('pendaftaran.store') }}"
-                        method="POST" enctype="multipart/form-data">
+                        method="POST" enctype="multipart/form-data" novalidate>
                         @csrf
                         @if (isset($pendaftaran))
                             @method('PUT')
@@ -59,7 +59,7 @@
                                             <input type="text" class="form-control @error('nisn') is-invalid @enderror"
                                                 placeholder="Masukkan NISN" name="nisn" id="nisnInput"
                                                 value="{{ isset($pendaftaran) ? $pendaftaran->siswa->nisn : old('nisn') }}"
-                                                pattern="\d*" inputmode="numeric">
+                                                pattern="\d*" inputmode="numeric" required>
 
                                             @error('nisn')
                                                 <div class="invalid-feedback">{{ $message }}</div>
@@ -75,7 +75,8 @@
                                             <input type="text"
                                                 class="form-control @error('tempat_lahir') is-invalid @enderror"
                                                 placeholder="Masukkan Tempat Lahir" name="tempat_lahir"
-                                                value="{{ isset($pendaftaran) ? $pendaftaran->siswa->tempat_lahir : old('tempat_lahir') }}">
+                                                value="{{ isset($pendaftaran) ? $pendaftaran->siswa->tempat_lahir : old('tempat_lahir') }}"
+                                                required>
                                             @error('tempat_lahir')
                                                 <div class="invalid-feedback">{{ $message }}</div>
                                             @enderror
@@ -93,7 +94,8 @@
                                             </label>
                                             <input type="text" class="form-control @error('nama') is-invalid @enderror"
                                                 placeholder="Masukkan Nama Lengkap" name="nama"
-                                                value="{{ isset($pendaftaran) ? $pendaftaran->siswa->nama : old('nama') }}">
+                                                value="{{ isset($pendaftaran) ? $pendaftaran->siswa->nama : old('nama') }}"
+                                                required>
                                             @error('nama')
                                                 <div class="invalid-feedback">{{ $message }}</div>
                                             @enderror
@@ -109,7 +111,8 @@
                                                 <input type="date"
                                                     class="form-control @error('tanggal_lahir') is-invalid @enderror"
                                                     name="tanggal_lahir"
-                                                    value="{{ isset($pendaftaran) ? $pendaftaran->siswa->tanggal_lahir->format('Y-m-d') : old('tanggal_lahir') }}">
+                                                    value="{{ isset($pendaftaran) ? $pendaftaran->siswa->tanggal_lahir->format('Y-m-d') : old('tanggal_lahir') }}"
+                                                    required>
                                                 @error('tanggal_lahir')
                                                     <div class="invalid-feedback">{{ $message }}</div>
                                                 @enderror
@@ -127,10 +130,11 @@
                                                 <span class="text-danger">*</span>
                                             </label>
                                             <small class="text-muted d-block invisible mt-md-3">Spacer</small>
-                                            <input type="text"
+                                            <input type="email"
                                                 class="form-control  @error('email_siswa') is-invalid @enderror"
                                                 placeholder="Masukkan Email Aktif" name="email_siswa"
-                                                value="{{ isset($pendaftaran) ? $pendaftaran->siswa->email_siswa : old('email_siswa') }}">
+                                                value="{{ isset($pendaftaran) ? $pendaftaran->siswa->email_siswa : old('email_siswa') }}"
+                                                required>
                                             @error('email_siswa')
                                                 <div class="invalid-feedback">{{ $message }}</div>
                                             @enderror
@@ -149,18 +153,29 @@
 
                                             </style>
                                             <div class="input-group">
+                                                {{-- Menampilkan old value tanpa +62 atau 62 --}}
+                                                @php
+                                                    $noHpSiswa = isset($pendaftaran)
+                                                        ? $pendaftaran->siswa->no_hp_siswa
+                                                        : old('no_hp_siswa');
+                                                    $displayedPhoneSiswa = str_replace(['+62', '62'], '', $noHpSiswa);
+                                                    $displayedPhoneSiswa = ltrim($displayedPhoneSiswa, '0');
+                                                @endphp
+
                                                 <div class="input-group-prepend">
                                                     <span class="input-group-text"> +62</span>
                                                 </div>
 
                                                 <input type="text" id="phoneInput"
                                                     class="form-control @error('no_hp_siswa') is-invalid @enderror"
-                                                    placeholder="Masukkan No Handphone" name="no_hp_siswa"
-                                                    value="{{ isset($pendaftaran) ? $pendaftaran->siswa->no_hp_siswa : old('no_hp_siswa_display') }}">
+                                                    placeholder="Contoh: 8738773637" required
+                                                    value="{{ $displayedPhoneSiswa }}">
                                                 <input type="hidden" name="no_hp_siswa" id="hiddenPhoneInput"
                                                     value="{{ isset($pendaftaran) ? $pendaftaran->siswa->no_hp_siswa : old('no_hp_siswa') }}">
+                                                <div id="no_hp_siswa-feedback" class="invalid-feedback"
+                                                    style="display: none;"></div>
                                                 @error('no_hp_siswa')
-                                                    <div class="invalid-feedback">{{ $message }}</div>
+                                                    <div class="invalid-feedback d-block">{{ $message }}</div>
                                                 @enderror
                                             </div>
                                         </div>
@@ -177,16 +192,19 @@
                                             <div class="form-check form-check-inline">
                                                 <input
                                                     class="form-check-input @error('jenis_kelamin') is-invalid @enderror"
-                                                    type="radio" name="jenis_kelamin" value="Laki-laki"
-                                                    {{ isset($pendaftaran) && $pendaftaran->siswa->jenis_kelamin == 'Laki-laki' ? 'checked' : (old('jenis_kelamin') == 'Laki-laki' ? 'checked' : '') }}>
-                                                <label class="form-check-label">Laki-laki</label>
+                                                    type="radio" name="jenis_kelamin" value="Laki-laki" id="jk_laki"
+                                                    {{ isset($pendaftaran) && $pendaftaran->siswa->jenis_kelamin == 'Laki-laki' ? 'checked' : (old('jenis_kelamin') == 'Laki-laki' ? 'checked' : '') }}
+                                                    required>
+                                                <label class="form-check-label" for="jk_laki">Laki-laki</label>
                                             </div>
                                             <div class="form-check form-check-inline">
                                                 <input class="form-check-input" type="radio" name="jenis_kelamin"
-                                                    value="Perempuan"
+                                                    value="Perempuan" id="jk_perempuan"
                                                     {{ isset($pendaftaran) && $pendaftaran->siswa->jenis_kelamin == 'Perempuan' ? 'checked' : (old('jenis_kelamin') == 'Perempuan' ? 'checked' : '') }}>
-                                                <label class="form-check-label">Perempuan</label>
+                                                <label class="form-check-label" for="jk_perempuan">Perempuan</label>
                                             </div>
+                                            <div id="jenis_kelamin-feedback" class="text-danger"
+                                                style="display: none; font-size: 80%;">Jenis kelamin harus dipilih</div>
                                             @error('jenis_kelamin')
                                                 <div class="invalid-feedback">{{ $message }}</div>
                                             @enderror
@@ -204,10 +222,11 @@
                                                 <span class="font-weight-medium text-dark">Alamat Lengkap</span>
                                                 <span class="text-danger">*</span>
                                             </label>
-                                            <input type="text"
+                                            <small class="text-muted d-block mb-2"> Format: Jalan, Desa, Kecamatan, Kabupaten/Kota, Provinsi.</small>
+                                            <textarea
                                                 class="form-control  @error('alamat_siswa') is-invalid @enderror"
                                                 placeholder="Masukkan Alamat Lengkap" name="alamat_siswa"
-                                                value="{{ isset($pendaftaran) ? $pendaftaran->siswa->alamat_siswa : old('alamat_siswa') }}">
+                                                required>{{ isset($pendaftaran) ? $pendaftaran->siswa->alamat_siswa : old('alamat_siswa') }}</textarea>
                                             @error('alamat_siswa')
                                                 <div class="invalid-feedback">{{ $message }}</div>
                                             @enderror
@@ -233,7 +252,7 @@
                                                 <span class="text-danger">*</span>
                                             </label>
                                             <small class="text-muted d-block mb-2">Unggah dalam bentuk format PDf maks
-                                                1 mb</small>
+                                                1 MB</small>
                                             @if (isset($pendaftaran) && $pendaftaran->kk)
                                                 <div class="mb-3">
                                                     <p>Dokumen yang sudah diunggah:</p>
@@ -247,7 +266,8 @@
                                             <div class="custom-file">
                                                 <input type="file"
                                                     class="custom-file-input @error('kk') is-invalid @enderror"
-                                                    id="kkInput" name="kk" accept=".pdf">
+                                                    id="kkInput" name="kk" accept=".pdf"
+                                                    {{ !isset($pendaftaran) ? 'required' : '' }}>
                                                 <label class="custom-file-label" for="kkInput">
                                                     {{ isset($pendaftaran) && $pendaftaran->kk ? 'Pilih Berkas untuk mengganti' : 'Unggah Dokumen' }}
                                                 </label>
@@ -264,7 +284,7 @@
                                                 <span class="text-danger">*</span>
                                             </label>
                                             <small class="text-muted d-block mb-2">Unggah dalam bentuk format PDf maks
-                                                1 mb</small>
+                                                1 MB</small>
                                             @if (isset($pendaftaran) && $pendaftaran->ijazah)
                                                 <div class="mb-3">
                                                     <p>Dokumen yang sudah diunggah:</p>
@@ -278,12 +298,13 @@
                                             <div class="custom-file">
                                                 <input type="file"
                                                     class="custom-file-input @error('ijazah') is-invalid @enderror"
-                                                    id="ijazahInput" name="ijazah" accept=".pdf">
+                                                    id="ijazahInput" name="ijazah" accept=".pdf"
+                                                    {{ !isset($pendaftaran) ? 'required' : '' }}>
                                                 <label class="custom-file-label" for="ijazahInput">
                                                     {{ isset($pendaftaran) && $pendaftaran->ijazah ? 'Pilih Berkas untuk mengganti' : 'Unggah Dokumen' }}
                                                 </label>
                                                 @error('ijazah')
-                                                    <div class="invalid-feedback">{{ $message }}</div>
+                                                    <div class="invalid-feedback">{{ $message }}</div> 
                                                 @enderror
                                             </div>
                                         </div>
@@ -293,15 +314,15 @@
                                 <div class="row">
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <label class="font-weight-medium text-dark">Kategori Prestasi (Jika
-                                                Ada)</label>
+                                            <label class="font-weight-medium text-dark">Kategori Prestasi
+                                                (Optional)</label>
                                             <br>
                                             <div class="form-check">
                                                 <input class="form-check-input" type="radio"
                                                     name="kategori_prestasi_id" id="prestasi_none" value=""
                                                     {{ old('kategori_prestasi_id', $pendaftaran->kategori_prestasi_id ?? '') == '' ? 'checked' : '' }}>
-                                                <label class="form-check-label" for="prestasi_none">Tidak Ada
-                                                    Prestasi</label>
+                                                {{-- <label class="form-check-label" for="prestasi_none">Tidak Ada
+                                                    Prestasi</label> --}}
                                             </div>
 
                                             @foreach ($kategoriPrestasiAktif as $kategori)
@@ -321,55 +342,19 @@
                                                     </label>
                                                 </div>
                                             @endforeach
+
                                             @error('kategori_prestasi_id')
                                                 <div class="alert alert-danger mt-2">{{ $message }}</div>
                                             @enderror
                                         </div>
                                     </div>
 
-                                    @if ($jurusanAktif->count() > 0)
-                                        <div class="col-md-6">
-                                            <div class="form-group">
-                                                <label class="d-flex align-items-center gap-1">
-                                                    <span class="font-weight-medium text-dark">Jurusan</span>
-                                                    <span class="text-danger">*</span>
-                                                </label>
-                                                @foreach ($jurusanAktif as $jrs)
-                                                    <div class="form-check">
-                                                        <input class="form-check-input" type="radio" name="jurusan_id"
-                                                            id="jurusan-{{ $jrs->id }}" value="{{ $jrs->id }}"
-                                                            {{ old('jurusan_id', $pendaftaran->jurusan_id ?? '') == $jrs->id ? 'checked' : '' }}>
-                                                        <label class="form-check-label"
-                                                            for="jurusan-{{ $jrs->id }}">
-                                                            {{ $jrs->nama_jurusan }}
-                                                        </label>
-                                                    </div>
-                                                @endforeach
-
-                                                @error('jurusan_id')
-                                                    <div class="text-danger mt-2">
-                                                        {{ $message }}
-                                                    </div>
-                                                @enderror
-                                            </div>
-                                        </div>
-                                    @else
-                                        <div class="row">
-                                            <div class="col-md-6">
-
-                                            </div>
-                                        </div>
-                                    @endif
-
-                                </div>
-
-                                <div class="row">
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <label class="font-weight-medium text-dark mb-0">Scan Piagam Prestasi (Jika
-                                                Ada)</label>
+                                            <label class="font-weight-medium text-dark mb-0">Scan Piagam Prestasi
+                                                (Optional)</label>
                                             <small class="text-muted d-block mb-2">Unggah dalam bentuk format PDf maks
-                                                1 mb</small>
+                                                1 MB</small>
                                             @if (isset($pendaftaran) && $pendaftaran->piagam)
                                                 <div class="mb-3">
                                                     <p>Dokumen yang sudah diunggah:</p>
@@ -395,6 +380,44 @@
                                     </div>
                                 </div>
 
+                                <div class="row">
+                                    @if ($jurusanAktif->count() > 0)
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label class="d-flex align-items-center gap-1">
+                                                    <span class="font-weight-medium text-dark">Jurusan</span>
+                                                    <span class="text-danger">*</span>
+                                                </label>
+                                                @foreach ($jurusanAktif as $jrs)
+                                                    <div class="form-check">
+                                                        <input class="form-check-input" type="radio" name="jurusan_id"
+                                                            id="jurusan-{{ $jrs->id }}" value="{{ $jrs->id }}"
+                                                            {{ old('jurusan_id', $pendaftaran->jurusan_id ?? '') == $jrs->id ? 'checked' : '' }}
+                                                            required>
+                                                        <label class="form-check-label"
+                                                            for="jurusan-{{ $jrs->id }}">
+                                                            {{ $jrs->nama_jurusan }}
+                                                        </label>
+                                                    </div>
+                                                @endforeach
+                                                <div id="jurusan_id-feedback" class="text-danger"
+                                                    style="display: none; font-size: 70%;">Silakan pilih jurusan.</div>
+                                                @error('jurusan_id')
+                                                    <div class="text-danger mt-2">
+                                                        {{ $message }}
+                                                    </div>
+                                                @enderror
+                                            </div>
+                                        </div>
+                                    @else
+                                        <div class="row">
+                                            <div class="col-md-6">
+
+                                            </div>
+                                        </div>
+                                    @endif
+                                </div>
+
                             </div>
 
                         </div>
@@ -415,7 +438,8 @@
                                             <input type="text"
                                                 class="form-control @error('nama_ayah') is-invalid @enderror"
                                                 placeholder="Masukkan Nama Ayah" name="nama_ayah"
-                                                value="{{ isset($pendaftaran) ? $pendaftaran->siswa->orangTua->nama_ayah : old('nama_ayah') }}">
+                                                value="{{ isset($pendaftaran) ? $pendaftaran->siswa->orangTua->nama_ayah : old('nama_ayah') }}"
+                                                required>
                                             @error('nama_ayah')
                                                 <div class="invalid-feedback">{{ $message }}</div>
                                             @enderror
@@ -430,7 +454,8 @@
                                             <input type="text"
                                                 class="form-control @error('nama_ibu') is-invalid @enderror"
                                                 placeholder="Masukkan Nama Ibu" name="nama_ibu"
-                                                value="{{ isset($pendaftaran) ? $pendaftaran->siswa->orangTua->nama_ibu : old('nama_ibu') }}">
+                                                value="{{ isset($pendaftaran) ? $pendaftaran->siswa->orangTua->nama_ibu : old('nama_ibu') }}"
+                                                required>
                                             @error('nama_ibu')
                                                 <div class="invalid-feedback">{{ $message }}</div>
                                             @enderror
@@ -446,11 +471,11 @@
                                                 <span class="font-weight-medium text-dark">Alamat Lengkap</span>
                                                 <span class="text-danger">*</span>
                                             </label>
-                                            <small class="text-muted d-block invisible mt-md-3">Spacer</small>
-                                            <input type="text"
+                                            <small class="text-muted d-block mb-2"> Format: Jalan, Desa, Kecamatan, Kabupaten/Kota, Provinsi.</small>
+                                            <textarea 
                                                 class="form-control @error('alamat_ortu') is-invalid @enderror"
                                                 placeholder="Masukkan Alamat" name="alamat_ortu"
-                                                value="{{ isset($pendaftaran) ? $pendaftaran->siswa->orangTua->alamat_ortu : old('alamat_ortu') }}">
+                                                required>{{ isset($pendaftaran) ? $pendaftaran->siswa->orangTua->alamat_ortu : old('alamat_ortu') }}</textarea>
                                             @error('alamat_ortu')
                                                 <div class="invalid-feedback">{{ $message }}</div>
                                             @enderror
@@ -465,16 +490,28 @@
                                             <small class="text-muted d-block mb-2">Masukkan nomor telepon diawali angka
                                                 8, tanpa 0 atau +62</small>
                                             <div class="input-group">
+
+                                                {{-- Menampilkan Old Value tanpa +62 atau 62 --}}
+                                                @php
+                                                    $noHpOrtu = isset($pendaftaran)
+                                                        ? $pendaftaran->siswa->orangTua->no_hp_ortu
+                                                        : old('no_hp_ortu');
+                                                    $displayedPhoneOrtu = str_replace(['+62', '62'], '', $noHpOrtu);
+                                                    $displayedPhoneOrtu = ltrim($displayedPhoneOrtu, '0');
+                                                @endphp
+
                                                 <span class="input-group-text"
                                                     style="background-color: #e9ecef; border-right: none; border-radius: 0.25rem 0 0 0.25rem">+62</span>
                                                 <input type="text" id="phoneOrtuInput"
                                                     class="form-control @error('no_hp_ortu') is-invalid @enderror"
-                                                    placeholder="Contoh: 81234567890" name="no_hp_ortu"
-                                                    value="{{ isset($pendaftaran) ? $pendaftaran->siswa->orangTua->no_hp_ortu : old('no_hp_ortu_display') }}">
+                                                    placeholder="Contoh: 81234567890" required
+                                                    value="{{ $displayedPhoneOrtu }}">
                                                 <input type="hidden" name="no_hp_ortu" id="hiddenOrtuInput"
                                                     value="{{ isset($pendaftaran) ? $pendaftaran->siswa->orangTua->no_hp_ortu : old('no_hp_ortu') }}">
+                                                <div id="no_hp_ortu-feedback" class="invalid-feedback"
+                                                    style="display: none;"></div>
                                                 @error('no_hp_ortu')
-                                                    <div class="invalid-feedback">{{ $message }}</div>
+                                                    <div class="invalid-feedback d-block">{{ $message }}</div>
                                                 @enderror
                                             </div>
                                         </div>
@@ -496,7 +533,6 @@
                             <div colspan="9" class="text-center py-5">
                                 <i class="fas fa-history fa-3x text-muted mb-3" style="opacity: 0.3;"></i>
                                 <h5 class="text-muted">{{ $message }}</h5>
-                                {{-- Pesan di bawah ini bisa disesuaikan atau dihapus jika tidak relevan --}}
                                 <p class="text-muted ">Kembali ke menu Daftar</p>
                                 <a href="{{ route('ajuan.pendaftaran') }}" class="btn  text-white"
                                     style="background-color: #31708F">Kembali</a>
@@ -509,134 +545,345 @@
     </div>
 @endsection
 
+
 @push('js')
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            // custom error messages client validation
+            const customErrorMessages = {
+                'required': 'Input ini wajib diisi.',
+                'email': 'Format email tidak valid.',
+                'numeric': 'NISN harus berupa angka.',
+                'jenis_kelamin': 'Jenis kelamin harus dipilih.',
+                'jurusan_id': 'Silakan pilih jurusan.',
+                'file_max_size': 'Ukuran file maksimal 1 MB.',
+                'file_mime_type': 'Hanya file PDF yang diizinkan.',
+                'piagam_required_with': 'File piagam harus diunggah jika Kategori Prestasi dipilih selain "Tidak Ada Prestasi".',
+                'phone_format': 'Nomor HP harus diawali dengan 8 dan berisi 9-12 digit.',
+                'phone_required': 'Nomor WhatsApp wajib diisi.',
+            };
+
+            // Fungsi untuk menampilkan pesan error kustom (Bootstrap styling)
+            function displayCustomError(element, message, feedbackElementId = null) {
+                clearCustomError(element, feedbackElementId);
+
+                element.classList.add('is-invalid');
+
+                let feedbackElement = null;
+
+                if (element.type === 'radio' && feedbackElementId) {
+                    feedbackElement = document.getElementById(feedbackElementId);
+                    if (feedbackElement) {
+                        feedbackElement.textContent = message;
+                        feedbackElement.style.display = 'block';
+                    }
+                } else if (element.id === 'phoneInput' || element.id === 'phoneOrtuInput') {
+                    const phoneFieldId = element.id === 'phoneInput' ? 'no_hp_siswa-feedback' :
+                        'no_hp_ortu-feedback';
+                    feedbackElement = document.getElementById(phoneFieldId);
+                    if (feedbackElement) {
+                        feedbackElement.textContent = message;
+                        feedbackElement.style.display = 'block';
+                    }
+                } else {
+                    let parent = element.closest('.form-group') || element.closest('.custom-file') || element
+                        .parentElement;
+                    feedbackElement = parent.querySelector('.invalid-feedback');
+
+                    if (!feedbackElement) {
+                        feedbackElement = document.createElement('div');
+                        feedbackElement.className = 'invalid-feedback';
+                        (element.closest('.custom-file') || element).after(feedbackElement);
+                    }
+                    feedbackElement.textContent = message;
+                }
+            }
+
+            // Fungsi untuk membersihkan error
+            function clearCustomError(element, feedbackElementId = null) {
+                element.classList.remove('is-invalid');
+
+                if (element.type === 'radio' && feedbackElementId) {
+                    const feedbackElement = document.getElementById(feedbackElementId);
+                    if (feedbackElement) {
+                        feedbackElement.style.display = 'none';
+                    }
+                } else if (element.id === 'phoneInput' || element.id === 'phoneOrtuInput') {
+                    const phoneFieldId = element.id === 'phoneInput' ? 'no_hp_siswa-feedback' :
+                        'no_hp_ortu-feedback';
+                    const feedbackElement = document.getElementById(phoneFieldId);
+                    if (feedbackElement) {
+                        feedbackElement.style.display = 'none';
+                    }
+                } else {
+                    let parent = element.closest('.form-group') || element.parentElement;
+                    let existingFeedback = parent.querySelector(
+                        '.invalid-feedback:not(.d-block)');
+                    if (existingFeedback) {
+                        existingFeedback.remove();
+                    }
+                }
+            }
+
+            // Fungsi untuk mendapatkan pesan error yang sesuai dari validasi HTML5
+            function getHtml5ErrorMessage(input) {
+                if (input.validity.valueMissing) {
+                    return customErrorMessages.required;
+                }
+                if (input.validity.typeMismatch && input.type === 'email') {
+                    return customErrorMessages.email;
+                }
+                if (input.validity.patternMismatch && input.name === 'nisn') {
+                    return customErrorMessages.numeric;
+                }
+                return 'Input tidak valid.';
+            }
+
+            // FUNGSI VALIDASI REAL-TIME UNTUK INPUT BIASA (NISN, NAMA, TEMPAT LAHIR, DLL)
+            function validateFieldRealTime(e) {
+                const input = e.target;
+
+                if (input.id === 'phoneInput' || input.id === 'phoneOrtuInput') {
+                    validatePhoneInputRealTime(input);
+                    return;
+                }
+
+                input.setCustomValidity('');
+
+                if (!input.checkValidity()) {
+                    const message = getHtml5ErrorMessage(input);
+                    input.setCustomValidity(message);
+                    displayCustomError(input, message);
+                } else {
+                    clearCustomError(input);
+                }
+            }
+
+            // Daftarkan event listener untuk input yang menggunakan validasi HTML5 dan custom pesan
+            document.querySelectorAll(
+                'input:not([type="radio"]):not([type="file"]):not([id="phoneInput"]):not([id="phoneOrtuInput"]), textarea, select'
+            ).forEach(input => {
+                input.addEventListener('blur', validateFieldRealTime);
+                input.addEventListener('input', function() {
+                    clearCustomError(this);
+                    this.setCustomValidity('');
+                });
+            });
+
+
+            // 1. VALIDASI UNGGAH BERKAS (FILE INPUT) - (Logika ini tetap sama)
             document.querySelectorAll('.custom-file-input').forEach(function(input) {
                 input.addEventListener('change', function(e) {
                     let file = e.target.files[0];
                     let label = e.target.nextElementSibling;
                     const maxFileSize = 1024 * 1024;
 
-                    // Reset label dan class
                     label.textContent = 'Pilih Berkas';
-                    this.classList.remove('is-invalid');
-                    let feedbackDiv = this.nextElementSibling.nextElementSibling;
-                    if (feedbackDiv && feedbackDiv.classList.contains('invalid-feedback')) {
-                        feedbackDiv.remove();
-                    }
+                    clearCustomError(this);
 
                     if (file) {
                         const fileSize = file.size;
                         const fileType = file.type;
+                        let isValid = true;
 
+                        // Validasi Ukuran
                         if (fileSize > maxFileSize) {
-                            this.classList.add('is-invalid');
+                            displayCustomError(this, customErrorMessages.file_max_size);
                             label.textContent = 'Ukuran file terlalu besar';
-                            let feedback = document.createElement('div');
-                            feedback.className = 'invalid-feedback';
-                            feedback.textContent = 'Ukuran file maksimal 1 MB.';
-                            this.parentNode.appendChild(feedback);
                             this.value = '';
-                            return;
+                            isValid = false;
                         }
 
-                        if (fileType !== 'application/pdf') {
-                            this.classList.add('is-invalid');
+                        // Validasi Tipe
+                        if (isValid && fileType !== 'application/pdf') {
+                            displayCustomError(this, customErrorMessages.file_mime_type);
                             label.textContent = 'Tipe file tidak valid';
-                            let feedback = document.createElement('div');
-                            feedback.className = 'invalid-feedback';
-                            feedback.textContent = 'Hanya file PDF yang diizinkan.';
-                            this.parentNode.appendChild(feedback);
                             this.value = '';
-                            return;
+                            isValid = false;
                         }
 
-                        label.textContent = file.name;
+                        if (isValid) {
+                            label.textContent = file.name;
+                            clearCustomError(this);
+                        }
                     }
+                    validatePiagamRequired();
                 });
             });
 
-            // validasi mencegah input no hp tidak valid
+
+            // 2. LOGIKA INPUT NOMOR HP (PERBAIKAN TAMPILAN ERROR)
             const phoneInput = document.querySelector('#phoneInput')
             const hiddenPhoneInput = document.querySelector('#hiddenPhoneInput')
             const phoneOrtuInput = document.querySelector('#phoneOrtuInput')
             const hiddenOrtuInput = document.querySelector('#hiddenOrtuInput')
 
-            function handlePhoneInput(inputField, hiddenField) {
-                inputField.addEventListener('input', function() {
-                    inputField.addEventListener('keypress', function(e) {
-                        if (inputField.value.length === 0 && (e.key === '6' || e.key === '+')) {
-                            e.preventDefault();
-                        }
-                    });
+            // Fungsi Validasi No HP Real-Time yang sudah diperbaiki
+            function validatePhoneInputRealTime(inputField) {
+                const phoneRegex = /^[8][0-9]{8,11}$/;
 
-                    let value = inputField.value.replace(/[^0-9]/g, '')
+                // A. Required check
+                if (inputField.value.length === 0) {
+                    const msg = customErrorMessages.phone_required;
+                    displayCustomError(inputField, msg);
+                    inputField.setCustomValidity(msg);
+                }
+                // B. Format check
+                else if (!phoneRegex.test(inputField.value)) {
+                    const msg = customErrorMessages.phone_format;
+                    displayCustomError(inputField, msg);
+                    inputField.setCustomValidity(msg);
+                }
+                // C. Valid
+                else {
+                    clearCustomError(inputField);
+                    inputField.setCustomValidity('');
+                }
+            }
+
+
+            function handlePhoneInput(inputField, hiddenField) {
+                // Event saat user mengetik
+                inputField.addEventListener('input', function() {
+                    let value = inputField.value.replace(/[^0-9]/g, '');
 
                     if (value.startsWith('0')) {
                         value = value.substring(1);
-                        inputField.value = value
+                        inputField.value = value;
                     } else if (value.startsWith('62')) {
                         value = value.substring(2);
-                        inputField.value = value
+                        inputField.value = value;
                     }
 
                     if (value.length > 12) {
-                        value = value.substring(0, 12)
-                        inputField.value = value
+                        value = value.substring(0, 12);
+                        inputField.value = value;
                     }
-                    hiddenField.value = value ? '+62' + value : ''
-                })
+                    hiddenField.value = value ? '+62' + value : '';
+
+                    // Panggil validasi real-time saat mengetik
+                    validatePhoneInputRealTime(inputField);
+                });
+
+                // Mencegah input '0' atau '6' atau '+' di awal
                 inputField.addEventListener('keypress', function(e) {
-                    if (inputField.value === '' && e.key === '0') {
-                        e.preventDefault()
+                    if (inputField.value.length === 0 && (e.key === '0' || e.key === '6' || e.key ===
+                            '+')) {
+                        e.preventDefault();
                     }
-                })
+                });
+
+                // Event saat kehilangan fokus untuk validasi akhir
+                inputField.addEventListener('blur', function() {
+                    validatePhoneInputRealTime(inputField);
+                });
             }
 
-            handlePhoneInput(phoneInput, hiddenPhoneInput)
-            handlePhoneInput(phoneOrtuInput, hiddenOrtuInput)
+            handlePhoneInput(phoneInput, hiddenPhoneInput);
+            handlePhoneInput(phoneOrtuInput, hiddenOrtuInput);
 
-            // validasi no telepon siswa dan ortu
-            document.querySelector('form').addEventListener('submit', function(e) {
-                const phoneRegex = /^[8][0-9]{8,11}$/;
 
+            // 3. VALIDASI 'required_with' (PIAGAM) 
+            const piagamInput = document.getElementById('piagamInput');
+            const kategoriPrestasiRadios = document.querySelectorAll('input[name="kategori_prestasi_id"]');
+
+            function validatePiagamRequired() {
+                const isPrestasiSelected = document.querySelector('input[name="kategori_prestasi_id"]:checked')
+                    .value !== '';
+
+                const isPiagamUploaded = piagamInput.files.length > 0 || (piagamInput.dataset.uploaded === 'true' &&
+                    piagamInput.files.length === 0);
+
+                if ("{{ isset($pendaftaran) && $pendaftaran->piagam ? 'true' : 'false' }}" === 'true') {
+                    piagamInput.dataset.uploaded = 'true';
+                }
+
+                if (isPrestasiSelected && !isPiagamUploaded) {
+                    const msg = customErrorMessages.piagam_required_with;
+                    piagamInput.setCustomValidity(msg);
+                } else {
+                    piagamInput.setCustomValidity('');
+                }
+            }
+
+            kategoriPrestasiRadios.forEach(radio => {
+                radio.addEventListener('change', validatePiagamRequired);
+            });
+
+            validatePiagamRequired();
+
+            // 4. VALIDASI RADIO BUTTONS (JENIS KELAMIN & JURUSAN) - Real-time (PERBAIKAN TAMPILAN ERROR)
+            function validateRadioGroups(e) {
+                const groupName = e ? e.target.name : null;
                 let isValid = true;
 
-                // Validasi Nomor HP Siswa
-                if (phoneInput.value && !phoneRegex.test(phoneInput.value)) {
-                    e.preventDefault();
-                    phoneInput.classList.add('is-invalid');
-                    let feedback = phoneInput.parentElement.querySelector('.invalid-feedback');
-                    if (!feedback) {
-                        feedback = document.createElement('div');
-                        feedback.className = 'invalid-feedback';
-                        phoneInput.parentElement.appendChild(feedback);
+                // Validasi Jenis Kelamin
+                const jkRadios = document.getElementsByName('jenis_kelamin');
+                const jkFeedbackId = 'jenis_kelamin-feedback';
+                if (!groupName || groupName === 'jenis_kelamin') {
+                    const jkChecked = Array.from(jkRadios).some(radio => radio.checked);
+                    if (!jkChecked) {
+                        displayCustomError(jkRadios[0], customErrorMessages.jenis_kelamin, jkFeedbackId);
+                        isValid = false;
+                    } else {
+                        clearCustomError(jkRadios[0], jkFeedbackId);
                     }
-                    feedback.textContent = 'Nomor HP siswa harus diawali dengan 8 dan berisi 9-12 digit.';
-                    isValid = false;
-                } else {
-                    phoneInput.classList.remove('is-invalid');
                 }
 
-                // Validasi Nomor HP Orang Tua
-                if (phoneOrtuInput.value && !phoneRegex.test(phoneOrtuInput.value)) {
-                    e.preventDefault();
-                    phoneOrtuInput.classList.add('is-invalid');
-                    let feedback = phoneOrtuInput.parentElement.querySelector('.invalid-feedback');
-                    if (!feedback) {
-                        feedback = document.createElement('div');
-                        feedback.className = 'invalid-feedback';
-                        phoneOrtuInput.parentElement.appendChild(feedback);
+                // Validasi Jurusan
+                const jurusanRadios = document.getElementsByName('jurusan_id');
+                const jurusanFeedbackId = 'jurusan_id-feedback';
+                if (jurusanRadios.length > 0 && (!groupName || groupName === 'jurusan_id')) {
+                    const jurusanChecked = Array.from(jurusanRadios).some(radio => radio.checked);
+                    if (!jurusanChecked) {
+                        displayCustomError(jurusanRadios[0], customErrorMessages.jurusan_id, jurusanFeedbackId);
+                        isValid = false;
+                    } else {
+                        clearCustomError(jurusanRadios[0], jurusanFeedbackId);
                     }
-                    feedback.textContent =
-                        'Nomor HP Orang Tua harus diawali dengan 8 dan berisi 9-12 digit.';
-                    isValid = false;
-                } else {
-                    phoneOrtuInput.classList.remove('is-invalid');
                 }
-                if (!isValid) {
+                return isValid;
+            }
+
+            document.getElementsByName('jenis_kelamin').forEach(radio => radio.addEventListener('change',
+                validateRadioGroups));
+            document.getElementsByName('jurusan_id').forEach(radio => radio.addEventListener('change',
+                validateRadioGroups));
+
+
+            const form = document.querySelector('form');
+            form.addEventListener('submit', function(e) {
+                let formIsInvalid = false;
+
+                const isRadioValid = validateRadioGroups();
+                validatePiagamRequired();
+                validatePhoneInputRealTime(phoneInput);
+                validatePhoneInputRealTime(phoneOrtuInput);
+
+
+                if (!isRadioValid || phoneInput.checkValidity() === false || phoneOrtuInput
+                    .checkValidity() === false || piagamInput.checkValidity() === false) {
+                    formIsInvalid = true;
+                }
+
+                if (!this.checkValidity()) {
+                    formIsInvalid = true;
+                }
+
+                if (formIsInvalid) {
                     e.preventDefault();
+
+                    this.reportValidity();
+
+
+                    const firstInvalid = this.querySelector('.is-invalid') || this.querySelector(
+                        ':invalid');
+                    if (firstInvalid) {
+                        firstInvalid.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'center'
+                        });
+                    }
                 }
             });
 
@@ -662,41 +909,39 @@
                 Swal.fire({
                     icon: 'error',
                     title: 'Gagal Mengirimkan Formulir!',
+                    html: errorMessages,
                     confirmButtonText: 'Tutup',
                     confirmButtonColor: '#2E8B57'
                 });
             @endif
 
-            // Add event listener for the confirmation modal
             const submitButton = document.getElementById('submitButton');
             if (submitButton) {
                 submitButton.addEventListener('click', function(event) {
-                    // Get the form element
                     const form = event.target.closest('form');
                     if (!form) return;
 
-                    // Perform form validation before showing the modal
-                    if (!form.checkValidity()) {
-                        form.reportValidity();
-                        return; // Stop if form is not valid
-                    }
-
-                    // Show the confirmation modal
-                    Swal.fire({
-                        title: 'Konfirmasi Pendaftaran',
-                        text: 'Apakah Anda yakin ingin mengirim formulir ini? Pastikan semua data sudah benar.',
-                        icon: 'question',
-                        showCancelButton: true,
-                        confirmButtonColor: '#3085d6',
-                        cancelButtonColor: '#d33',
-                        confirmButtonText: 'Ya, Kirim!',
-                        cancelButtonText: 'Batal'
-                    }).then((result) => {
-                        if (result.isConfirmed) {
-                            // If user clicks "Ya, Kirim!", submit the form
-                            form.submit();
-                        }
+                    const submitEvent = new Event('submit', {
+                        cancelable: true
                     });
+                    form.dispatchEvent(submitEvent);
+
+                    if (!submitEvent.defaultPrevented) {
+                        Swal.fire({
+                            title: 'Konfirmasi Pendaftaran',
+                            text: 'Apakah Anda yakin ingin mengirim formulir ini? Pastikan semua data sudah benar.',
+                            icon: 'question',
+                            showCancelButton: true,
+                            confirmButtonColor: '#3085d6',
+                            cancelButtonColor: '#d33',
+                            confirmButtonText: 'Ya, Kirim!',
+                            cancelButtonText: 'Batal'
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                form.submit();
+                            }
+                        });
+                    }
                 });
             }
         });

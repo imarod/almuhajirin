@@ -2,7 +2,7 @@
 
 @extends('layouts.auth')
 @section('content')
-    <h2 class="font-weight-bold h2 mb-4">Atur Password Baru</h2>
+    <h4 class="font-weight-bold mb-3">Atur Password Baru</h4>
     <form action="{{route('password.update')}}" method="post">
         @csrf
 
@@ -26,7 +26,7 @@
                 placeholder="Ulangi Password Baru">
         </div>
         <button type="submit" class="btn btn-primary btn-block mb-4 w-100"
-            style="background-color: #5E7CE3; border-color: #5E7CE3;"> Reset Password
+            style="background-color:  #2E8B57; border-color: #2E8B57;"> Reset Password
         </button>
     </form>
 @endsection

@@ -10,23 +10,14 @@ use App\Http\Controllers\Admin\JurusanController;
 use App\Http\Controllers\Admin\ManajemenJadwalPpdbController;
 use App\Http\Controllers\Admin\ManajemenUser;
 use App\Http\Controllers\Admin\KategoriPrestasiController;
-
-
+use App\Http\Controllers\LandingPageController;
 use App\Http\Controllers\PendaftaranController;
 use App\Http\Controllers\LoginTokenController;
 use App\Http\Controllers\WilayahController;
 
 
 
-Route::get('/', function () {
-    if (Auth::check()) {
-        if (Auth::user()->is_admin == 1) {
-            return redirect()->route('admin.dashboard-statistik');
-        }
-        return redirect()->route('ajuan.pendaftaran');
-    }
-    return view('welcome');
-})->name('root');
+Route::get('/', [LandingPageController::class, 'index'])->name('root');
 
 Auth::routes();
 

@@ -164,31 +164,22 @@
 <body>
     <div class="header-container">
         <table class="header-table">
-            <tr>
-                <td class="logo-cell">
-                    <div class="logo">
-                        <img src="{{ asset('images/tutwuri.png') }}" alt="Logo" style="width: 100%; height: auto;">
-                    </div>
-                </td>
-                <td class="header-text">
-                    <div class="ministry-title">KEMENTERIAN PENDIDIKAN DAN KEBUDAYAAN</div>
-                    <div class="university-title">UNIVERSITAS LAMPUNG</div>
-                    <div class="contact-info">
-                        Jalan Prof. Dr. Soemantri Brojonegoro No. 1 Bandar Lampung 35145<br>
-                        Telepon (0721) 701609, 702673, 702971, 703475, 701252, Fax. (0721) 702767<br>
-                        laman http://unila.ac.id
-                    </div>
-                </td>
-            </tr>
+
+            @php
+                $type = pathinfo(public_path('images/kopsurat.png'), PATHINFO_EXTENSION);
+                $data = file_get_contents(public_path('images/kopsurat.png'));
+                $base64_image = 'data:image/' . $type . ';base64,' . base64_encode($data);
+            @endphp
+
+            <img src="{{ $base64_image }}" alt="Kop Surat" style="width: 100%; height: auto;">
+            
         </table>
     </div>
 
-    <div class="separator"></div>
-
 
     <div class="form-title">
-        <strong>BORANG ISIAN DATA POKOK MAHASISWA</strong><br>
-        <strong>TAHUN AKADEMIK {{ $pendaftaran->jadwal->thn_ajaran }}</strong>
+        <strong>FORMULIR BUKTI PENDAFTARAN SISWA BARU</strong><br>
+        <strong>TAHUN AJARAN {{ $pendaftaran->jadwal->thn_ajaran }}</strong>
     </div>
 
 
@@ -302,8 +293,9 @@
     <div class="signature-container">
         @php
             $tgl_cetak = \Carbon\Carbon::now()->format('d F Y');
-            
+
             // $tgl_cetak = \Carbon\Carbon::parse($pendaftaran->created_at)->format('d F Y');
+
         @endphp
 
 
@@ -314,7 +306,7 @@
                     <div class="signature-date" style="color: white;">
                         .
                     </div>
-                    <div class="signature-label" >Wali Murid</div>
+                    <div class="signature-label">Wali Murid</div>
                     <div class="signature-name"> {{ $pendaftaran->siswa->orangTua->nama_ayah }} </div>
 
                 </td>

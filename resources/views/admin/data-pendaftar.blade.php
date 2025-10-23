@@ -49,8 +49,8 @@
 
                 </div>
 
-                <div class="row align-items-center mb-6">
-                    <div class="col-md-4 mb-4 mb-md-0">
+                <div class="row align-items-center mb-4">
+                    <div class="col-md-4 mb-3 mb-lg-0 col-12 ">
                         <div class="input-group input-group-sm">
 
                             <input type="text" class="form-control" placeholder="Cari pendaftar ..." id="searchUser">
@@ -62,7 +62,7 @@
 
                         </div>
                     </div>
-                    <div class="col-md-8">
+                    <div class="col-md-8 col-12">
                         <div class="d-flex flex-wrap justify-content-start justify-content-md-end align-items-center">
                             {{-- filter tahun ajaran --}}
                             <div class="form-inline mr-4 mb-3 mb-lg-0">
@@ -78,7 +78,7 @@
                                     @endforeach
                                 </select>
                             </div>
-                            <div class="form-inline mr-4 mb-2 mb-lg-0">
+                            <div class="form-inline mr-4 mb-3 mb-lg-0">
                                 <label for="filter-status" class="mr-2">Status</label>
                                 <select name="status_aktual" id="filter-status" class="form-control form-control-sm">
                                     <option value=""{{ $defaultStatus == '' ? 'selected' : '' }}>Semua</option>
@@ -94,7 +94,7 @@
                             </div>
 
                             {{-- filter gelombang --}}
-                            <div class="form-inline">
+                            <div class="form-inline mb-3 mb-lg-0">
                                 <label for="filter-gelombang" class="mr-2 ">Gelombang</label>
                                 <select name="gelombang_pendaftaran" id="filter-gelombang"
                                     class="form-control form-control-sm">

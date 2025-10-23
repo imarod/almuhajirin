@@ -1,7 +1,7 @@
 @extends('layouts.auth')
 
 @section('content')
-    <h6 class="font-weight-bold mb-3">Masuk Akun</h6>
+    <h4 class="font-weight-bold mb-3">Masuk Akun</h4>
 
     <form action="{{ route('login') }}" method="post">
         @csrf
@@ -44,4 +44,5 @@
             </small>
         @endif
     </footer>
+
 @endsection

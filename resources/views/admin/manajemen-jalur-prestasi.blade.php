@@ -92,10 +92,10 @@
                                                     @enderror
                                                 </div>
                                                 <div class="form-group">
-                                                    <label for="deskripsi">Deskripsi (opsional)</label>
+                                                    <label for="deskripsi">Reward Prestasi (Wajib Isi)</label>
                                                     <input type="text" class="form-control" id="deskripsi"
                                                         name="deskripsi" placeholder="Deskripsi singkat"
-                                                        value="{{ old('deskripsi', $kategori->deskripsi) }}">
+                                                        value="{{ old('deskripsi', $kategori->deskripsi) }}" required>
                                                 </div>
                                                 <div class="form-group form-check">
                                                     <input type="hidden" name="is_active" value="0">
@@ -151,9 +151,9 @@
                             @enderror
                         </div>
                         <div class="form-group">
-                            <label for="deskripsi">Deskripsi (opsional)</label>
+                            <label for="deskripsi">Reward Prestasi (Wajib Isi)</label>
                             <input type="text" class="form-control" id="deskripsi" name="deskripsi"
-                                placeholder="Deskripsi singkat" value="{{ old('deskripsi') }}">
+                                placeholder="Deskripsi singkat" value="{{ old('deskripsi') }}" required>
                         </div>
                         <div class="form-group form-check">
                             <input type="hidden" name="is_active" value="0">

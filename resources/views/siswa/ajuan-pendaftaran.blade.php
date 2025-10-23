@@ -21,12 +21,25 @@
                             <h5 class="font-weight-bold mb-0" style="color: #2E8B57;">Selamat Datang di Portal PPDB Online!
                             </h5>
                             <p class="text-secondary small mb-0">Sebelum memulai proses pendaftaran, mohon pastikan Anda
-                                telah menyiapkan dokumen-dokumen berikut:</p>
+                                telah menyiapkan dokumen-dokumen sesuai dengan syarat pendaftaran</p>
                         </div>
-
                     </div>
 
-                    <div class="row text-center my-4">
+                     <div class="card mb-3 p-3 border-0 shadow-sm h-100 d-flex flex-column"
+                            style="background-color: #D8EEDD">
+                            <p class="mb-0 text-success font-weight-bold">Perhatian!</p>
+                            <ul>
+                                <li>Data yang telah dikirim masih bisa dilakukan perubahan selama belum diverifikasi oleh
+                                    panitia PPDB.</li>
+                                <li>Fitur "Edit Formulir" akan hilang setelah data diverifikasi oleh panitia.</li>
+                                <li>Panitia dapat meminta pengiriman ulang jika ada perbaikan.</li>
+                                <li>Kirimkan data perbaikan sebelum batas waktu pendaftaran berakhir.</li>
+                                <li>Hasil seleksi diumumkan melalui email peserta.</li>
+                            </ul>
+
+                        </div>
+
+                    {{-- <div class="row text-center my-4">
                         <div class="col-md-4 mb-3">
                             <div class="card p-3 border-0 shadow-sm rounded-lg h-100 d-flex flex-column align-items-center"
                                 style="background-color: rgba(94, 124, 227, 0.1);">
@@ -74,14 +87,8 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </div> --}}
 
-                    <div class="alert text-center rounded-lg d-flex align-items-center justify-content-center mb-0"
-                        style="background-color: #f0f4ff;">
-                        <i class="fas fa-lightbulb text-warning mr-2"></i>
-                        <p class="text-muted mb-0 small">Ikuti setiap langkah dengan teliti dan pastikan data yang diisi
-                            sudah benar.</p>
-                    </div>
                 </div>
                 {{-- 
                 <div class="card">
@@ -188,6 +195,7 @@
                         @if (isset($pendaftarans) && $pendaftarans->isEmpty())
                             <tr>
                                 <x-jadwal-ppdb-aktif />
+
                                 <td colspan="" class="text-center">
                                     <div colspan="9" class="text-center py-3">
                                         <i class="fas fa-history fa-2x text-muted mb-3" style="opacity: 0.3;"></i>
@@ -206,6 +214,8 @@
                                     $statusClass = 'status-badge status-' . str_replace(' ', '', strtolower($status));
                                 @endphp
                                 <x-jadwal-ppdb-aktif />
+
+
                                 <div class="row px-3">
                                     <div class="col-md-4 mb-3 border-bottom">
                                         <p class="text-muted mb-1">Nama</p>

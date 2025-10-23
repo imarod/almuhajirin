@@ -2,7 +2,7 @@
 
 @extends('layouts.auth')
 @section('content')
-    <h2 class="font-weight-bold h2 mb-4">Reset Password</h2>
+    <h4 class="font-weight-bold  mb-3">Reset Password</h4>
     @if (session('status'))
         <div class="alert alert-success" role="alert">
             {{ session('status') }}
@@ -21,13 +21,13 @@
         </div>
 
         <button type="submit" class="btn btn-primary btn-block mb-4 w-100"
-            style="background-color: #5E7CE3; border-color: #5E7CE3;"> Kirim Tautan Reset Password
+            style="background-color: #2E8B57; border-color: #2E8B57;"> Kirim Tautan Reset Password
         </button>
     </form>
 
      <footer class="d-flex justify-content-center">
         <small class="text-muted">
-            Kembali ke <a href="{{ route('login') }}" class="font-weight-bold" style="color: #5E7CE3;">Masuk</a>
+            Kembali ke <a href="{{ route('login') }}" class="font-weight-bold" style="color: #2E8B57;;">Masuk</a>
         </small>
     </footer>
 @endsection

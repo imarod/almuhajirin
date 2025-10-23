@@ -15,9 +15,11 @@
         <div class="row">
             <div class="col-lg-3 col-md-6 col-sm-6  ">
                 <div class="card p-0 h-75">
-                    <div class="card-body d-flex flex-column justify-content-center" >
+                    <div class="card-body d-flex flex-column justify-content-center">
                         <div class="d-flex align-items-center mt-4">
-                            <h3 class="font-weight-bold mb-0" style="color:  #3F51B5;font-size: calc(1.325rem + 0.9vw) !important;" id="totalPendaftar"></h3>
+                            <h3 class="font-weight-bold mb-0"
+                                style="color:  #3F51B5;font-size: calc(1.325rem + 0.9vw) !important;" id="totalPendaftar">
+                            </h3>
                             <div class="ml-auto" style="color: #3F51B5">
                                 <i class="fas fa-user-plus fa-lg"></i>
                             </div>
@@ -34,14 +36,16 @@
 
             <div class="col-lg-3 col-md-6 col-sm-6 ">
                 <div class="card p-0 h-75">
-                    <div class="card-body d-flex flex-column justify-content-center" >
+                    <div class="card-body d-flex flex-column justify-content-center">
                         <div class="d-flex align-items-center mt-4">
-                            <h3 class="font-weight-bold mb-0" style="color:  #2E8B57;font-size: calc(1.325rem + 0.9vw) !important;" id="totalDiterima" ></h3>
+                            <h3 class="font-weight-bold mb-0"
+                                style="color:  #2E8B57;font-size: calc(1.325rem + 0.9vw) !important;" id="totalDiterima">
+                            </h3>
                             <div class="ml-auto " style="color: #2E8B57;">
                                 <i class="fas fa-check-circle fa-lg"></i>
                             </div>
                         </div>
-                        <p class="mb-0" >Total Diterima</p>
+                        <p class="mb-0">Total Diterima</p>
                     </div>
                     <div class="card-footer p-2 text-white " style="background: #2E8B57;">
                         <div class="d-flex align-items-center py-2">
@@ -52,9 +56,11 @@
 
             <div class="col-lg-3 col-md-6 col-sm-6 ">
                 <div class="card p-0 h-75">
-                    <div class="card-body d-flex flex-column justify-content-center" >
+                    <div class="card-body d-flex flex-column justify-content-center">
                         <div class="d-flex align-items-center mt-4">
-                            <h3 class="font-weight-bold mb-0" style="color:  #FF9F40;font-size: calc(1.325rem + 0.9vw) !important;" id="belumDiperiksa"></h3>
+                            <h3 class="font-weight-bold mb-0"
+                                style="color:  #FF9F40;font-size: calc(1.325rem + 0.9vw) !important;" id="belumDiperiksa">
+                            </h3>
                             <div class="ml-auto " style="color: #FF9F40;">
                                 <i class="fas fa-hourglass-half fa-lg"></i>
                             </div>
@@ -69,9 +75,11 @@
             </div>
             <div class="col-lg-3 col-md-6 col-sm-6 ">
                 <div class="card p-0 h-75">
-                    <div class="card-body d-flex flex-column justify-content-center"  >
+                    <div class="card-body d-flex flex-column justify-content-center">
                         <div class="d-flex align-items-center mt-4">
-                            <h3 class="font-weight-bold mb-0" style="color:  #FFCE56;font-size: calc(1.325rem + 0.9vw) !important;" id="totalPerbaikan"></h3>
+                            <h3 class="font-weight-bold mb-0"
+                                style="color:  #FFCE56;font-size: calc(1.325rem + 0.9vw) !important;" id="totalPerbaikan">
+                            </h3>
                             <div class="ml-auto " style="color: #FFCE56;">
                                 <i class="fas fa-pen fa-lg"></i>
                             </div>
@@ -87,14 +95,16 @@
 
             <div class="col-lg-3 col-md-6 col-sm-6 ">
                 <div class="card p-0 h-75">
-                    <div class="card-body d-flex flex-column justify-content-center" >
+                    <div class="card-body d-flex flex-column justify-content-center">
                         <div class="d-flex align-items-center mt-4">
-                            <h3 class="font-weight-bold mb-0" style="color:  #E53935;font-size: calc(1.325rem + 0.9vw) !important;" id="totalDitolak"></h3>
+                            <h3 class="font-weight-bold mb-0"
+                                style="color:  #E53935;font-size: calc(1.325rem + 0.9vw) !important;" id="totalDitolak">
+                            </h3>
                             <div class="ml-auto" style="color: #E53935">
                                 <i class="fas fa-times-circle fa-lg"></i>
                             </div>
                         </div>
-                        <p class="mb-0" >Total Ditolak</p>
+                        <p class="mb-0">Total Ditolak</p>
                     </div>
                     <div class="card-footer p-2 text-white" style="background-color: #E53935;">
                         <div class="d-flex align-items-center py-2">
@@ -336,7 +346,7 @@
         function loadDashboardData(tahun = null) {
             const queryParam = tahun ? `?tahun=${tahun}` : '';
             const backgroundColors = [
-                '#4BC0C0', '#36A2EB', '#3F51B5', '#9966FF','#EF4444', '#FF9F40', '#FFCE56', '#A3D65C', '#43A047',
+                '#4BC0C0', '#36A2EB', '#3F51B5', '#9966FF', '#EF4444', '#FF9F40', '#FFCE56', '#A3D65C', '#43A047',
             ];
 
             const titleGender = getChartTitle('Perbandingan jumlah pendaftar laki-laki dan perempuan', tahun);
@@ -346,15 +356,29 @@
             fetch('{{ route('admin.dashboard.data-gender') }}' + queryParam)
                 .then(response => response.json())
                 .then(data => {
-                    const seriesData = data.labels.map((label, index) => ({
-                        name: label,
-                        y: data.data[index],
-                        color: index === 0 ? '#36A2EB' : '#FF6384'
-                    }));
 
-                    createHighchartsPie('highchart1',
-                        titleGender,
-                        'Jumlah Pendaftar', seriesData);
+                    const container = document.getElementById('highchart1');
+
+                    if (container.chart) {
+                        container.chart.destroy();
+                    }
+
+                    if (data.labels && data.data && data.labels.length > 0) {
+                        const seriesData = data.labels.map((label, index) => ({
+                            name: label,
+                            y: data.data[index],
+                            color: index === 0 ? '#36A2EB' : '#FF6384'
+                        }));
+
+                        createHighchartsPie(
+                            'highchart1',
+                            titleGender,
+                            'Jumlah Pendaftar', seriesData);
+                    } else {
+                         container.innerHTML =
+                            '<div class="text-center p-5 text-muted">Tidak ada data gender yang tercatat pada tahun ini.</div>';
+                    }
+
                 })
                 .catch(error => console.error('Error fetching gender data:', error));
 
@@ -381,7 +405,6 @@
                             seriesData
                         );
                     } else {
-                        console.log('Tidak ada data prestasi yang ditemukan.');
                         container.innerHTML =
                             '<div class="text-center p-5 text-muted">Tidak ada data kategori prestasi yang tercatat pada tahun ini.</div>';
                     }
@@ -412,7 +435,6 @@
                             seriesData
                         );
                     } else {
-                        console.log('Tidak ada data jurusan yang ditemukan.');
                         container.innerHTML =
                             '<div class="text-center p-5 text-muted">Tidak ada data jurusan yang tercatat pada tahun ini.</div>';
                     }

@@ -3,7 +3,7 @@
 @extends('layouts.auth')
 
 @section('content')
-    <h2 class="font-weight-bold h2 mb-4">Daftar Akun Baru</h2>
+    <h4 class="font-weight-bold mb-3">Daftar Akun Baru</h4>
 
     <form action="{{ route('register') }}" method="post">
         @csrf
@@ -33,12 +33,12 @@
             <input type="password" name="password_confirmation" class="form-control" required placeholder="Ulangi Password">
         </div>
         <button type="submit" class="btn btn-primary btn-block mb-4 w-100"
-            style="background-color: #5E7CE3; border-color: #5E7CE3;"> Daftar
+            style="background-color:  #2E8B57; border-color: #2E8B57;"> Daftar
         </button>
     </form>
     <footer class="d-flex justify-content-center">
         <small class="text-muted">
-            Sudah punya akun? <a href="{{ route('login') }}" class="font-weight-bold" style="color: #5E7CE3;">Masuk</a>
+            Sudah punya akun? <a href="{{ route('login') }}" class="font-weight-bold" style="color: #2E8B57;">Masuk</a>
         </small>
     </footer>
 @endsection

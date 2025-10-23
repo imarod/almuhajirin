@@ -20,9 +20,8 @@
 
         .header {
             text-align: center;
-            margin-bottom: 30px;
-            border-bottom: 3px solid #000000;
-            padding-bottom: 20px;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
         }
 
         .school-name {
@@ -94,48 +93,6 @@
             color: #1e293b;
             display: block;
             margin-bottom: 4px;
-        }
-/* 
-        .stat-label {
-            font-size: 8px;
-            color: #64748b;
-            font-weight: bold;
-        }
-
-        .stat-card.accepted {
-            background-color: #dcfce7;
-            border-color: #16a34a;
-        }
-
-        .stat-card.accepted .stat-number {
-            color: #16a34a;
-        }
-
-        .stat-card.pending {
-            background-color: #fef3c7;
-            border-color: #d97706;
-        }
-
-        .stat-card.pending .stat-number {
-            color: #d97706;
-        }
-
-        .stat-card.rejected {
-            background-color: #fee2e2;
-            border-color: #dc2626;
-        }
-
-        .stat-card.rejected .stat-number {
-            color: #dc2626;
-        } */
-
-        .stat-card.unprocessed {
-            background-color: #f1f5f9;
-            border-color: #64748b;
-        }
-
-        .stat-card.unprocessed .stat-number {
-            color: #64748b;
         }
 
         .table-section {
@@ -213,9 +170,13 @@
 
 <body>
     <div class="header">
-        <div class="school-name">MAS AL MUHAJIRIN TUGUMULYO</div>
-        
-        {{-- <div class="academic-year">Tahun Ajaran 2024/2025</div> --}}
+         @php
+                $type = pathinfo(public_path('images/kopsurat.png'), PATHINFO_EXTENSION);
+                $data = file_get_contents(public_path('images/kopsurat.png'));
+                $base64_image = 'data:image/' . $type . ';base64,' . base64_encode($data);
+            @endphp
+
+            <img src="{{ $base64_image }}" alt="Kop Surat" style="width: 100%; height: auto;">
     </div>
 
     <div class="report-title">Laporan Data Pendaftar Peserta Didik Baru</div>

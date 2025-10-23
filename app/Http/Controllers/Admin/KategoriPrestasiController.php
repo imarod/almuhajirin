@@ -27,7 +27,7 @@ class KategoriPrestasiController extends Controller
                     Rule::unique('kategori_prestasi', 'nama_prestasi')->whereNull('deleted_at')
 
                 ],
-                'deskripsi' => 'nullable|string',
+                'deskripsi' => 'required|string',
                 'is_active' => 'nullable|boolean',
             ],
             [
@@ -36,6 +36,7 @@ class KategoriPrestasiController extends Controller
                 'nama_prestasi.max'      => 'Nama prestasi tidak boleh lebih dari 255 karakter.',
                 'nama_prestasi.unique'   => 'Nama prestasi ini sudah ada.',
                 'deskripsi.string'       => 'Deskripsi harus berupa teks.',
+                'deskripsi.required'     => 'Reward prestasi harus diisi.',
                 'is_active.boolean'      => 'Status aktif harus berupa true atau false.',
             ]
         );

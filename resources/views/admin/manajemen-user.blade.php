@@ -112,7 +112,7 @@
                     </a>
                     <div class="tab-pane fade show active" id="daftar-user" role="tabpanel"
                         aria-labelledby="daftar-user-tab">
-                        <div class="row align-items-center mb-6">
+                        <div class="row align-items-center mb-3">
                             <div class="col-md-4 mb-4 mb-md-0">
                                 <div class="d-flex align-items-center flex-wrap">
                                     <div class="d-flex align-items-center">
@@ -170,10 +170,6 @@
                             </table>
                         </div>
                     </div>
-                    {{-- <div class="tab-pane fade" id="manajemen-role" role="tabpanel" aria-labelledby="manajemen-role-tab">
-                        <h4>Halaman Manajemen Role</h4>
-                        <p>Konten ini akan muncul jika pengguna mengklik tab "Manajemen Role".</p>
-                    </div> --}}
                 </div>
 
                 {{-- paginasi --}}
@@ -281,6 +277,7 @@
     </div>
 @endsection
 @push('js')
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script>
         function fetchUsers(page = 1) {
             const searchQuery = $('#searchUser').val();

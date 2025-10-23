@@ -45,6 +45,12 @@ class ManajemenJadwalPpdb extends Model
         return $query->where('tgl_mulai', '<=', $today)
                      ->where('tgl_berakhir', '>=', $today);
     }
+
+    public function scopeNotStarted(Builder $query) : Builder
+    {
+        $today = Carbon::today();
+        return $query->where('tgl_mulai', '>' , $today);
+    }
     public function scopeOverlapse(Builder $query, $start, $end, $exceptId = null): Builder
     {
         $query->where(function($q) use ($start, $end){
