@@ -250,6 +250,7 @@
                     form.submit();
                 }
             });
+
             @if ($errors->any())
                 document.addEventListener('DOMContentLoaded', function() {
                     @if (old('edit_id'))

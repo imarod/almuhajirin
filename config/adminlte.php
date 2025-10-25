@@ -133,7 +133,7 @@ return [
     |
     */
 
-    'usermenu_enabled' => false,
+    'usermenu_enabled' => true,
     'usermenu_header' => false,
     'usermenu_header_class' => 'bg-primary',
     'usermenu_image' => false,
@@ -311,13 +311,13 @@ return [
             'type' => 'fullscreen-widget',
             'topnav_right' => true,
         ],
-        [
-            'type' => 'logout', // Menggunakan tipe logout untuk method POST
-            'text' => 'Keluar', // Teks yang akan muncul di navlink
-            'icon' => 'fas fa-sign-out-alt', // Ikon yang diinginkan
-            'topnav_right' => true, // Harus true agar muncul di kanan atas
-            'id' => 'directLogoutLink', // ID opsional
-        ],
+        // [
+        //     'type' => 'logout', // Menggunakan tipe logout untuk method POST
+        //     'text' => 'Keluar', // Teks yang akan muncul di navlink
+        //     'icon' => 'fas fa-sign-out-alt', // Ikon yang diinginkan
+        //     'topnav_right' => true, // Harus true agar muncul di kanan atas
+        //     'id' => 'directLogoutLink', // ID opsional
+        // ],
 
         // Sidebar items:
         [
@@ -450,16 +450,16 @@ return [
             ],
         ],
 
-        'Bootstrap' => [
-            'active' => true,
-            'files' => [
-                [
-                    'type' => 'js',
-                    'asset' => true,
-                    'location' => '//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.6.0/js/bootstrap.bundle.min.js',
-                ],
-            ],
-        ],
+        // 'Bootstrap' => [
+        //     'active' => true,
+        //     'files' => [
+        //         [
+        //             'type' => 'js',
+        //             'asset' => true,
+        //             'location' => '//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.6.0/js/bootstrap.bundle.min.js',
+        //         ],
+        //     ],
+        // ],
 
         'Datatables' => [
             'active' => true,

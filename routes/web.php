@@ -127,17 +127,26 @@ Route::prefix('admin')->middleware(['auth', 'is_admin'])->group(function () {
         ->name('admin.manajemen-user');
     Route::get('/manajemen-user/counts', [ManajemenUser::class, 'getTotalUser'])
         ->name('admin.manajemen.user.counts');
+
+    // Diubah: tidak menggunakan JSON response
     Route::post('/manajemen-user', [ManajemenUser::class, 'store'])
         ->name(('admin.manajemen.user.store'));
+
+    // Tetap ada untuk Datatables Server-Side
     Route::get('/manajemen-user/json', [ManajemenUser::class, 'getDataUser'])
         ->name('admin.manajemen.user.json');
+
+    // Diubah: form delete kini menggunakan full form submit
     Route::delete('/manajemen-user/{id}', [ManajemenUser::class, 'destroy'])
         ->name('admin.manajemen.user.destroy');
+
+    // Tetap ada untuk mengambil data user saat tombol edit ditekan
     Route::get('/manajemen-user/{id}/edit', [ManajemenUser::class, 'edit'])
         ->name('admin.manajemen.user.edit');
-    Route::put('/manajemen-user/{id}', [ManajemenUser::class, 'update'])
-        ->name('admin.manajemen.user');
 
+    // Diubah: tidak menggunakan JSON response
+    Route::put('/manajemen-user/{id}', [ManajemenUser::class, 'update'])
+        ->name('admin.manajemen.user.update'); // Diubah nama rute agar lebih spesifik
 
 
     // Route::get('/dashboard', [HomeController::class, 'adminDashboard'])

@@ -12,12 +12,14 @@
 
 @section('content')
     <div class="container-fluid">
+
         <div class="row">
+            {{-- Statistik Cards tetap menggunakan AJAX untuk counts karena tidak ada cara Blade murni untuk counts real-time tanpa Datatables loading --}}
             <div class="col-lg-3 col-md-6 col-sm-6 mb-4 ">
                 <div class="card p-0 h-100">
                     <div class="card-body d-flex flex-column justify-content-center">
                         <div class="d-flex align-items-center mb-2">
-                            <h3 class="font-weight-bold mb-0 total-users-count" style="color: #3F51B5"></h3>
+                            <h3 class="font-weight-bold mb-0 total-users-count" style="color: #3F51B5">0</h3>
                             <div class="ml-auto" style="color: #3F51B5">
                                 <i class="fas fa-user-plus fa-2x"></i>
                             </div>
@@ -26,7 +28,6 @@
                     </div>
                     <div class="card-footer p-2 text-white " style="background: #3F51B5;">
                         <div class="d-flex align-items-center py-2">
-
                         </div>
                     </div>
                 </div>
@@ -36,7 +37,7 @@
                 <div class="card p-0 h-100">
                     <div class="card-body d-flex flex-column justify-content-center">
                         <div class="d-flex align-items-center mb-2">
-                            <h3 class="font-weight-bold mb-0 admin-count" style="color: #5E7CE3;"></h3>
+                            <h3 class="font-weight-bold mb-0 admin-count" style="color: #5E7CE3;">0</h3>
                             <div class="ml-auto " style="color: #5E7CE3;">
                                 <i class="fas fa-check-circle fa-2x"></i>
                             </div>
@@ -58,7 +59,7 @@
                 <div class="card p-0 h-100">
                     <div class="card-body d-flex flex-column justify-content-center">
                         <div class="d-flex align-items-center mb-2">
-                            <h3 class="font-weight-bold mb-0 siswa-count" style="color: #21ca5f;"></h3>
+                            <h3 class="font-weight-bold mb-0 siswa-count" style="color: #21ca5f;">0</h3>
                             <div class="ml-auto " style="color: #21ca5f;">
                                 <i class="fas fa-check-circle fa-2x"></i>
                             </div>
@@ -84,10 +85,6 @@
                         <a class="nav-link active text-dark" id="daftar-user-tab" data-toggle="pill" href="#daftar-user"
                             role="tab" aria-controls="daftar-user" aria-selected="true">Daftar User</a>
                     </li>
-                    {{-- <li class="nav-item">
-                        <a class="nav-link text-dark" id="manajemen-role-tab" data-toggle="pill" href="#manajemen-role"
-                            role="tab" aria-controls="manajemen-role" aria-selected="false">Manajemen Role</a>
-                    </li> --}}
                 </ul>
                 <style>
                     .nav-tabs .nav-link.active {
@@ -113,47 +110,12 @@
                     </a>
                     <div class="tab-pane fade show active" id="daftar-user" role="tabpanel"
                         aria-labelledby="daftar-user-tab">
-                        <div class="row align-items-center mb-3">
-                            <div class="col-md-4 mb-4 mb-md-0">
-                                <div class="d-flex align-items-center flex-wrap">
-                                    <div class="d-flex align-items-center">
-                                        <span class="mr-2">Tampilkan</span>
-                                        <select class="form-control form-control-sm" style="width: auto" id="show-entries">
-                                            <option value="10">10 Baris</option>
-                                            <option value="25">25 Baris</option>
-                                            <option value="50">50 Baris</option>
-                                            <option value="100">100 Baris</option>
-                                            <option value="0">Semua Baris</option>
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
 
-                            <div class="col-md-8">
-                                <div class="row d-flex justify-content-end">
-                                    <div class="col-md-3 mb-2 mb-md-0 d-flex justify-content-md-end align-items-center">
-                                        <select class="form-control form-control-sm" id="roleFilter">
-                                            <option value="">Semua Role</option>
-                                            <option value="1">Admin</option>
-                                            <option value="0">Siswa</option>
-                                        </select>
-                                    </div>
-                                    <div class="col-md-6 mb-2 mb-md-0">
-                                        <div class="input-group input-group-sm">
-                                            <div class="input-group-prepend">
-                                                <span class="input-group-text"><i class="fas fa-search"></i></span>
-                                            </div>
-                                            <input type="text" class="form-control"
-                                                placeholder="Cari berdasarkan nama atau email..." id="searchUser">
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
+                        {{-- Logika filter manual Dihapus, Datatables menanganinya --}}
 
                         <div class="table-responsive">
-                            <table class="table  table-hover table-bordered">
+                            {{-- ID table diubah menjadi "user-table" untuk Datatables --}}
+                            <table class="table table-hover table-bordered" id="user-table" style="width:100%">
                                 <thead class="bg-basic text-white">
                                     <tr>
                                         <th>No</th>
@@ -165,112 +127,136 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {{-- AJAX data --}}
-
+                                    {{-- Data akan diisi oleh Datatables Server-Side --}}
                                 </tbody>
                             </table>
                         </div>
                     </div>
                 </div>
 
-                {{-- paginasi --}}
-                <div class="row mt-3">
-                    <div class="col-sm-12 col-md-5">
-                        <div class="dataTables_info text-muted"></div>
-                    </div>
-
-                    <div class="col-sm-12 col-md-7">
-                        <nav aria-label="Page navigation" class="float-right">
-                            <ul class="pagination pagination-sm mb-0">
-                            </ul>
-                        </nav>
-                    </div>
-                </div>
+                {{-- Paginasi manual dihapus --}}
             </div>
         </div>
     </div>
 
+    {{-- MODAL TAMBAH USER (Dipertahankan, AJAX store diganti Form biasa) --}}
     <div class="modal fade" id="tambahUserModal" tabindex="-1" role="dialog" aria-labelledby="tambahUserModalLabel"
         aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="tambahUserModalLabel">Tambah User Baru</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <button type="button" class="close" data-dismiss="modal" data-focus="false" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
+                {{-- Form submit langsung ke route, bukan via AJAX --}}
                 <form action="{{ route('admin.manajemen.user.store') }}" method="POST">
                     @csrf
                     <div class="modal-body">
                         <div class="form-group">
                             <label for="name">Nama</label>
-                            <input type="name" class="form-control" id="name" name="name" required>
+                            <input type="text" class="form-control @error('name') is-invalid @enderror" id="name"
+                                name="name" value="{{ old('name') }}" required>
+                            @error('name')
+                                <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
+                            @enderror
                         </div>
                         <div class="form-group">
                             <label for="email">Email</label>
-                            <input type="email" class="form-control" id="email" name="email" required>
+                            <input type="email" class="form-control @error('email') is-invalid @enderror"
+                                id="email" name="email" value="{{ old('email') }}" required>
+                            @error('email')
+                                <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
+                            @enderror
                         </div>
                         <div class="form-group">
                             <label for="password">password</label>
-                            <input type="password" class="form-control" id="password" name="password" required>
+                            <input type="password" class="form-control @error('password') is-invalid @enderror"
+                                id="password" name="password" required>
+                            @error('password')
+                                <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
+                            @enderror
                         </div>
                         <div class="form-group">
                             <label for="is_admin">Role</label>
-                            <select class="form-control" id="is_admin" name="is_admin" required>
-                                <option value="0">Siswa</option>
-                                <option value="1">Admin</option>
+                            <select class="form-control @error('is_admin') is-invalid @enderror" id="is_admin"
+                                name="is_admin" required>
+                                <option value="0" {{ old('is_admin') == '0' ? 'selected' : '' }}>Siswa</option>
+                                <option value="1" {{ old('is_admin') == '1' ? 'selected' : '' }}>Admin</option>
                             </select>
+                            @error('is_admin')
+                                <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
+                            @enderror
                         </div>
                     </div>
                     <div class="modal-footer">
                         <button type="submit" class="btn"
                             style="background-color:  #31708F; color: white;">Simpan</button>
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
-
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal"
+                            data-focus="false">Tutup</button>
                     </div>
                 </form>
             </div>
         </div>
     </div>
 
+    {{-- MODAL EDIT USER (Dipertahankan, AJAX update diganti Form biasa) --}}
     <div class="modal fade" id="editUserModal" tabindex="-1" role="dialog" aria-labelledby="editUserModalLabel"
         aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="editUserModalLabel">Edit User</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close" data-focus="false">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <form id="editUserForm">
+                {{-- Form action akan diisi dinamis oleh JS, menggunakan PUT method --}}
+                <form id="editUserForm" method="POST">
                     @csrf
                     @method('PUT')
                     <div class="modal-body">
-                        <input type="hidden" id="editUserId" name="id">
+                        {{-- ID field dihilangkan, karena ID sudah ada di URL form action --}}
                         <div class="form-group">
                             <label for="editName">Nama</label>
-                            <input type="text" class="form-control" id="editName" name="name" required>
+                            <input type="text" class="form-control @error('name') is-invalid @enderror" id="editName"
+                                name="name" required>
+                            @error('name')
+                                <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
+                            @enderror
                         </div>
                         <div class="form-group">
                             <label for="editEmail">Email</label>
-                            <input type="email" class="form-control" id="editEmail" name="email" required>
+                            <input type="email" class="form-control @error('email') is-invalid @enderror"
+                                id="editEmail" name="email" required>
+                            @error('email')
+                                <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
+                            @enderror
                         </div>
                         <div class="form-group">
                             <label for="editPassword">Password (isi jika ingin mengubah)</label>
-                            <input type="password" class="form-control" id="editPassword" name="password">
+                            <input type="password" class="form-control @error('password') is-invalid @enderror"
+                                id="editPassword" name="password">
+                            @error('password')
+                                <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
+                            @enderror
                         </div>
                         <div class="form-group">
                             <label for="editIsAdmin">Role</label>
-                            <select class="form-control" id="editIsAdmin" name="is_admin" required>
+                            <select class="form-control @error('is_admin') is-invalid @enderror" id="editIsAdmin"
+                                name="is_admin" required>
                                 <option value="0">Siswa</option>
                                 <option value="1">Admin</option>
                             </select>
+                            @error('is_admin')
+                                <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
+                            @enderror
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal"
+                            data-focus="false">Tutup</button>
                         <button type="submit" class="btn btn-primary">Update</button>
                     </div>
                 </form>
@@ -280,93 +266,38 @@
 @endsection
 @push('js')
     <script>
-        function fetchUsers(page = 1) {
-            const searchQuery = $('#searchUser').val();
-            const roleFilter = $('#roleFilter').val();
-            const perPage = $('#show-entries').val()
-
-            $.ajax({
-                url: '{{ route('admin.manajemen.user.json') }}',
-                method: 'GET',
-                data: {
-                    search: searchQuery,
-                    role: roleFilter,
-                    page: page,
-                    per_page: perPage
-                },
-                success: function(response) {
-                    let users = response.data
-                    let tableBody = $('.table tbody')
-                    tableBody.empty()
-
-                    if (users.length > 0) {
-                        let offset = (response.current_page - 1) * response.per_page
-                        $.each(users, function(index, user) {
-                            let no = offset + index + 1;
-                            let roleBadge = user.is_admin === 1 ?
-                                '<span class="badge-admin">Admin</span>' :
-                                '<span class="badge-siswa">Siswa</span>';
-                            let row = `  
-                        <tr>
-                            <td>${no}</td>
-                            <td>${user.name}</td>
-                            <td>${user.email}</td>
-                            <td>${roleBadge}</td>
-                            <td>${user.created_at_formatted}</td>
-                            <td class=" text-center action-icons">   
-                                <i class="fas fa-edit text-primary edit-btn"  data-id="${user.id}" title="Edit"></i>                            
-                                <i class="fas fa-trash text-danger delete-btn" title="Hapus" data-id="${user.id}"></i>
-                                    
-                            </td>
-                            </tr>
-                            `
-                            tableBody.append(row)
-                        })
-                    } else {
-                        tableBody.append(
-                            '<tr><td colspan="6" class="text-center">Tidak ada data user yang ditemukan.</td></tr>'
-                        )
-                    }
-
-                    let infoText =
-                        `Menampilkan ${response.from ?? 0} hingga ${response.to ?? 0} dari ${response.total} data`
-                    $('.dataTables_info').text(infoText)
-
-                    let paginationHtml = ''
-                    response.links.forEach(link => {
-                        let disabledClass = link.url === null ? 'disabled' : ''
-                        let activeClass = link.active ? 'active' : ''
-                        let pageNumber
-
-                        if (link.label.includes('Previous')) {
-                            labelText = 'Sebelumnya';
-                            pageNumber = response.current_page - 1
-                        } else if (link.label.includes('Next')) {
-                            labelText = 'Selanjutnya';
-                            pageNumber = response.current_page + 1
-                        } else {
-                            labelText = link.label;
-                            pageNumber = link.label
-                        }
-
-                        paginationHtml += `
-                            <li class="page-item ${disabledClass} ${activeClass}">
-                                <a class="page-link" href="#" data-page="${pageNumber}" onclick="event.preventDefault(); fetchUsers(${pageNumber});">
-                                    ${labelText}
-                                </a>
-                            </li>
-                        `;
-                    })
-                    $('.pagination').html(paginationHtml)
-                },
-                error: function(xhr, status, error) {
-                    console.log('AJAX Error: ', status, error)
-                }
-            })
-        }
-
         $(document).ready(function() {
 
+            @if (session('success'))
+
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Berhasil!',
+                    text: '{{ session('success') }}',
+                    timer: 3000,
+                    showConfirmButton: false
+                });
+            @endif
+            @if (session('error'))
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Gagal!',
+                    text: '{{ session('error') }}',
+                    showConfirmButton: true
+                });
+            @endif
+            @if ($errors->any())
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Gagal Menambahkan Jurusan!',
+                    html: `{!! implode('<br>', $errors->all()) !!}`,
+                    showConfirmButton: true,
+                    confirmButtonColor: '#d33'
+                });
+            @endif
+
+
+            // 1. Fetch User Counts (satu-satunya fungsi AJAX yang tersisa untuk counts di card)
             function fetchUserCounts() {
                 $.ajax({
                     url: '{{ route('admin.manajemen.user.counts') }}',
@@ -382,176 +313,129 @@
                 });
             }
             fetchUserCounts();
-            fetchUsers()
 
-            $('#roleFilter , #show-entries, #searchUser').on('change keyup', function() {
-                fetchUsers(1)
-            })
-
-            // Event handler untuk tombol hapus
-            $(document).on('click', '.delete-btn', function() {
-                const userId = $(this).data('id');
-                const userRow = $(this).closest('tr');
-
-                Swal.fire({
-                    title: 'Apakah Anda yakin?',
-                    text: "Data user ini akan dihapus secara permanen!",
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonColor: '#d33',
-                    cancelButtonColor: '#3085d6',
-                    confirmButtonText: 'Ya, hapus!',
-                    cancelButtonText: 'Batal'
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        $.ajax({
-                            url: `/admin/manajemen-user/${userId}`,
-                            type: 'DELETE',
-                            data: {
-                                _token: '{{ csrf_token() }}'
-                            },
-                            success: function(response) {
-                                if (response.success) {
-                                    Swal.fire(
-                                        'Dihapus!',
-                                        response.message,
-                                        'success'
-                                    );
-                                    userRow.remove();
-                                    fetchUsers();
-                                    fetchUserCounts();
-                                } else {
-                                    Swal.fire(
-                                        'Gagal!',
-                                        response.message,
-                                        'error'
-                                    );
-                                }
-                            },
-                            error: function(xhr, status, error) {
-                                Swal.fire(
-                                    'Gagal!',
-                                    'Terjadi kesalahan saat menghapus user.',
-                                    'error'
-                                );
-                                console.log('AJAX Error: ', status, error);
-                            }
-                        });
-                    }
-                });
+            // 2. Inisialisasi Datatables (Server-Side Processing)
+            const userTable = $('#user-table').DataTable({
+                processing: true,
+                serverSide: true,
+                ajax: '{{ route('admin.manajemen.user.json') }}',
+                columns: [{
+                        data: null,
+                        name: 'no',
+                        orderable: false,
+                        searchable: false,
+                        render: function(data, type, row, meta) {
+                            return meta.row + meta.settings._iDisplayStart + 1;
+                        }
+                    },
+                    {
+                        data: 'name',
+                        name: 'name'
+                    },
+                    {
+                        data: 'email',
+                        name: 'email'
+                    },
+                    {
+                        data: 'role',
+                        name: 'is_admin',
+                        orderable: true,
+                        searchable: true
+                    }, // 'role' adalah kolom baru dari Yajra
+                    {
+                        data: 'created_at_formatted',
+                        name: 'created_at',
+                        searchable: false
+                    }, // 'created_at_formatted' dari Yajra
+                    {
+                        data: 'action',
+                        name: 'action',
+                        orderable: false,
+                        searchable: false,
+                        className: 'text-center'
+                    },
+                ],
+                order: [
+                    [4, 'desc']
+                ] // Order by created_at
             });
 
-            // Event handler untuk tombol edit
+            // 3. Logic untuk Tombol Edit (Memuat data user ke modal)
             $(document).on('click', '.edit-btn', function() {
                 const userId = $(this).data('id');
+                const editUrl = $(this).data('url'); // Rute untuk GET /admin/manajemen-user/{id}/edit
 
+                // 3a. Set action form update
+                $('#editUserForm').attr('action', `{{ url('admin/manajemen-user') }}/${userId}`);
+
+                // 3b. Ambil data user via AJAX (ini adalah AJAX GET untuk mengisi form, bukan untuk proses CRUD)
                 $.ajax({
-                    url: `{{ url('admin/manajemen-user') }}/${userId}/edit`,
+                    url: editUrl,
                     method: 'GET',
                     success: function(user) {
-                        $('#editUserId').val(user.id);
+                        // Isi form dengan data yang diterima
                         $('#editName').val(user.name);
                         $('#editEmail').val(user.email);
                         $('#editIsAdmin').val(user.is_admin);
-
-                        $('#editUserModal').modal('show');
+                        $('#editPassword').val(''); // Kosongkan password field
                     },
-                    error: function(xhr, status, error) {
-                        Swal.fire(
-                            'Gagal!',
-                            'Terjadi kesalahan saat mengambil data user.',
-                            'error'
-                        );
-                        console.log('AJAX Error: ', status, error);
+                    error: function() {
+                        Swal.fire('Gagal', 'Gagal memuat data user untuk diedit.', 'error');
                     }
                 });
+
+                // 3c. Hapus class 'is-invalid' dan pesan error sebelumnya
+                $('#editUserForm .is-invalid').removeClass('is-invalid');
+                $('#editUserForm .invalid-feedback').remove();
             });
 
-            // Form tambah user - DIPERBAIKI
-            $('#tambahUserModal form').on('submit', function(e) {
-                e.preventDefault();
-                const formData = $(this).serialize();
 
-                $.ajax({
-                    url: '{{ route('admin.manajemen.user.store') }}',
-                    method: 'POST',
-                    data: formData,
-                    success: function(response) {
-                        $('#tambahUserModal').modal('hide');
+            $(document).on('submit', 'form', function(e) {
+                // KODE ASLI YANG PERLU DIVERIFIKASI:
+                if ($(this).find('.delete-btn').length >
+                    0) {
+                    e.preventDefault();
+                    const form = this;
 
-                        setTimeout(function() {
-                            Swal.fire({
-                                icon: 'success',
-                                title: 'Berhasil!',
-                                text: response.message,
-                                showConfirmButton: true,
-                                timer: 3000
-                            });
-
-                            $('#tambahUserModal form')[0].reset();
-                            fetchUsers();
-                            fetchUserCounts();
-                        }, 300);
-                    },
-                    error: function(xhr) {
-                        // PERBAIKAN: Hapus duplikasi
-                        const errors = xhr.responseJSON?.errors || {};
-                        let errorHtml = '';
-                        $.each(errors, function(key, value) {
-                            errorHtml += `<li>${value}</li>`;
-                        });
+                    // Pengecekan SweetAlert sebelum submit
+                    if (typeof Swal !== 'undefined') { // Cek apakah SweetAlert2 sudah dimuat
                         Swal.fire({
-                            icon: 'error',
-                            title: 'Gagal!',
-                            html: `Terjadi kesalahan validasi:<ul>${errorHtml}</ul>`,
-                            showConfirmButton: true
+                            title: 'Apakah Anda yakin?',
+                            text: "Data user ini akan dihapus secara permanen!",
+                            icon: 'warning',
+                            showCancelButton: true,
+                            confirmButtonColor: '#d33',
+                            cancelButtonColor: '#3085d6',
+                            confirmButtonText: 'Ya, hapus!',
+                            cancelButtonText: 'Batal'
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                // Jika dikonfirmasi, lakukan submit form secara manual
+                                form.submit();
+                            }
+                            // Jika dibatalkan, tidak terjadi apa-apa
                         });
+                    } else {
+                        // Fallback jika SweetAlert tidak termuat
+                        console.error("SweetAlert2 is not loaded. Submitting form directly.");
+                        form.submit();
                     }
-                });
+
+                }
             });
 
-            // Form edit user
-            $('#editUserForm').on('submit', function(e) {
-                e.preventDefault();
-
-                const userId = $('#editUserId').val();
-                const formData = $(this).serialize();
-
-                $.ajax({
-                    url: `{{ url('admin/manajemen-user') }}/${userId}`,
-                    method: 'PUT',
-                    data: formData,
-                    success: function(response) {
-                        $('#editUserModal').modal('hide');
-
-                        setTimeout(function() {
-                            Swal.fire({
-                                icon: 'success',
-                                title: 'Berhasil!',
-                                text: response.message,
-                                showConfirmButton: true,
-                                timer: 3000
-                            });
-                            fetchUsers();
-                            fetchUserCounts();
-                        }, 300);
-                    },
-                    error: function(xhr, status, error) {
-                        const errors = xhr.responseJSON?.errors || {};
-                        let errorHtml = '';
-                        $.each(errors, function(key, value) {
-                            errorHtml += `<li>${value}</li>`;
-                        });
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Gagal!',
-                            html: `Terjadi kesalahan saat mengupdate user:<ul>${errorHtml}</ul>`,
-                            showConfirmButton: true
-                        });
-                        console.log('AJAX Error: ', status, error);
-                    }
-                });
-            });
+            // 5. Handle Error Validasi (untuk modal Add dan Edit)
+            // window.addEventListener('load', function() {
+            //     @if ($errors->any())
+            //         @if (session('edit_error_id'))
+            //             $('#editUserForm').attr('action',
+            //                 `{{ url('admin/manajemen-user') }}/{{ session('edit_error_id') }}`);
+            //             $('#editUserModal').modal('show');
+            //         @else
+            //             $('#tambahUserModal').modal('show');
+            //         @endif
+            //     @endif
+            // });
         });
     </script>
 @endpush

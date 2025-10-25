@@ -229,31 +229,35 @@
     </div>
 
 
-    <div class="modal fade" id="pdfPreviewModal" tabindex="-1" aria-labelledby="pdfPreviewModalLabel"
+    {{-- MODAL PREVIEW PDF - Bootstrap 4 --}}
+    <div class="modal fade" id="pdfPreviewModal" tabindex="-1" role="dialog" aria-labelledby="pdfPreviewModalLabel"
         aria-hidden="true">
-        <div class="modal-dialog modal-xl dialog-centered" role="document">
+        <div class="modal-dialog modal-xl modal-dialog-centered" role="document">
             <div class="modal-content bg-dark text-white">
                 <div class="modal-header">
-                    <h5 class="" id="pdfPreviewModalLabel">Pratinjau Dokumen</h5>
-                    <button type="button" class="close text-white" data-bs-dismiss="modal" aria-label="Close">
+                    <h5 class="modal-title" id="pdfPreviewModalLabel">Pratinjau Dokumen</h5>
+                    {{-- Bootstrap 4: gunakan class "close" dengan span × --}}
+                    <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <div class="modal-body">
-                    <div class="embed-responsive embed-responsive-16by9">
-                        <iframe id="pdfFrame" style="width:100%; height:100%; border:0;"></iframe>
+                    <div class="embed-responsive embed-responsive-16by9" style="height: 80vh;">
+                        <iframe id="pdfFrame" class="embed-responsive-item" style="border:0;"></iframe>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
+    {{-- MODAL PERBAIKAN - Bootstrap 4 --}}
     <div class="modal fade" id="modalPerbaikan" tabindex="-1" role="dialog" aria-labelledby="modalPerbaikanLabel"
         aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="modalPerbaikanLabel">Tambah Catatan Perbaikan</h5>
+                    {{-- Bootstrap 4: gunakan class "close" dengan span × --}}
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -262,7 +266,6 @@
                     <form id="formPerbaikan" action="{{ route('admin.update-perbaikan-status', $pendaftars->id) }}"
                         method="POST">
                         @csrf
-
                         <input type="hidden" name="thn_ajaran" value="{{ $lastFilters['thn_ajaran'] ?? '' }}">
                         <input type="hidden" name="gelombang_pendaftaran"
                             value="{{ $lastFilters['gelombang_pendaftaran'] ?? '' }}">
@@ -275,14 +278,12 @@
                             <textarea class="form-control" id="catatan" name="catatan" rows="3"
                                 placeholder="Contoh: Dokumen Kartu Keluarga kurang jelas, mohon upload ulang dengan kualitas lebih baik." required></textarea>
                         </div>
-
                     </form>
                 </div>
                 <div class="modal-footer d-flex justify-content-end">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
                     <button type="submit" form="formPerbaikan" class="btn"
-                        style="background-color:  #31708F; color:white;">Simpan</button>
-                    <button type="button" class="btn btn-default mr-2" data-dismiss="modal">Batal</button>
-
+                        style="background-color: #31708F; color:white;">Simpan</button>
                 </div>
             </div>
         </div>
@@ -291,16 +292,21 @@
 
 @push('js')
     <script>
-        function showPdfModal(url, title) {
-            document.getElementById('pdfPreviewModalLabel').textContent = title;
-            document.getElementById('pdfFrame').src = url;
-            $('#pdfPreviewModal').modal('show');
+        function showPdfModal(pdfUrl, title) {
+            document.getElementById('pdfPreviewModalLabel').innerText = title;
+            document.getElementById('pdfFrame').src = pdfUrl;
+
+            const modalEl = document.getElementById('pdfPreviewModal');
+            const modal = new bootstrap.Modal(modalEl);
+            modal.show();
+
+            modalEl.addEventListener('hidden.bs.modal', function() {
+                document.getElementById('pdfFrame').src = '';
+            }, {
+                once: true
+            });
         }
 
-
-        $('#pdfPreviewModal').on('hidden.bs.modal', function() {
-            document.getElementById('pdfFrame').src = '';
-        });
 
         document.getElementById('btn-terima').addEventListener('click', function(e) {
             e.preventDefault()
