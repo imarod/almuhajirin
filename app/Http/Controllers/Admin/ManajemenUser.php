@@ -8,7 +8,7 @@ use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
-use Yajra\DataTables\Facades\DataTables; // Pastikan package ini sudah terinstal: composer require yajra/laravel-datatables-oracle
+use Yajra\DataTables\Facades\DataTables; 
 
 
 class ManajemenUser extends Controller
@@ -20,7 +20,7 @@ class ManajemenUser extends Controller
 
     public function getTotalUser()
     {
-        // Tetap menggunakan JSON response untuk memuat counts via fetch (ini adalah pengecualian fungsionalitas yang tidak bisa dihilangkan tanpa mengorbankan tampilan real-time count)
+        
         $totalUSer = User::count();
         $totalAdmin = User::where('is_admin', 1)->count();
         $totalUserBiasa = User::where('is_admin', 0)->count();
@@ -71,7 +71,6 @@ class ManajemenUser extends Controller
         return redirect()->route('admin.manajemen-user')->with('success', 'User berhasil ditambahkan!');
     }
 
-    // Diubah untuk server-side Datatables
     public function getDataUser(Request $request)
     {
         if ($request->ajax()) {
@@ -79,7 +78,7 @@ class ManajemenUser extends Controller
 
             return DataTables::of($query)
                 ->addColumn('role', function ($user) {
-                    return $user->is_admin == 1 ? '<span class="badge badge-primary">Admin</span>' : '<span class="badge badge-success">Siswa</span>';
+                    return $user->is_admin == 1 ? '<span class="badge badge-primary px-3 py-2">Admin</span>' : '<span class="badge badge-success px-3 py-2">Siswa</span>';
                 })
                 ->addColumn('created_at_formatted', function ($user) {
                     return $user->created_at->format('d F Y');
@@ -107,7 +106,6 @@ class ManajemenUser extends Controller
         }
     }
 
-    // Diubah untuk merespons dengan data user untuk modal edit
     public function edit($id)
     {
         $user = User::findOrFail($id);
@@ -164,7 +162,6 @@ class ManajemenUser extends Controller
         }
 
         try {
-            // Logika penghapusan relasi tetap dipertahankan
             if ($user->siswa) {
                 $siswa = $user->siswa;
                 $ortu = $siswa->orangTua;

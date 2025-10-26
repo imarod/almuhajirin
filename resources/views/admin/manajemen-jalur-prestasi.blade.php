@@ -16,7 +16,6 @@
 
         <div class="card">
             <div class="card-body">
-                {{-- Tombol Tambah --}}
                 <button class="btn btn-sm mb-4" style="background-color:  #31708F; color:white;" data-toggle="modal"
                     data-target="#modalTambahKategori">
                     Tambah Kategori
@@ -145,7 +144,7 @@
     </div>
 
 
-    {{-- Modal Tambah Kategori (Di luar Loop) --}}
+    {{-- Modal Tambah Kategori--}}
     <div class="modal fade" id="modalTambahKategori" tabindex="-1" role="dialog"
         aria-labelledby="modalTambahKategoriLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
@@ -298,11 +297,9 @@
 
             @if ($errors->any())
                 document.addEventListener('DOMContentLoaded', function() {
-                    // Cek apakah ada old('edit_id') - artinya dari form EDIT
                     @if (old('edit_id'))
                         $('#modalEditKategori{{ old('edit_id') }}').modal('show');
                     @else
-                        // Jika tidak ada old('edit_id'), berarti dari form TAMBAH
                         $('#modalTambahKategori').modal('show');
                     @endif
                 });

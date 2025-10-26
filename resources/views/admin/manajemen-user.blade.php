@@ -201,7 +201,7 @@
         </div>
     </div>
 
-    {{-- MODAL EDIT USER (Dipertahankan, AJAX update diganti Form biasa) --}}
+    {{-- MODAL EDIT USER  --}}
     <div class="modal fade" id="editUserModal" tabindex="-1" role="dialog" aria-labelledby="editUserModalLabel"
         aria-hidden="true">
         <div class="modal-dialog" role="document">
@@ -212,12 +212,10 @@
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                {{-- Form action akan diisi dinamis oleh JS, menggunakan PUT method --}}
                 <form id="editUserForm" method="POST">
                     @csrf
                     @method('PUT')
                     <div class="modal-body">
-                        {{-- ID field dihilangkan, karena ID sudah ada di URL form action --}}
                         <div class="form-group">
                             <label for="editName">Nama</label>
                             <input type="text" class="form-control @error('name') is-invalid @enderror" id="editName"
@@ -297,7 +295,7 @@
             @endif
 
 
-            // 1. Fetch User Counts (satu-satunya fungsi AJAX yang tersisa untuk counts di card)
+            // Fetch User Counts 
             function fetchUserCounts() {
                 $.ajax({
                     url: '{{ route('admin.manajemen.user.counts') }}',
@@ -314,7 +312,7 @@
             }
             fetchUserCounts();
 
-            // 2. Inisialisasi Datatables (Server-Side Processing)
+            // Datatables (Server-Side Processing)
             const userTable = $('#user-table').DataTable({
                 processing: true,
                 serverSide: true,
@@ -341,12 +339,12 @@
                         name: 'is_admin',
                         orderable: true,
                         searchable: true
-                    }, // 'role' adalah kolom baru dari Yajra
+                    }, 
                     {
                         data: 'created_at_formatted',
                         name: 'created_at',
                         searchable: false
-                    }, // 'created_at_formatted' dari Yajra
+                    }, 
                     {
                         data: 'action',
                         name: 'action',
@@ -360,45 +358,39 @@
                 ] // Order by created_at
             });
 
-            // 3. Logic untuk Tombol Edit (Memuat data user ke modal)
+            
             $(document).on('click', '.edit-btn', function() {
                 const userId = $(this).data('id');
-                const editUrl = $(this).data('url'); // Rute untuk GET /admin/manajemen-user/{id}/edit
+                const editUrl = $(this).data('url');
 
-                // 3a. Set action form update
                 $('#editUserForm').attr('action', `{{ url('admin/manajemen-user') }}/${userId}`);
 
-                // 3b. Ambil data user via AJAX (ini adalah AJAX GET untuk mengisi form, bukan untuk proses CRUD)
                 $.ajax({
                     url: editUrl,
                     method: 'GET',
                     success: function(user) {
-                        // Isi form dengan data yang diterima
                         $('#editName').val(user.name);
                         $('#editEmail').val(user.email);
                         $('#editIsAdmin').val(user.is_admin);
-                        $('#editPassword').val(''); // Kosongkan password field
+                        $('#editPassword').val(''); 
                     },
                     error: function() {
                         Swal.fire('Gagal', 'Gagal memuat data user untuk diedit.', 'error');
                     }
                 });
 
-                // 3c. Hapus class 'is-invalid' dan pesan error sebelumnya
                 $('#editUserForm .is-invalid').removeClass('is-invalid');
                 $('#editUserForm .invalid-feedback').remove();
             });
 
 
             $(document).on('submit', 'form', function(e) {
-                // KODE ASLI YANG PERLU DIVERIFIKASI:
                 if ($(this).find('.delete-btn').length >
                     0) {
                     e.preventDefault();
                     const form = this;
 
-                    // Pengecekan SweetAlert sebelum submit
-                    if (typeof Swal !== 'undefined') { // Cek apakah SweetAlert2 sudah dimuat
+                    if (typeof Swal !== 'undefined') { 
                         Swal.fire({
                             title: 'Apakah Anda yakin?',
                             text: "Data user ini akan dihapus secara permanen!",
@@ -410,13 +402,10 @@
                             cancelButtonText: 'Batal'
                         }).then((result) => {
                             if (result.isConfirmed) {
-                                // Jika dikonfirmasi, lakukan submit form secara manual
                                 form.submit();
                             }
-                            // Jika dibatalkan, tidak terjadi apa-apa
                         });
                     } else {
-                        // Fallback jika SweetAlert tidak termuat
                         console.error("SweetAlert2 is not loaded. Submitting form directly.");
                         form.submit();
                     }

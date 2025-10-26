@@ -28,7 +28,6 @@
                                 @endforeach
                             </div>
 
-                            <!-- Dokumen -->
                             <div class="col-md-6">
                                 @foreach (['Scan Kartu Keluarga', 'Scan Ijazah', 'Scan Piagam Prestasi (Jika Ada)'] as $label)
                                     <div class="form-group text-center">
@@ -42,7 +41,6 @@
                             </div>
                         </div>
 
-                        <!-- Data Orang Tua / Wali -->
                         <h5 class="mt-4"><strong>Data Orang Tua / Wali</strong></h5>
                         <div class="row">
                             <div class="col-md-6">
@@ -67,7 +65,6 @@
                             </div>
                         </div>
 
-                        <!-- Status Verifikasi -->
                         <h5 class="mt-4"><strong>Status Verifikasi</strong></h5>
                         <div class="form-group">
                             <label>Status</label>
@@ -78,7 +75,6 @@
                             </select>
                         </div>
 
-                        <!-- Tombol -->
                         <div class="form-group d-flex justify-content-between mt-4">
                             <button type="button" class="btn btn-secondary">Batal</button>
                             <button type="submit" class="btn btn-dark">Konfirmasi</button>
