@@ -12,5 +12,5 @@ Artisan::command('inspire', function () {
 })->purpose('Display an inspiring quote');
 
 // Kode untuk menjadwalkan command pengumuman Anda
-Schedule::command(AnnouncePendaftaran::class)->everyMinute();
+// Schedule::command(AnnouncePendaftaran::class)->everyMinute();
 Schedule::command(SendAnnouncementEmails::class)->everyMinute();
