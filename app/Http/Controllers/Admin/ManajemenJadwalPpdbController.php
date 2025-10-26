@@ -134,7 +134,8 @@ class ManajemenJadwalPpdbController extends Controller
         $query = ManajemenJadwalPpdb::orderBy('created_at', 'desc');
         $jadwals = $query->get();
         $fileName = 'jadwal_ppdb_' . now()->format('Ymd_His') . '.csv';
-        $writer = SimpleExcelWriter::create($fileName)->addHeader([
+        $filePath = storage_path('app/' . $fileName);
+        $writer = SimpleExcelWriter::create($filePath)->addHeader([
             'ID',
             'Tahun Ajaran',
             'Gelombang Pendaftaran',
@@ -164,8 +165,9 @@ class ManajemenJadwalPpdbController extends Controller
 
         $writer->close();
 
-        return response()->download($fileName)->deleteFileAfterSend(true);
+        return response()->download($filePath)->deleteFileAfterSend(true);
     }
+
 
     public function exportJadwalToPdf(Request $request)
     {

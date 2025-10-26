@@ -195,14 +195,17 @@ class AdminController extends Controller
                 'Status' => $statusToPrint,
             ];
         });
-        $filePath = 'data_pendaftar_' . now()->format('Ymd_His') . '.csv';
+        $fileName = 'data_pendaftar_' . now()->format('Ymd_His') . '.csv';
+        $filePath = storage_path('app/' . $fileName);
         $writer = SimpleExcelWriter::create($filePath)->addRows($records);
 
 
-        return response()->download($filePath, $filePath, [
+        return response()->download($filePath, $fileName, [
             'Content-Type' => 'text/csv',
         ])->deleteFileAfterSend(true);
     }
+
+
 
     public function exportPendaftarToPdf(Request $request)
     {
