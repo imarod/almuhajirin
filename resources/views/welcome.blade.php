@@ -40,7 +40,7 @@
         .hero-container {
             background-image:
                 linear-gradient(rgba(57, 63, 69, 0.6)),
-                url('{{ asset('images/bg-base.png') }}');
+                url('{{ asset('images/bg-base.PNG') }}');
             background-size: cover;
             background-position: center;
             border-radius: 15px;
@@ -647,13 +647,13 @@
                         <div class="carousel-item">
                             <div class="d-md-none">
                                 <div class="col-12">
-                                    <img src="{{ asset('images/bg-base.png') }}" class="d-block w-100 rounded shadow"
+                                    <img src="{{ asset('images/bg-base.PNG') }}" class="d-block w-100 rounded shadow"
                                         alt="Foto 4" loading="lazy">
                                 </div>
                             </div>
                             <div class="d-none d-md-flex row justify-content-center g-3">
                                 <div class="col-md-4">
-                                    <img src="{{ asset('images/bg-base.png') }}" class="d-block w-100 rounded shadow"
+                                    <img src="{{ asset('images/bg-base.PNG') }}" class="d-block w-100 rounded shadow"
                                         alt="Foto 4" loading="lazy">
                                 </div>
                                 <div class="col-md-4">
