@@ -13,4 +13,4 @@ Artisan::command('inspire', function () {
 
 // Kode untuk menjadwalkan command pengumuman
 // Schedule::command(AnnouncePendaftaran::class)->everyMinute();
-Schedule::command(SendAnnouncementEmails::class)->dailyAt('09:00');
+Schedule::command(SendAnnouncementEmails::class)->everyMinute();

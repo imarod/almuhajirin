@@ -22,6 +22,7 @@ class SendAnnouncementEmails extends Command
     {
         $today = Carbon::today();
 
+        // Cari semua jadwal yang tanggal pengumumannya adalah hari ini
         $jadwals = ManajemenJadwalPpdb::whereDate('tgl_pengumuman', $today)->get();
 
         if ($jadwals->isEmpty()) {
@@ -29,40 +30,43 @@ class SendAnnouncementEmails extends Command
             return Command::SUCCESS;
         }
 
+        // Loop melalui setiap jadwal yang ditemukan
         foreach ($jadwals as $jadwal) {
+            
+            // Ambil semua pendaftar untuk jadwal ini yang belum dikirimi email pengumuman
             $pendaftarToAnnounce = Pendaftaran::where('jadwal_id', $jadwal->id)
                 ->where('pesan_email', false)
                 ->get();
 
             if ($pendaftarToAnnounce->isEmpty()) {
-                $this->info('Tidak ada pendaftar untuk jadwal ' . $jadwal->thn_ajaran . ' gelombang ' . $jadwal->gelombang_pendaftaran);
+                $this->info('Tidak ada pendaftar baru yang perlu diumumkan untuk jadwal ' . $jadwal->thn_ajaran . ' gelombang ' . $jadwal->gelombang_pendaftaran);
                 continue;
+            }
 
+            // Jika ada pendaftar, cetak info dan mulai pengiriman
+            $this->info('Mulai mengumumkan ' . $pendaftarToAnnounce->count() . ' Pendaftar untuk tahun ajaran ' . $jadwal->thn_ajaran . ' gelombang ' . $jadwal->gelombang_pendaftaran . '...');
 
-                $this->info('Mulai mengumumkan ' . $pendaftarToAnnounce->count() . ' Pendaftar untuk tahun ajaran ' . $jadwal->thn_ajaran . ' gelombang ' . $jadwal->gelombang_pendaftaran . '...');
+            foreach ($pendaftarToAnnounce as $pendaftar) {
+                // Pastikan ada relasi siswa dan email
+                if ($pendaftar->siswa && $pendaftar->siswa->email_siswa) {
+                    $user = $pendaftar->siswa->user;
+                    $plainToken = $this->generateLoginToken($user);
 
-                foreach ($pendaftarToAnnounce as $pendaftar) {
-                    if ($pendaftar->siswa && $pendaftar->siswa->email_siswa) {
-                        $user = $pendaftar->siswa->user;
-                        $plainToken = $this->generateLoginToken($user);
+                    Mail::to($pendaftar->siswa->email_siswa)
+                        ->queue(new ResultNotificationMail($pendaftar, $plainToken));
 
-                        Mail::to($pendaftar->siswa->email_siswa)
-                            ->queue(new ResultNotificationMail($pendaftar, $plainToken));
-
-                        $pendaftar->pesan_email = true;
-                        if ($pendaftar->pesan_whatsapp) {
-                            $pendaftar->is_announced = true;
-                        }
-                        $pendaftar->save();
-                        $this->info('Email pengumuman dikirim ke: ' . $pendaftar->siswa->email_siswa);
-                    } else {
-                        $this->warn('Pendaftar dengan ID ' . $pendaftar->id . ' tidak memiliki email terdaftar. Melewati pengiriman email.');
-                    }
+                    // Tandai bahwa email sudah dikirim dan status pengumuman sudah disetel
+                    $pendaftar->pesan_email = true;
+                    $pendaftar->is_announced = true;
+                    $pendaftar->save();
+                    $this->info('Email pengumuman dikirim ke: ' . $pendaftar->siswa->email_siswa);
+                } else {
+                    $this->warn('Pendaftar dengan ID ' . $pendaftar->id . ' tidak memiliki data siswa/email terdaftar. Melewati pengiriman email.');
                 }
             }
 
-            $this->info('Pengiriman email pengumuman selesai.');
-            return Command::SUCCESS;
-        }
+        } 
+        $this->info('Pengiriman email pengumuman selesai.');
+        return Command::SUCCESS;
     }
 }
