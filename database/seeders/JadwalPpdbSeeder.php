@@ -20,7 +20,7 @@ class JadwalPpdbSeeder extends Seeder
         for ($year = $startYear; $year <= $currentYear; $year++) {
             // Tahun ajaran dalam format "YYYY/YYYY+1"
             $thnAjaran = "{$year}/" . ($year + 1);
-            $kuota = fake()->numberBetween(2, 7);
+            $kuota = fake()->numberBetween(2, 3);
 
             $tglMulaiGel1 = Carbon::create($year, 1, 1);
             $this->createJadwalWithPendaftaran($thnAjaran, 1, $tglMulaiGel1, $kuota, 30);

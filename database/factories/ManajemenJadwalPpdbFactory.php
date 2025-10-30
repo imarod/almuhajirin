@@ -22,14 +22,14 @@ class ManajemenJadwalPpdbFactory extends Factory
         $currentYear = now()->year;
         $thnAjaran = $currentYear . '/' . ($currentYear+1);
 
-        $tgl_mulai = fake()->dateTimeBetween('-10 days', 'today');;
+        $tgl_mulai = fake()->dateTimeBetween('-10 days', 'today');
         $tgl_berakhir = Carbon::parse($tgl_mulai)->addDays(rand(5, 10));
         $tgl_pengumuman = Carbon::parse($tgl_berakhir)->addDays(rand(3, 7));
 
         return [
             'thn_ajaran' => $thnAjaran,
             'gelombang_pendaftaran' =>  fake()->numberBetween(1, 2),
-            'kuota' => fake()->numberBetween(2, 7),
+            'kuota' => fake()->numberBetween(2, 3),
             'tgl_mulai' => $tgl_mulai,
             'tgl_berakhir' => $tgl_berakhir,
             'tgl_pengumuman' => $tgl_pengumuman,

@@ -8,6 +8,9 @@
 
     <title>PPDB | Al Muhajirin</title>
 
+    <link rel="stylesheet" href="{{ asset('build/assets/app-YiHTX5S0.css') }}">
+    <script src="{{ asset('build/assets/app-CLW3V3YL.js') }}" defer></script>
+
     @vite(['resources/sass/app.scss', 'resources/js/app.js'])
     {{-- @vite('resources/css/app.css') --}}
 
@@ -153,7 +156,7 @@
                 display: none;
             }
 
-        
+
             .navbar-collapse.show,
             .navbar-collapse {
                 background-color: #393939 !important;

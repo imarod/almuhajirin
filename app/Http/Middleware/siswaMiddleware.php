@@ -20,7 +20,7 @@ class siswaMiddleware
             return redirect('/login')->with('error', 'Silakan login terlebih dahulu.');
         }
 
-        if (Auth::user()->is_admin !== 0) {
+        if (Auth::user()->is_admin != 0) {
             return abort(403, 'Unauthorized: Anda tidak memiliki akses.');
         }
         return $next($request);

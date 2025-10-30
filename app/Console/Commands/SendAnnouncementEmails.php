@@ -32,7 +32,7 @@ class SendAnnouncementEmails extends Command
 
         // Loop melalui setiap jadwal yang ditemukan
         foreach ($jadwals as $jadwal) {
-            
+
             // Ambil semua pendaftar untuk jadwal ini yang belum dikirimi email pengumuman
             $pendaftarToAnnounce = Pendaftaran::where('jadwal_id', $jadwal->id)
                 ->where('pesan_email', false)
@@ -64,8 +64,7 @@ class SendAnnouncementEmails extends Command
                     $this->warn('Pendaftar dengan ID ' . $pendaftar->id . ' tidak memiliki data siswa/email terdaftar. Melewati pengiriman email.');
                 }
             }
-
-        } 
+        }
         $this->info('Pengiriman email pengumuman selesai.');
         return Command::SUCCESS;
     }

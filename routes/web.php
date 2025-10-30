@@ -14,12 +14,14 @@ use App\Http\Controllers\LandingPageController;
 use App\Http\Controllers\PendaftaranController;
 use App\Http\Controllers\LoginTokenController;
 use App\Http\Controllers\WilayahController;
+use Illuminate\Support\Facades\Artisan;
 
 
 
 Route::get('/', [LandingPageController::class, 'index'])->name('root');
 
 Auth::routes();
+
 
 
 // Route::get('/home', [App\Http\Controllers\HomeController::class, 'home'])->name('home');
