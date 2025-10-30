@@ -74,7 +74,7 @@ class ManajemenUser extends Controller
     public function getDataUser(Request $request)
     {
         if ($request->ajax()) {
-            $query = User::query();
+            $query = User::orderBy('is_admin', 'desc')->orderBy('name','asc');
 
             return DataTables::of($query)
                 ->addColumn('role', function ($user) {
