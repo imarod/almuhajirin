@@ -63,13 +63,14 @@ class Pendaftaran extends Model
             return $this->status_aktual;
         }
 
+         if ($this->status_aktual !== null) {
+            return 'Diproses';
+        }
         if ($this->status_verifikasi === 'Perbaikan') {
             return $this->status_verifikasi;
         }
 
-        if ($this->status_aktual !== null) {
-            return 'Diproses';
-        }
+       
 
         return $this->status_verifikasi;
     }
