@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="icon" href="{{ asset('images/tutwuri.png') }}" type="image/x-icon" loading="lazy">
+    <link rel="icon" href="{{ asset('images/logo.jpg') }}" type="image/x-icon" loading="lazy">
 
     <title>PPDB | Al Muhajirin</title>
 
@@ -176,7 +176,7 @@
         <nav class="navbar navbar-expand-lg navbar-light py-3">
             <div class="container">
                 <a class="navbar-brand d-flex align-items-center" href="{{ url('/') }}">
-                    <img src="{{ asset('images/tutwuri.png') }}" style="width: 50px; height: 50px;" alt="Logo"
+                    <img src="{{ asset('images/logo.jpg') }}" style="width: 50px; height: 50px;" alt="Logo"
                         class="d-inline-block align-text-top me-3" loading="lazy">
                     <div class="d-flex flex-column lh-sm">
                         <span class="fw-bold">Penerimaan Peserta Didik Baru</span>
