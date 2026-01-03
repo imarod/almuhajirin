@@ -14,7 +14,16 @@ class ManajemenJadwalPpdb extends Model
     use HasFactory, SoftDeletes;
 
     protected $table = 'jadwal_ppdb';
-    protected $fillable = ['tgl_pengumuman', 'thn_ajaran', 'gelombang_pendaftaran', 'kuota', 'tgl_mulai', 'tgl_berakhir', 'deleted_at'];
+    protected $fillable = [
+        'tgl_pengumuman', 
+        'thn_ajaran', 
+        'gelombang_pendaftaran', 
+        'kuota', 
+        'tgl_mulai', 
+        'tgl_berakhir', 
+        'deleted_at'
+    ];
+
     protected $casts = [
         'tgl_mulai' => 'date',
         'tgl_berakhir' => 'date',

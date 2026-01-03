@@ -72,13 +72,19 @@ class JurusanController extends Controller
         try {
             // Jika jurusan ini sudah digunakan oleh pendaftaran, jangan dihapus.
             if ($jurusan->pendaftarans()->exists()) {
-                return redirect()->route('admin.manajemen-jurusan')->with('error', 'Gagal menghapus! Jurusan ini sedang digunakan oleh data pendaftar.');
+                return redirect()
+                ->route('admin.manajemen-jurusan')
+                ->with('error', 'Gagal menghapus! Jurusan ini sedang digunakan oleh data pendaftar.');
             }
 
             $jurusan->delete();
-            return redirect()->route('admin.manajemen-jurusan')->with('success', 'Jurusan berhasil dihapus.');
+            return redirect()
+            ->route('admin.manajemen-jurusan')
+            ->with('success', 'Jurusan berhasil dihapus.');
         } catch (\Exception $e) {
-            return redirect()->route('admin.manajemen-jurusan')->with('error', 'Gagal menghapus Jurusan: ' . $e->getMessage());
+            return redirect()
+            ->route('admin.manajemen-jurusan')
+            ->with('error', 'Gagal menghapus Jurusan: ' . $e->getMessage());
         }
     }
 }

@@ -172,7 +172,8 @@ class PendaftaranController extends Controller
             $jadwalSelesai = $pendaftaran->jadwal && Carbon::parse($pendaftaran->jadwal->tgl_berakhir)->isPast();
             if ($pendaftaran->status_aktual !== null || $jadwalSelesai) {
                 DB::rollBack();
-                return back()->with('error', 'Gagal memperbarui pendaftaran: Formulir sudah diproses dan tidak dapat diubah diproses atau jadwal sudah ditutup.');
+                return back()->with('error', 'Gagal memperbarui pendaftaran: 
+                Formulir sudah diproses dan tidak dapat diubah diproses atau jadwal sudah ditutup.');
             }
 
             // Update data Orang Tua

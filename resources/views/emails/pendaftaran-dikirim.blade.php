@@ -37,7 +37,13 @@
                                 <tr>
                                     <td align="center" style="padding-top: 20px;">
                                         <a href="{{ route('login.token', ['token' => $token]) }}" target="_blank"
-                                            style="display: inline-block; padding: 12px 24px; background-color: #2E8B57; color: #ffffff; text-decoration: none; border-radius: 5px; font-weight: bold;">
+                                            style="display: inline-block; 
+                                            padding: 12px 24px; 
+                                            background-color: #2E8B57; 
+                                            color: #ffffff; 
+                                            text-decoration: none; 
+                                            border-radius: 5px; 
+                                            font-weight: bold;">
                                             Lihat Status Pendaftaran
                                         </a>
                                     </td>

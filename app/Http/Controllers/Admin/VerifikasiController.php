@@ -86,7 +86,7 @@ class VerifikasiController extends Controller
          $plainToken = $this->generateLoginToken($user);
 
   
-    Mail::to($pendaftaran->siswa->email_siswa)->queue(new CorrectionMailNotification($pendaftaran, $siswa, $plainToken));
+        Mail::to($pendaftaran->siswa->email_siswa)->queue(new CorrectionMailNotification($pendaftaran, $siswa, $plainToken));
 
         return redirect()->route('admin.pendaftar', $lastFilters)
             ->with('success', 'Catatan perbaikan berhasil dikirim. Status pendaftaran diubah menjadi "Perbaikan".');

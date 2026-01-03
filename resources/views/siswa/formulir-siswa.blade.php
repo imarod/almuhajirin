@@ -385,7 +385,7 @@
                                         <div class="col-md-6">
                                             <div class="form-group">
                                                 <label class="d-flex align-items-center gap-1">
-                                                    <span class="font-weight-medium text-dark">Jurusan</span>
+                                                    <span class="font-weight-medium text-dark">Jurusan</span> 
                                                     <span class="text-danger">*</span>
                                                 </label>
                                                 @foreach ($jurusanAktif as $jrs)

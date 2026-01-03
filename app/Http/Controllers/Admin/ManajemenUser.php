@@ -58,7 +58,11 @@ class ManajemenUser extends Controller
         );
 
         if ($validator->fails()) {
-            return redirect()->route('admin.manajemen-user')->withErrors($validator)->withInput()->with('error', 'Gagal menambahkan user. Periksa kembali input Anda.');
+            return redirect()
+            ->route('admin.manajemen-user')
+            ->withErrors($validator)
+            ->withInput()
+            ->with('error', 'Gagal menambahkan user. Periksa kembali input Anda.');
         }
 
         User::create([
@@ -139,7 +143,11 @@ class ManajemenUser extends Controller
         );
 
         if ($validator->fails()) {
-            return redirect()->route('admin.manajemen-user')->with('edit_error_id', $id)->withErrors($validator)->with('error', 'Gagal mengupdate user. Periksa kembali input Anda.');
+            return redirect()
+            ->route('admin.manajemen-user')
+            ->with('edit_error_id', $id)
+            ->withErrors($validator)
+            ->with('error', 'Gagal mengupdate user. Periksa kembali input Anda.');
         }
 
         $user->name = $request->name;

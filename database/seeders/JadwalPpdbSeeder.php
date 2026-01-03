@@ -20,7 +20,7 @@ class JadwalPpdbSeeder extends Seeder
         for ($year = $startYear; $year <= $currentYear; $year++) {
             // Tahun ajaran dalam format "YYYY/YYYY+1"
             $thnAjaran = "{$year}/" . ($year + 1);
-            $kuota = fake()->numberBetween(2, 3);
+            $kuota = fake()->numberBetween(250, 350);
 
             $tglMulaiGel1 = Carbon::create($year, 1, 1);
             $this->createJadwalWithPendaftaran($thnAjaran, 1, $tglMulaiGel1, $kuota, 30);
@@ -63,7 +63,7 @@ class JadwalPpdbSeeder extends Seeder
             ]);
 
             // Tentukan jumlah pendaftar yang akan dibuat secara acak
-            $jumlahPendaftar = fake()->numberBetween(min(2, $kuota), min(7, $kuota));
+            $jumlahPendaftar = fake()->numberBetween(min(220, $kuota), min(350, $kuota));
 
             Pendaftaran::factory()->count($jumlahPendaftar)->create([
                 'jadwal_id' => $jadwal->id,

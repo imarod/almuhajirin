@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 
 class LoginController extends Controller
@@ -39,24 +40,39 @@ class LoginController extends Controller
         $this->middleware('guest')->except('logout');
         $this->middleware('auth')->only('logout');
     }
-    public function login (Request $request) {
-        $input = $request->all();
-        $this->validate($request, [
-            'email' => 'required|email',
-            'password' => 'required',
-        ]);
-        
-        if (auth()->attempt(array('email' => $input['email'], 'password' => $input['password']))) {
-            if (auth()->user()->is_admin == 1) {
-                return redirect() -> route('admin.dashboard-statistik')->with('success', 'Login berhasil');
-            }else {
-                return redirect() -> route('ajuan.pendaftaran')->with('success', 'Login berhasil');
+    public function login(Request $request)
+    {
+        // Validasi input
+        $request->validate(
+            [
+                'email' => 'required|email',
+                'password' => 'required',
+            ],
+            [
+                'email.required' => 'Email wajib diisi',
+                'email.email' => 'Format email tidak valid',
+                'password.required' => 'Password wajib diisi',
+            ]
+        );
+
+        // Cek login
+        if (Auth::attempt($request->only('email', 'password'))) {
+            if (Auth::user()->is_admin == 1) {
+                return redirect()
+                    ->route('admin.dashboard-statistik')
+                    ->with('success', 'Login berhasil');
             }
 
-        }else {
-            return redirect() -> route('login')->with('error', 'Email atau password salah');
+            return redirect()
+                ->route('ajuan.pendaftaran')
+                ->with('success', 'Login berhasil');
         }
-    }
 
-    
+        //Login gagal
+        return back()
+            ->withErrors([
+                'email' => 'Email atau password salah',
+            ])
+            ->withInput($request->except('password'));
+    }
 }

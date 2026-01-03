@@ -195,7 +195,7 @@
                 <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
                     <ul class="navbar-nav d-flex align-items-center me-3 mb-2 mb-lg-0">
                         <li class="nav-item">
-                            <a class="nav-link" href="#">Beranda</a>
+                            <a class="nav-link" href="#">Beranda</a> 
                         </li>
                         <li class="nav-item">
                             <a class="nav-link d-flex flex-column text-center lh-sm" href="#info-jadwal">

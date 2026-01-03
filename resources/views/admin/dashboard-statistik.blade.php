@@ -342,7 +342,7 @@
             return tahun ? `${baseTitle} - Tahun Ajaran ${tahun}` : baseTitle;
         }
 
-        // fungsi untuk load data dashboard berdasarkan tahun
+        // fungsi untuk load data dashboard berdasarkan tahun or filter tahun
         function loadDashboardData(tahun = null) {
             const queryParam = tahun ? `?tahun=${tahun}` : '';
             const backgroundColors = [
@@ -375,7 +375,7 @@
                             titleGender,
                             'Jumlah Pendaftar', seriesData);
                     } else {
-                         container.innerHTML =
+                        container.innerHTML =
                             '<div class="text-center p-5 text-muted">Tidak ada data gender yang tercatat pada tahun ini.</div>';
                     }
 

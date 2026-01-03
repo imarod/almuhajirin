@@ -79,13 +79,19 @@ class KategoriPrestasiController extends Controller
     {
         try {
             if ($kategoriPrestasi->pendaftarans()->exists()) {
-                return redirect()->route('admin.kategori-prestasi')->with('error', 'Gagal menghapus! Kategori ini sedang digunakan oleh pendaftar.');
+                return redirect()
+                ->route('admin.kategori-prestasi')
+                ->with('error', 'Gagal menghapus! Kategori ini sedang digunakan oleh pendaftar.');
             }
 
             $kategoriPrestasi->delete();
-            return redirect()->route('admin.kategori-prestasi')->with('success', 'Kategori Prestasi berhasil dihapus.');
+            return redirect()
+            ->route('admin.kategori-prestasi')
+            ->with('success', 'Kategori Prestasi berhasil dihapus.');
         } catch (\Exception $e) {
-            return redirect()->route('admin.kategori-prestasi')->with('error', 'Gagal menghapus Kategori Prestasi: ' . $e->getMessage());
+            return redirect()
+            ->route('admin.kategori-prestasi')
+            ->with('error', 'Gagal menghapus Kategori Prestasi: ' . $e->getMessage());
         }
     }
 }

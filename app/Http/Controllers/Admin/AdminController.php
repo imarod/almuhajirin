@@ -14,8 +14,15 @@ class AdminController extends Controller
 {
     public function showDataPendaftar(Request $request)
     {
-        $thnAjaran = ManajemenJadwalPpdb::select('thn_ajaran')->distinct()->orderBy('thn_ajaran', 'desc')->pluck('thn_ajaran');
-        $gelombangPendaftaran = ManajemenJadwalPpdb::select('gelombang_pendaftaran')->distinct()->orderBy('gelombang_pendaftaran', 'asc')->pluck('gelombang_pendaftaran');
+        $thnAjaran = ManajemenJadwalPpdb::select('thn_ajaran')
+        ->distinct()
+        ->orderBy('thn_ajaran', 'desc')
+        ->pluck('thn_ajaran');
+        
+        $gelombangPendaftaran = ManajemenJadwalPpdb::select('gelombang_pendaftaran')
+        ->distinct()
+        ->orderBy('gelombang_pendaftaran', 'asc')
+        ->pluck('gelombang_pendaftaran');
 
         $lastFilters = $request->session()->get('last_filters', []);
         $defaultThnAjaran = $request->input('thn_ajaran', $lastFilters['thn_ajaran'] ?? $thnAjaran->first());

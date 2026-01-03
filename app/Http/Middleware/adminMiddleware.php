@@ -21,7 +21,6 @@ class adminMiddleware
         }
 
         if (Auth::user()->is_admin != 1) {
-            //halaman ini nnati ganti abort yang lebih umum
             return abort(403, 'Unauthorized: Anda tidak memiliki akses.');
         }
         return $next($request);
