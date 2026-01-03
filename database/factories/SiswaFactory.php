@@ -32,8 +32,6 @@ class SiswaFactory extends Factory
         $email = fake()->randomElement(self::$emails);
         
         return [
-            'user_id' => User::factory(),
-            'orang_tua_id' => OrangTua::factory(),
             'nama' => fake()->name($gender === 'Laki-laki' ? 'male' : 'female'),
             'nisn' => fake()->unique()->numerify('##########'),
             'jenis_kelamin' => $gender,

@@ -3,6 +3,8 @@
 namespace Database\Seeders;
 
 use App\Models\User;
+use App\Models\Jurusan;
+use App\Models\KategoriPrestasi;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -13,11 +15,11 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
+        Jurusan::factory()->count(5)->create();
+        KategoriPrestasi::factory()->count(5)->create();
 
        $this->call([
             JadwalPpdbSeeder::class,
-            PendaftaranSeeder::class,
         ]);
     }
 }

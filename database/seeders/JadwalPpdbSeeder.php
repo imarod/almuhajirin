@@ -2,10 +2,10 @@
 
 namespace Database\Seeders;
 
-use App\Models\ManajemenJadwalPpdb;
+use App\Models\{ManajemenJadwalPpdb, Pendaftaran, Siswa, User, OrangTua, Jurusan};
 use Illuminate\Database\Seeder;
 use Carbon\Carbon;
-use App\Models\Pendaftaran;
+use JeroenNoten\LaravelAdminLte\View\Components\Widget\Card;
 
 class JadwalPpdbSeeder extends Seeder
 {
@@ -20,54 +20,43 @@ class JadwalPpdbSeeder extends Seeder
         for ($year = $startYear; $year <= $currentYear; $year++) {
             // Tahun ajaran dalam format "YYYY/YYYY+1"
             $thnAjaran = "{$year}/" . ($year + 1);
-            $kuota = fake()->numberBetween(250, 350);
 
-            $tglMulaiGel1 = Carbon::create($year, 1, 1);
-            $this->createJadwalWithPendaftaran($thnAjaran, 1, $tglMulaiGel1, $kuota, 30);
+            for ($gel = 1; $gel <= 2; $gel++) {
+                //Gel 1 Jan, Gel 2 Juni
+                $month = ($gel == 1) ? 1 : 6;
+                $tglMulai = Carbon::create($year, $month, 1);
+                $tglBerakhir = (clone $tglMulai)->addDays(29);
 
-            // --- Gelombang 2 ---
-            $tglMulaiGel2 = Carbon::create($year, 3, 1);
-            $this->createJadwalWithPendaftaran($thnAjaran, 2, $tglMulaiGel2, $kuota, 30);
+
+                if (!ManajemenJadwalPpdb::overlapse($tglMulai, $tglBerakhir)->exists()) {
+                    $jadwal = ManajemenJadwalPpdb::factory()->create([
+                        'thn_ajaran' => $thnAjaran,
+                        'gelombang_pendaftaran' => $gel,
+                        'kuota' => rand(220, 350),
+                        'tgl_mulai' => $tglMulai,
+                        'tgl_berakhir' => $tglBerakhir,
+                        'tgl_pengumuman' => (clone $tglBerakhir)->addWeek(),
+                    ]);
+                    $jumlahPendaftar = rand(100, $jadwal->kuota);
+                    $this->createPendaftarLengkap($jadwal, $jumlahPendaftar);
+                }
+            }
         }
     }
 
 
-    private function createJadwalWithPendaftaran(string $thnAjaran, int $gelombang, Carbon $tglMulai, int $kuota, int $durationDays): void
+    private function createPendaftarLengkap($jadwal, $count)
     {
-        // Cek apakah jadwal dengan tahun ajaran dan gelombang ini sudah ada
-        $existingJadwal = ManajemenJadwalPpdb::where('thn_ajaran', $thnAjaran)
-            ->where('gelombang_pendaftaran', $gelombang)
-            ->first();
-
-        if ($existingJadwal) {
-            return;
-        }
-
-        $tglBerakhir = (clone $tglMulai)->addDays($durationDays - 1);
-        $tglPengumuman = (clone $tglBerakhir)->addWeek();
-
-        // 2. Cek OVERLAP:
-        $isOverlapping = ManajemenJadwalPpdb::query()
-            ->overlapse($tglMulai, $tglBerakhir)
-            ->exists();
-
-        // Buat jadwal baru
-        if (!$isOverlapping) {            
-            $jadwal = ManajemenJadwalPpdb::factory()->create([
-                'thn_ajaran' => $thnAjaran,
-                'gelombang_pendaftaran' => $gelombang,
-                'kuota' => $kuota,
-                'tgl_mulai' => $tglMulai,
-                'tgl_berakhir' => $tglBerakhir,
-                'tgl_pengumuman' => $tglPengumuman,
+        for ($i = 0; $i < $count; $i++) {
+            $user = User::factory()->create();
+            $ortu = OrangTua::factory()->create();
+            $siswa = Siswa::factory()->create([
+                'user_id' => $user->id,
+                'orang_tua_id' => $ortu->id,
             ]);
-
-            // Tentukan jumlah pendaftar yang akan dibuat secara acak
-            $jumlahPendaftar = fake()->numberBetween(min(220, $kuota), min(350, $kuota));
-
-            Pendaftaran::factory()->count($jumlahPendaftar)->create([
+            Pendaftaran::factory()->create([
+                'siswa_id' => $siswa->id,
                 'jadwal_id' => $jadwal->id,
-                'status_verifikasi' => fake()->randomElement(['Dikirim']),
             ]);
         }
     }
