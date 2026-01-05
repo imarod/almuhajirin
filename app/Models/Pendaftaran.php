@@ -59,10 +59,13 @@ class Pendaftaran extends Model
         // if ($tanggalPengumuman  && $tanggalPengumuman->isPast()) {
         //     return $this->status_aktual;
         // }
-        if ($this->pesan_email && $tanggalPengumuman  && $tanggalPengumuman->isPast()) {
+        
+        // if ($this->pesan_email && $tanggalPengumuman  && $tanggalPengumuman->isPast()) {
+        //     return $this->status_aktual;
+        // }
+        if ($tanggalPengumuman  && $tanggalPengumuman->isPast()) {
             return $this->status_aktual;
         }
-
          if ($this->status_aktual !== null) {
             return 'Diproses';
         }
