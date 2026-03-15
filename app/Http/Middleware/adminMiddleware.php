@@ -16,11 +16,13 @@ class adminMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if (!Auth::check()) {
+        $user = Auth::user(); 
+
+        if (!$user) {
             return redirect('/login')->with('error', 'Silakan login terlebih dahulu.');
         }
 
-        if (Auth::user()->is_admin != 1) {
+        if ($user->is_admin != 1) {
             return abort(403, 'Unauthorized: Anda tidak memiliki akses.');
         }
         return $next($request);

@@ -32,12 +32,12 @@ class JadwalPpdbSeeder extends Seeder
                     $jadwal = ManajemenJadwalPpdb::factory()->create([
                         'thn_ajaran' => $thnAjaran,
                         'gelombang_pendaftaran' => $gel,
-                        'kuota' => rand(220, 350),
+                        'kuota' => rand(1, 2),
                         'tgl_mulai' => $tglMulai,
                         'tgl_berakhir' => $tglBerakhir,
                         'tgl_pengumuman' => (clone $tglBerakhir)->addWeek(),
                     ]);
-                    $jumlahPendaftar = rand(100, $jadwal->kuota);
+                    $jumlahPendaftar = rand(3, $jadwal->kuota);
                     $this->createPendaftarLengkap($jadwal, $jumlahPendaftar);
                 }
             }

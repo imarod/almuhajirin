@@ -14,7 +14,7 @@ class LoginTokenController extends Controller
     {
         $user = User::whereNotNull('login_token')
             ->where('token_expires_at', '>', Carbon::now())
-            ->whereHas('siswa.pendaftaran', function ($query) {
+            ->with('siswa.pendaftaran', function ($query) {
                 $query->where('status_aktual', '!=');
             })
             ->first();

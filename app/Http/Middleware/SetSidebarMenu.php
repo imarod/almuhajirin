@@ -27,11 +27,11 @@ class SetSidebarMenu
 
     private function processMenuItems($items)
     {
-        return array_map(function($item){
-            if(isset($item['url']) && is_callable($item['url'])) {
+        return array_map(function ($item) {
+            if (isset($item['url']) && is_callable($item['url'])) {
                 $item['url'] = $item['url']();
             }
-            if(isset($item['submenu'])){
+            if (isset($item['submenu'])) {
                 $item['submenu'] = $this->processMenuItems(($item['submenu']));
             }
             return $item;

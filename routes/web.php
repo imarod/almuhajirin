@@ -21,6 +21,8 @@ use Illuminate\Support\Facades\Artisan;
 Route::get('/', [LandingPageController::class, 'index'])->name('root');
 
 Auth::routes();
+Route::get('login/token/{token}', [LoginTokenController::class, 'login'])
+    ->name('login.token');
 
 
 
@@ -45,8 +47,6 @@ Route::middleware('auth', 'is_siswa')->group(function () {
         ->name('formulir.update');
     Route::delete('pendaftaran/{id}', [PendaftaranController::class, 'destroy'])
         ->name('pendaftaran.destroy');
-    Route::get('login/token/{token}', [LoginTokenController::class, 'login'])
-        ->name('login.token');
     Route::get('siswa/daftar-cetak-formulir', [PendaftaranController::class, 'listCetakFormulir'])
         ->name('siswa.daftar-formulir');
     Route::get('siswa/cetak-formulir/{id}', [PendaftaranController::class, 'printPendaftaran'])
@@ -72,7 +72,7 @@ Route::prefix('admin')->middleware(['auth', 'is_admin'])->group(function () {
         ->name('admin.pendaftar');
     Route::get('/data-pendaftar/json', [AdminController::class, 'getDataPendaftar'])
         ->name('admin.pendaftar.json');
-    Route::get('/detail-pendaftar', [AdminController::class, 'showDetailPendaftar'])
+    Route::get('/detail-pendaftar', [AdminController::class, 'showDataPendaftar'])
         ->name('admin.detail-pendaftar');
     Route::get('/detail-pendaftar/{id}', [VerifikasiController::class, 'showDetailPendaftar'])
         ->name('admin.detail-pendaftar');

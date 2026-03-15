@@ -53,28 +53,22 @@ class Pendaftaran extends Model
 
     public function showStatusPendaftar()
     {
-        $jadwal = ManajemenJadwalPpdb::first();
+        $jadwal = $this->jadwal;
         $tanggalPengumuman = $jadwal ? Carbon::parse($jadwal->tgl_pengumuman) : null;
 
-        // if ($tanggalPengumuman  && $tanggalPengumuman->isPast()) {
-        //     return $this->status_aktual;
-        // }
-        
-        // if ($this->pesan_email && $tanggalPengumuman  && $tanggalPengumuman->isPast()) {
-        //     return $this->status_aktual;
-        // }
-        if ($tanggalPengumuman  && $tanggalPengumuman->isPast()) {
-            return $this->status_aktual;
+   
+        if ($tanggalPengumuman && $tanggalPengumuman->isPast()) {
+            return $this->status_aktual ;
         }
-         if ($this->status_aktual !== null) {
+
+        if ($this->status_aktual !== null) {
             return 'Diproses';
         }
+
         if ($this->status_verifikasi === 'Perbaikan') {
-            return $this->status_verifikasi;
+            return 'Perbaikan';
         }
 
-       
-
-        return $this->status_verifikasi;
+        return $this->status_verifikasi ;
     }
 }

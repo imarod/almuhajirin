@@ -350,7 +350,7 @@
             ];
 
             const titleGender = getChartTitle('Perbandingan jumlah pendaftar laki-laki dan perempuan', tahun);
-            const titlePrestasi = getChartTitle('Perbandingan Kategori Prestasi Siswa', tahun);
+            const titlePrestasi = getChartTitle('Perbandingan Pendaftar Berdasarkan Jalur Prestasi', tahun);
             const titleJurusan = getChartTitle('Perbandingan Jumlah Pendaftar Berdasarkan Jurusan', tahun);
 
             fetch('{{ route('admin.dashboard.data-gender') }}' + queryParam)

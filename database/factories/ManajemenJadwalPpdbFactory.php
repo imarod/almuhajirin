@@ -24,7 +24,7 @@ class ManajemenJadwalPpdbFactory extends Factory
             //default
             'thn_ajaran' => now()->year . '/' . (now()->year + 1),
             'gelombang_pendaftaran' =>  fake()->numberBetween(1, 2),
-            'kuota' => fake()->numberBetween(250, 350),
+            'kuota' => fake()->numberBetween(1, 2),
             'tgl_mulai' => now(),
             'tgl_berakhir' => now()->addDays(30),
             'tgl_pengumuman' => now()->addDays(37),

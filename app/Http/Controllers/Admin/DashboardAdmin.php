@@ -7,6 +7,7 @@ use App\Models\ManajemenJadwalPpdb;
 use Illuminate\Http\Request;
 use App\Models\Siswa;
 use App\Models\Pendaftaran;
+use Illuminate\Support\Facades\DB;
 
 class DashboardAdmin extends Controller
 {
@@ -30,18 +31,21 @@ class DashboardAdmin extends Controller
     }
     public function getTotalPendaftar()
     {
-        $totalPendaftar = Pendaftaran::count();
-        $totalDiterima = Pendaftaran::where('status_aktual', 'Diterima')->count();
-        $totalDitolak = Pendaftaran::where('status_aktual', 'Ditolak')->count();
-        $totalPerbaikan = Pendaftaran::where('status_verifikasi', 'Perbaikan')->count();
-        $belumDiperiksa = Pendaftaran::whereNull('status_aktual')->count();
+        // Optimasi getTotalPendaftar
+        $stats = Pendaftaran::selectRaw("
+    count(*) as totalPendaftar,
+    count(case when status_aktual = 'Diterima' then 1 end) as totalDiterima,
+    count(case when status_aktual = 'Ditolak' then 1 end) as totalDitolak,
+    count(case when status_verifikasi = 'Perbaikan' then 1 end) as totalPerbaikan,
+    count(case when status_aktual IS NULL then 1 end) as belumDiperiksa
+")->first();
 
         return response()->json([
-            'totalPendaftar' => $totalPendaftar,
-            'totalDiterima' => $totalDiterima,
-            'totalDitolak' => $totalDitolak,
-            'totalPerbaikan' => $totalPerbaikan,
-            'belumDiperiksa' => $belumDiperiksa
+            'totalPendaftar' => $stats->totalPendaftar,
+            'totalDiterima' => $stats->totalDiterima,
+            'totalDitolak' => $stats->totalDitolak,
+            'totalPerbaikan' => $stats->totalPerbaikan,
+            'belumDiperiksa' => $stats->belumDiperiksa,
         ]);
     }
     public function getPendaftarByGender(Request $request)
@@ -112,11 +116,10 @@ class DashboardAdmin extends Controller
             });
         }
 
-        $dataJurusan = $query->get()
+        $dataJurusan = $query->join('jurusan', 'pendaftaran.jurusan_id', '=', 'jurusan.id')
+            ->select('jurusan.nama_jurusan', DB::raw('count(*) as total'))
             ->groupBy('jurusan.nama_jurusan')
-            ->map(function ($items, $key) {
-                return $items->count();
-            });
+            ->pluck('total', 'nama_jurusan');
 
 
         if ($dataJurusan->isEmpty()) {

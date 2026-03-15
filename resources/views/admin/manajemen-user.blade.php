@@ -45,11 +45,8 @@
                         <p class="mb-0 text-muted">Total User Admin</p>
                     </div>
                     <div class="card-footer p-2 text-white " style="background: #5E7CE3;">
-                        <div class="d-flex align-items-center">
-                            <p class="mb-0 small text-white">% change</p>
-                            <div class="ml-auto">
-                                <i class="fas fa-chart-line"></i>
-                            </div>
+                        <div class="d-flex align-items-center py-2">
+                            
                         </div>
                     </div>
                 </div>
@@ -67,11 +64,7 @@
                         <p class="mb-0 text-muted">Total User Siswa</p>
                     </div>
                     <div class="card-footer p-2 text-white " style="background: #21ca5f;">
-                        <div class="d-flex align-items-center">
-                            <p class="mb-0 small text-white">% change</p>
-                            <div class="ml-auto">
-                                <i class="fas fa-chart-line"></i>
-                            </div>
+                        <div class="d-flex align-items-center py-2">
                         </div>
                     </div>
                 </div>

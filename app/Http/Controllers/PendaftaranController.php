@@ -31,12 +31,18 @@ class PendaftaranController extends Controller
     {
         $statusPendaftaran = 'closed';
         $message = "Pendaftaran belum dibuka/sudah ditutup. Silahkan cek kembali jadwal pendaftaran.";
-        $jadwalAktif = ManajemenJadwalPpdb::active()->first();
+        $jadwalAktif = cache()->remember('jadwal_aktif', 3600, function () {
+            return ManajemenJadwalPpdb::active()->first();
+        });
         $pendaftaran = null;
         $jumlahPendaftar = 0;
 
-        $kategoriPrestasiAktif = KategoriPrestasi::active()->get();
-        $jurusanAktif = Jurusan::active()->get();
+        $kategoriPrestasiAktif = cache()->remember('kategori_prestasi_aktif', 3600, function () {
+            return KategoriPrestasi::active()->get();
+        });
+        $jurusanAktif = cache()->remember('jurusan_aktif', 3600, function () {
+            return Jurusan::active()->get();
+        });
 
         // Jika ID pendaftaran diberikan, coba cari data pendaftaran untuk mode edit
         if ($id) {
@@ -46,8 +52,7 @@ class PendaftaranController extends Controller
                 })->findOrFail($id);
 
                 //tidak boleh edit kalau pendaftaran sudah diproses atau jadwal selesai
-                $jadwalSelesai = $pendaftaran->jadwal && Carbon::parse($pendaftaran->jadwal->tgl_berakhir)->isPast();
-                if ($pendaftaran->status_aktual !== null || $jadwalSelesai) {
+                if ($this->isPendaftaranLocked($pendaftaran)) {
                     Session::flash('error', 'Formulir pendaftaran tidak dapat diubah karena sudah diproses atau jadwal sudah ditutup.');
                     return redirect()->route('ajuan.pendaftaran');
                 }
@@ -169,8 +174,7 @@ class PendaftaranController extends Controller
             ]);
 
             //tidak boleh edit kalau pendaftaran sudah diproses
-            $jadwalSelesai = $pendaftaran->jadwal && Carbon::parse($pendaftaran->jadwal->tgl_berakhir)->isPast();
-            if ($pendaftaran->status_aktual !== null || $jadwalSelesai) {
+            if ($this->isPendaftaranLocked($pendaftaran)) {
                 DB::rollBack();
                 return back()->with('error', 'Gagal memperbarui pendaftaran: 
                 Formulir sudah diproses dan tidak dapat diubah diproses atau jadwal sudah ditutup.');
@@ -273,10 +277,16 @@ class PendaftaranController extends Controller
                 $query->where('user_id', $userId);
             })->findOrFail($id);
 
-        $pendaftaran->load('kategoriPrestasi'); 
+        $pendaftaran->load('kategoriPrestasi');
 
         $pdf = Pdf::loadView('siswa.cetak-formulir', compact('pendaftaran'));
         $namaFile = 'Formulir Pendaftaran_' . $pendaftaran->siswa->nama . '.pdf';
         return $pdf->download($namaFile);
+    }
+
+    private function isPendaftaranLocked($pendaftaran)
+    {
+        $jadwalSelesai = $pendaftaran->jadwal && \Carbon\Carbon::parse($pendaftaran->jadwal->tgl_berakhir)->isPast();
+        return $pendaftaran->status_aktual !== null || $jadwalSelesai;
     }
 }
