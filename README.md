@@ -174,5 +174,5 @@ php artisan queue:work
 
 ## 👨‍💻 Kontributor
 
-* Developer: Nama Anda
+* Developer: Rodhiyati
 * Framework: Laravel
