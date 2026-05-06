@@ -20,8 +20,8 @@ Ikuti langkah-langkah berikut untuk menjalankan proyek ini di lingkungan lokal A
 ### 2. Kloning Repositori
 
 ```bash
-git clone https://github.com/username/repository-name.git
-cd repository-name
+git clone https://github.com/imarod/almuhajirin.git
+cd almuhajirin
 ```
 
 ---
